@@ -6,10 +6,10 @@
                 "linux": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/geth-linux-amd64-0.9.3-3676f9a1.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/gwan-linux-amd64-0.9.3-3676f9a1.tar.gz",
                             "type": "tar",
                             "md5": "32e415f9f90fff9efe4cd5a98f95d662",
-                            "bin": "geth-linux-amd64-0.9.3-3676f9a1/geth"
+                            "bin": "geth-linux-amd64-0.9.3-3676f9a1/gwan"
                         },
                         "bin": "geth",
                         "commands": {
@@ -28,10 +28,10 @@
                 "mac": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/geth-mac-amd64-0.9.3-3676f9a1.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/gwan-mac-amd64-0.9.3-3676f9a1.tar.gz",
                             "type": "tar",
                             "md5": "98aacfbf0c7cb1a0ac98a33d77b6f2da",
-                            "bin": "geth-mac-amd64-0.9.3-3676f9a1/geth"
+                            "bin": "geth-mac-amd64-0.9.3-3676f9a1/gwan"
                         },
                         "bin": "geth",
                         "commands": {
@@ -50,10 +50,10 @@
                 "win": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/geth-windows-amd64-0.9.3-3676f9a1.zip",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/gwan-windows-amd64-0.9.3-3676f9a1.zip",
                             "type": "zip",
                             "md5": "0179eea8eab659088900b4df71ae95a8",
-                            "bin": "geth-windows-amd64-0.9.3-3676f9a1/geth.exe"
+                            "bin": "geth-windows-amd64-0.9.3-3676f9a1/gwan.exe"
                         },
                         "bin": "geth.exe",
                         "commands": {

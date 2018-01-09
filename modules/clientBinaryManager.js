@@ -284,7 +284,10 @@ class Manager extends EventEmitter {
         this.emit('status', status, msg);
     }
 
-
+    _relaunch(options) {
+        app.relaunch(options);
+        app.quit();
+    }
     _resolveEthBinPath() {
         log.info('Resolving path to Eth client binary ...');
 

@@ -30,6 +30,7 @@ const log = logger.create('ipcCommunicator');
 const Web3 = require("web3");
 const web3Admin = require('./web3Admin.js');
 var net = require('net');
+let web3;
 require('./abi.js');
 /*
 
@@ -302,7 +303,10 @@ function generatePubkeyIWQforRing(Pubs, I, w, q){
 const CoinContractAddr = wanUtil.contractCoinAddress;
 
 async function otaRefund(rfAddr, otaDestAddress, number, privKeyA, privKeyB,value, gas, gasPrice, password){
-    var web3 = new Web3(new Web3.providers.IpcProvider( Settings.rpcIpcPath, net));
+    if (!web3) {
+        web3 = new Web3(new Web3.providers.IpcProvider(Settings.rpcIpcPath, net));
+        web3Admin.extend(web3);
+    }
     web3Admin.extend(web3);
     log.debug("otaRefund OTAs:", otaDestAddress, value);
     let otaSet;
@@ -359,8 +363,10 @@ async function otaRefund(rfAddr, otaDestAddress, number, privKeyA, privKeyB,valu
 }
 
 ipc.on('wan_updateAccount', (e, address, oldpw,  pw,)=> {
-    var web3 = new Web3(new Web3.providers.IpcProvider( Settings.rpcIpcPath, net));
-    web3Admin.extend(web3);
+    if (!web3) {
+        web3 = new Web3(new Web3.providers.IpcProvider(Settings.rpcIpcPath, net));
+        web3Admin.extend(web3);
+    }
     const mainWindow = Windows.getByType('main');
     const senderWindow = Windows.getById(e.sender.id);
     log.debug("wan_updateAccount address:",address);
@@ -429,7 +435,10 @@ function web3SendTransaction(web3Func, paras){
 function getTransactionReceipt(rfHashs)
 {
     return new Promise(function(success, fail){
-        var web3 = new Web3(new Web3.providers.IpcProvider( Settings.rpcIpcPath, net));
+        if (!web3) {
+            web3 = new Web3(new Web3.providers.IpcProvider(Settings.rpcIpcPath, net));
+            web3Admin.extend(web3);
+        }
         let filter = web3.eth.filter('latest');
         let blockAfter = 0;
         filter.watch(async function(err,blockhash){

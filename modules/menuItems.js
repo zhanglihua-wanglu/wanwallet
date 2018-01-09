@@ -521,33 +521,25 @@ let menuTempl = function (webviews) {
             submenu: [
                 {
                     //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
-                    label: 'Test network - beta',
+                    label: 'main network',
                     accelerator: 'CommandOrControl+Alt+1',
                     checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
                     enabled: ethereumNode.isOwnNode,
                     type: 'radio',
                     click() {
-                        restartNode(ethereumNode.type, 'main');
+                        //restartNode(ethereumNode.type, 'main');
+                        ClientBinaryManager._relaunch({network:'main'});
                     },
                 },
                 {
-                    label: 'internal - Test network',
-                    accelerator: 'CommandOrControl+Alt+3',
-                    checked: ethereumNode.isOwnNode && ethereumNode.network === 'internal',
-                    enabled: ethereumNode.isOwnNode,
-                    type: 'radio',
-                    click() {
-                        restartNode(ethereumNode.type, 'internal');
-                    },
-                },
-                {
-                    label: 'Pluto - Test network',
+                    label: 'Test network',
                     accelerator: 'CommandOrControl+Alt+2',
-                    checked: ethereumNode.isOwnNode && ethereumNode.network === 'pluto',
+                    checked: ethereumNode.isOwnNode && ethereumNode.network === 'testnet',
                     enabled: ethereumNode.isOwnNode,
                     type: 'radio',
                     click() {
-                        restartNode(ethereumNode.type, 'pluto');
+                        //restartNode(ethereumNode.type, 'testnet');
+                        ClientBinaryManager._relaunch({network:'testnet'});
                     },
                 }
             ] });
@@ -557,13 +549,26 @@ let menuTempl = function (webviews) {
             submenu: [
                 {
                     //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
-                    label: 'Test network - beta',
+                    label: 'main network',
                     accelerator: 'CommandOrControl+Alt+1',
                     checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
                     enabled: ethereumNode.isOwnNode,
                     type: 'radio',
                     click() {
-                        restartNode(ethereumNode.type, 'main');
+                        //restartNode(ethereumNode.type, 'main');
+                        ClientBinaryManager._relaunch({network:'main'});
+                    },
+                },
+                {
+                    //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
+                    label: 'Test network',
+                    accelerator: 'CommandOrControl+Alt+2',
+                    checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
+                    enabled: ethereumNode.isOwnNode,
+                    type: 'radio',
+                    click() {
+                        //restartNode(ethereumNode.type, 'testnet');
+                        ClientBinaryManager._relaunch({network:'testnet'});
                     },
                 }
             ] });
