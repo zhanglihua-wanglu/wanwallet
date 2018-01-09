@@ -307,7 +307,6 @@ async function otaRefund(rfAddr, otaDestAddress, number, privKeyA, privKeyB,valu
         web3 = new Web3(new Web3.providers.IpcProvider(Settings.rpcIpcPath, net));
         web3Admin.extend(web3);
     }
-    web3Admin.extend(web3);
     log.debug("otaRefund OTAs:", otaDestAddress, value);
     let otaSet;
     try {

@@ -528,18 +528,22 @@ let menuTempl = function (webviews) {
                     type: 'radio',
                     click() {
                         //restartNode(ethereumNode.type, 'main');
-                        ClientBinaryManager._relaunch({network:'main'});
+                        if(!ethereumNode.isMainNetwork) {
+                            ClientBinaryManager._relaunch({args: ['--network', 'main']});
+                        }
                     },
                 },
                 {
                     label: 'Test network',
                     accelerator: 'CommandOrControl+Alt+2',
-                    checked: ethereumNode.isOwnNode && ethereumNode.network === 'testnet',
+                    checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
                     enabled: ethereumNode.isOwnNode,
                     type: 'radio',
                     click() {
                         //restartNode(ethereumNode.type, 'testnet');
-                        ClientBinaryManager._relaunch({network:'testnet'});
+                        if(!ethereumNode.isTestNetwork) {
+                            ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
+                        }
                     },
                 }
             ] });
@@ -556,20 +560,24 @@ let menuTempl = function (webviews) {
                     type: 'radio',
                     click() {
                         //restartNode(ethereumNode.type, 'main');
-                        ClientBinaryManager._relaunch({network:'main'});
+                        if(!ethereumNode.isMainNetwork){
+                            ClientBinaryManager._relaunch({args:  ['--network', 'main']});
+                        }
                     },
                 },
                 {
                     //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
                     label: 'Test network',
                     accelerator: 'CommandOrControl+Alt+2',
-                    checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
+                    checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
                     enabled: ethereumNode.isOwnNode,
                     type: 'radio',
                     click() {
                         //restartNode(ethereumNode.type, 'testnet');
-                        ClientBinaryManager._relaunch({network:'testnet'});
-                    },
+                        if(!ethereumNode.isTestNetwork) {
+                            ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
+                        }
+                    }
                 }
             ] });
     }

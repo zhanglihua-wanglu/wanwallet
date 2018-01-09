@@ -117,7 +117,7 @@ class EthereumNode extends EventEmitter {
     }
 
     get isTestNetwork() {
-        return this.network === 'test';
+        return this.network === 'testnet';
     }
 
     get isPlutoNetwork() {
@@ -299,7 +299,7 @@ class EthereumNode extends EventEmitter {
     _start(nodeType, network, syncMode) {
         log.info(`Start node: ${nodeType} ${network} ${syncMode}`);
 
-        const isTestNet = (network === 'test');
+        const isTestNet = (network === 'testnet');
 
         if (isTestNet) {
             log.debug('Node will connect to the test network');
@@ -436,6 +436,14 @@ class EthereumNode extends EventEmitter {
                 case 'rinkeby':
                     args = [
                         '--rinkeby',
+                        '--syncmode', syncMode,
+                        '--cache', ((process.arch === 'x64') ? '1024' : '512'),
+                        '--ipcpath', Settings.rpcIpcPath
+                    ];
+                    break;
+                case 'testnet':
+                    args = [
+                        '--testnet',
                         '--syncmode', syncMode,
                         '--cache', ((process.arch === 'x64') ? '1024' : '512'),
                         '--ipcpath', Settings.rpcIpcPath
