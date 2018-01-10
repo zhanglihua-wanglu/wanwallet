@@ -109,7 +109,7 @@ class EthereumNode extends EventEmitter {
     }
 
     get isGeth() {
-        return this._type === 'geth';
+        return this._type === 'gwan';
     }
 
     get isMainNetwork() {
@@ -292,7 +292,7 @@ class EthereumNode extends EventEmitter {
 
     /**
      * Start an ethereum node.
-     * @param  {String} nodeType geth, eth, etc
+     * @param  {String} nodeType gwan, eth, etc
      * @param  {String} network  network id
      * @return {Promise}
      */
@@ -350,9 +350,9 @@ class EthereumNode extends EventEmitter {
                 this.lastError = err.tag;
                 this.state = STATES.ERROR;
 
-                // if unable to start eth node then write geth to defaults
+                // if unable to start eth node then write gwan to defaults
                 if (nodeType === 'eth') {
-                    Settings.saveUserData('node', 'geth');
+                    Settings.saveUserData('node', 'gwan');
                 }
 
                 throw err;
@@ -392,7 +392,7 @@ class EthereumNode extends EventEmitter {
      */
     __startProcess(nodeType, network, binPath, _syncMode) {
         let syncMode = _syncMode;
-        if (nodeType === 'geth' && !syncMode) {
+        if (nodeType === 'gwan' && !syncMode) {
             syncMode = 'fast';
         }
 
@@ -441,7 +441,7 @@ class EthereumNode extends EventEmitter {
 
                 // Starts Main net
                 default:
-                    args = (nodeType === 'geth')
+                    args = (nodeType === 'gwan')
                         ? [
                             '--syncmode', syncMode,
                             '--cache', ((process.arch === 'x64') ? '1024' : '512')
@@ -490,7 +490,7 @@ class EthereumNode extends EventEmitter {
                     if (STATES.STARTING === this.state) {
                         const dataStr = data.toString().toLowerCase();
 
-                        if (nodeType === 'geth') {
+                        if (nodeType === 'gwan') {
                             if (dataStr.indexOf('fatal: error') >= 0) {
                                 const error = new Error(`Geth error: ${dataStr}`);
 
@@ -521,7 +521,7 @@ class EthereumNode extends EventEmitter {
                     /*
                         We wait a short while before marking startup as successful
                         because we may want to parse the initial node output for
-                        errors, etc (see geth port-binding error above)
+                        errors, etc (see gwan port-binding error above)
                     */
                     setTimeout(() => {
                         if (STATES.STARTING === this.state) {

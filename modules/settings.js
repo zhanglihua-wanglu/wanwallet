@@ -297,7 +297,7 @@ class Settings {
     }
 
     get nodeType() {
-        return argv.node;
+        return argv.node ? argv.node : "geth";
     }
 
     get network() {
