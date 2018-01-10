@@ -188,8 +188,8 @@ class Settings {
         let dbFileName = 'mist.lokidb';
         if(this.network === 'pluto'){
             dbFileName = 'mist.pluto.lokidb';
-        }else if(this.network === 'internal'){
-            dbFileName = 'mist.internal.lokidb';
+        }else if(this.network === 'testnet'){
+            dbFileName = 'mist.testnet.lokidb';
         }
         return path.join(this.userDataPath, dbFileName);
 

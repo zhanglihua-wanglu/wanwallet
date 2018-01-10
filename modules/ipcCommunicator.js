@@ -313,7 +313,7 @@ async function otaRefund(rfAddr, otaDestAddress, number, privKeyA, privKeyB,valu
         otaSet = await web3SendTransaction(web3.eth.getOTAMixSet, [otaDestAddress, number]);
         log.debug('otaSet:',otaSet);
     } catch (error) {
-        log.info('otaRefund:', error);
+        log.info('otaRefund:', error.toString());
         return {error:error.toString(), hash:null};
     }
 
@@ -533,8 +533,12 @@ ipc.on('wan_refundCoin', async (e, rfOta, keyPassword)=> {
             let hash = ra.hash;
             let used = false;
             if(error){
-                if(error.indexOf('Error: OTA is reused') === 0) {
+                if(error.indexOf('Error: OTA is reused') === 0 ) {
                     log.debug("Ota is reused, set status as 1:", otas[c].otaddr);
+                    wanOTAs.updateOtaStatus(otas[c].otaddr);
+                    used = true;
+                }else if(error.indexOf("Error: can't find ota address balance!") === 0 ) {
+                    log.debug("can't find ota address balance, set status as 1:", otas[c].otaddr);
                     wanOTAs.updateOtaStatus(otas[c].otaddr);
                     used = true;
                 }else{

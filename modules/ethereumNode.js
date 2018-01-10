@@ -12,7 +12,7 @@ const EventEmitter = require('events').EventEmitter;
 const Sockets = require('./socketManager');
 const ClientBinaryManager = require('./clientBinaryManager');
 
-const DEFAULT_NODE_TYPE = 'geth';
+const DEFAULT_NODE_TYPE = 'gwan';
 const DEFAULT_NETWORK = 'main';
 const DEFAULT_SYNCMODE = 'fast';
 
@@ -82,8 +82,8 @@ class EthereumNode extends EventEmitter {
         if (process.platform === 'win32') keystorePath = Settings.appDataPath + '\\' + ksdir;
 
 
-        if(this._network == 'internal' || this.defaultNetwork == 'internal'){
-            keystorePath =  path.join(keystorePath, 'internal');
+        if(this._network == 'testnet' || this.defaultNetwork == 'testnet'){
+            keystorePath =  path.join(keystorePath, 'testnet');
         }
         if(isKs){
             keystorePath =  path.join(keystorePath, 'keystore');
@@ -413,54 +413,18 @@ class EthereumNode extends EventEmitter {
 
                 // Starts Ropsten network
                 case 'main':
-                    if (Settings.internal) {
-                        args = [
-                            '--datadir', this.getDatadir(),
-                            '--syncmode', syncMode,
-                            '--cache', ((process.arch === 'x64') ? '1024' : '512'),
-                            '--ipcpath', Settings.rpcIpcPath
-                        ];
-                    } else {
-                        args = [
-                            '--testnet',
-                            '--datadir', this.getDatadir(),
-                            '--syncmode', syncMode,
-                            '--cache', ((process.arch === 'x64') ? '1024' : '512'),
-                            '--ipcpath', Settings.rpcIpcPath
-                        ];
-                    }
-
-                    break;
-
-                // Starts Rinkeby network
-                case 'rinkeby':
                     args = [
-                        '--rinkeby',
+                        '--datadir', this.getDatadir(),
                         '--syncmode', syncMode,
                         '--cache', ((process.arch === 'x64') ? '1024' : '512'),
                         '--ipcpath', Settings.rpcIpcPath
                     ];
                     break;
+
                 case 'testnet':
                     args = [
                         '--testnet',
-                        '--syncmode', syncMode,
-                        '--cache', ((process.arch === 'x64') ? '1024' : '512'),
-                        '--ipcpath', Settings.rpcIpcPath
-                    ];
-                    break;
-                case 'internal':
-                    args = [
-                        '--internal',
-                        '--syncmode', syncMode,
                         '--datadir', this.getDatadir(),
-                        '--cache', ((process.arch === 'x64') ? '1024' : '512'),
-                        '--ipcpath', Settings.rpcIpcPath
-                    ];
-                        break;
-                case 'pluto':
-                    args = [
-                        '--pluto',
                         '--syncmode', syncMode,
                         '--cache', ((process.arch === 'x64') ? '1024' : '512'),
                         '--ipcpath', Settings.rpcIpcPath
