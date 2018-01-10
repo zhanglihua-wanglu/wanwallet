@@ -297,7 +297,7 @@ class Settings {
     }
 
     get nodeType() {
-        return argv.node ? argv.node : "geth";
+        return argv.node ? argv.node : "gwan";
     }
 
     get network() {
