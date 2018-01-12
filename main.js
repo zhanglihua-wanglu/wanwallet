@@ -210,6 +210,7 @@ onReady = () => {
         defaultWidth: 1024 + 208,
         defaultHeight: 720
     });
+    log.info('appDataPath:' + Settings.appDataPath);
 
     // MIST
     if (Settings.uiMode === 'mist') {

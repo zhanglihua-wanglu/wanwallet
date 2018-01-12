@@ -218,6 +218,7 @@ let menuTempl = function (webviews) {
                             } else {
 
                                 userPath = ethereumNode.getDatadir(true);
+                                log.info('keyStorePath: ' + userPath);
                             }
 
                             shell.showItemInFolder(userPath);
