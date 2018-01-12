@@ -196,7 +196,10 @@ class Settings {
     }
     get appDataPath() {
     // Application Support/
-        return app.getPath('appData');
+        if(argv.nodeOptions['datadir'])
+            return argv.nodeOptions['datadir'];
+        else
+            return app.getPath('appData');
     }
 
     get userHomePath() {
