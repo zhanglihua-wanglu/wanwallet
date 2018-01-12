@@ -414,7 +414,8 @@ class EthereumNode extends EventEmitter {
                 // Starts Ropsten network
                 case 'main':
                     args = [
-                        '--datadir', this.getDatadir(),
+                        //zhang li hua da xia said: no use to delete
+                        //'--datadir', this.getDatadir(),
                         '--syncmode', syncMode,
                         '--cache', ((process.arch === 'x64') ? '1024' : '512'),
                         '--ipcpath', Settings.rpcIpcPath
@@ -424,7 +425,8 @@ class EthereumNode extends EventEmitter {
                 case 'testnet':
                     args = [
                         '--testnet',
-                        '--datadir', this.getDatadir(),
+                        //zhang li hua da xia said: no use to delete
+                        //'--datadir', this.getDatadir(),
                         '--syncmode', syncMode,
                         '--cache', ((process.arch === 'x64') ? '1024' : '512'),
                         '--ipcpath', Settings.rpcIpcPath
