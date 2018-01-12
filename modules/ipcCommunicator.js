@@ -162,8 +162,14 @@ ipc.on('backendAction_checkWalletFile', (e, path) => {
                     keystorePath = ethereumNode.getDatadir(true);
                 }
 
-                if (!/^[0-9a-fA-F]{40}$/.test(keyfile.address)) {
+                if (!/^[0-9a-fA-F]{40}$/.test(keyfile.address) ||
+                    !(/^(0x)?[0-9a-fA-F]{132}$/.test(keyfile.waddress))) {
                     throw new Error('Invalid Address format.');
+                }
+                else if(!(/^0x[0-9a-f]{40}$/.test(keyfile.address)) && !(/^0x[0-9A-F]{40}$/.test(keyfile.address)))
+                {
+                    if(wanUtil.toChecksumAddress(keyfile.address) != keyfile.address)
+                        throw new Error('Invalid Address format.');
                 }
                 log.info('keystorePath :' + keystorePath);
                 fs.writeFile(`${keystorePath}/0x${keyfile.address}`, data, (err) => {
