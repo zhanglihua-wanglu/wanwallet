@@ -79,7 +79,7 @@ class EthereumNode extends EventEmitter {
             process.platform === 'linux' ||
             process.platform === 'sunos') keystorePath += '/.' + ksdir;
 
-        if (process.platform === 'win32') keystorePath = Settings.appDataPath + '\\' + ksdir;
+        if (process.platform === 'win32') keystorePath = Settings.appDataPath;
 
 
         if(this._network == 'testnet' || this.defaultNetwork == 'testnet'){

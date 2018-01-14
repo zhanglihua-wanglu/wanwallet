@@ -142,7 +142,7 @@ ipc.on('backendAction_checkWalletFile', (e, path) => {
 
             const type = _.first(result);
 
-            log.debug(`Importing ${type} account...`);
+            log.info(`Importing ${type} account...`);
 
             if (type === 'ethersale') {
                 e.sender.send('uiAction_checkedWalletFile', null, 'presale');
@@ -159,25 +159,21 @@ ipc.on('backendAction_checkWalletFile', (e, path) => {
                     }
                 // geth
                 } else {
-                    let ksdir = "";
-                    if(ethereumNode.isPlutoNetwork){
-                        ksdir = "wanchain/pluto/keystore";
-                    }else{
-                        ksdir = "wanchain/keystore";
-                    }
-                    if (process.platform === 'darwin') keystorePath += '/Library/' + ksdir;
-
-                    if (process.platform === 'freebsd' ||
-                        process.platform === 'linux' ||
-                        process.platform === 'sunos') keystorePath += '/.' + ksdir;
-
-                    if (process.platform === 'win32') keystorePath = `${Settings.appDataPath}\\` + ksdir;
+                    keystorePath = ethereumNode.getDatadir(true);
                 }
 
-                if (!/^[0-9a-fA-F]{40}$/.test(keyfile.address)) {
+                if (!/^[0-9a-fA-F]{40}$/.test(keyfile.address) ||
+                    !(/^(0x)?[0-9a-fA-F]{132}$/.test(keyfile.waddress))) {
                     throw new Error('Invalid Address format.');
                 }
-
+                /*
+                else if(!(/^0x[0-9a-f]{40}$/.test(keyfile.address)) && !(/^0x[0-9A-F]{40}$/.test(keyfile.address)))
+                {
+                    if(wanUtil.toChecksumAddress('0x'+keyfile.address) != '0x'+keyfile.address)
+                        throw new Error('Invalid Address format.');
+                }
+                */
+                log.info('keystorePath :' + keystorePath);
                 fs.writeFile(`${keystorePath}/0x${keyfile.address}`, data, (err) => {
                     if (err) throw new Error("Can't write file to disk");
                 });
