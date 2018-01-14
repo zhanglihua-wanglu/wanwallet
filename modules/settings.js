@@ -196,20 +196,17 @@ class Settings {
     }
     get appDataPath() {
     // Application Support/
-        var bFind = false;
         for(var i=0;i<argv.nodeOptions.length;i++)
         {
             if(argv.nodeOptions[i] == '--datadir')
             {
                 if(i+1<argv.nodeOptions.length)
                 {
-                    bFind = true;
                     return argv.nodeOptions[i+1];
                 }
             }
         }
-        if(!bFind)
-            return app.getPath('appData');
+        return app.getPath('appData')+'\\'+'wanchain';
     }
 
     get userHomePath() {
