@@ -6,9 +6,9 @@
                 "linux": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-linux-amd64-1_0_0-3f338f50.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-linux-amd64-1.0.0-3f338f50.tar.gz",
                             "type": "tar",
-                            "md5": "3b336cd8716fe716b50d7c25f80e51bb",
+                            "md5": "b999cbd5a4ec17ccf501891f21093b57",
                             "bin": "gwan-linux-amd64-1_0_0-3f338f50/gwan"
                         },
                         "bin": "gwan",
