@@ -18,7 +18,7 @@ let BINARY_URL;
 if (Settings.internal) {
     BINARY_URL = 'http://47.104.60.142:/clientBinaries.json';
 } else {
-    BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/develop/clientBinaries.json';
+    BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/main/clientBinaries.json';
 }
 
 const ALLOWED_DOWNLOAD_URLS_REGEX = /.+/;

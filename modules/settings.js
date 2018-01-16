@@ -43,7 +43,7 @@ const argv = require('yargs')
         network: {
             demand: false,
             default: 'main',
-            describe: 'Network to connect to: main-beta, internal, pluto',
+            describe: 'Network to connect to: main, testnet',
             requiresArg: true,
             nargs: 1,
             type: 'string',
@@ -196,20 +196,17 @@ class Settings {
     }
     get appDataPath() {
     // Application Support/
-        var bFind = false;
         for(var i=0;i<argv.nodeOptions.length;i++)
         {
             if(argv.nodeOptions[i] == '--datadir')
             {
                 if(i+1<argv.nodeOptions.length)
                 {
-                    bFind = true;
                     return argv.nodeOptions[i+1];
                 }
             }
         }
-        if(!bFind)
-            return app.getPath('appData');
+        return app.getPath('appData')+'\\'+'wanchain';
     }
 
     get userHomePath() {
@@ -316,8 +313,6 @@ class Settings {
     get network() {
         if(argv.network){
             return argv.network;
-        }else if(defaultConfig.internal){
-            return 'internal';
         }else{
             return 'main'
         }
