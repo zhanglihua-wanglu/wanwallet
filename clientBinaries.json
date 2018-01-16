@@ -1,25 +1,25 @@
 {
     "clients": {
-        "Geth": {
-            "version": "0.9.3",
+        "Gwan": {
+            "version": "1.0.0",
             "platforms": {
                 "linux": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/gwan-linux-amd64-0.9.3-3676f9a1.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-linux-amd64-1_0_0-3f338f50.tar.gz",
                             "type": "tar",
-                            "md5": "32e415f9f90fff9efe4cd5a98f95d662",
-                            "bin": "geth-linux-amd64-0.9.3-3676f9a1/gwan"
+                            "md5": "3b336cd8716fe716b50d7c25f80e51bb",
+                            "bin": "gwan-linux-amd64-1_0_0-3f338f50/gwan"
                         },
-                        "bin": "geth",
+                        "bin": "gwan",
                         "commands": {
                             "sanity": {
                                 "args": [
                                     "version"
                                 ],
                                 "output": [
-                                    "Geth",
-                                    "0.9.3"
+                                    "Gwan",
+                                    "1.0.0"
                                 ]
                             }
                         }
@@ -50,12 +50,12 @@
                 "win": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/gwan-windows-amd64-0.9.3-3676f9a1.zip",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-windows-amd64-1.0.0-3f338f50.zip",
                             "type": "zip",
-                            "md5": "0179eea8eab659088900b4df71ae95a8",
-                            "bin": "geth-windows-amd64-0.9.3-3676f9a1/gwan.exe"
+                            "md5": "c5b4faff5d6d23380a33a852ddf875f1",
+                            "bin": "gwan-windows-amd64-1.0.0-3f338f50/gwan.exe"
                         },
-                        "bin": "geth.exe",
+                        "bin": "gwan.exe",
                         "commands": {
                             "sanity": {
                                 "args": [
@@ -63,7 +63,7 @@
                                 ],
                                 "output": [
                                     "Geth",
-                                    "0.9.3"
+                                    "1.0.0"
                                 ]
                             }
                         }
