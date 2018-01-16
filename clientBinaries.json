@@ -9,7 +9,7 @@
                             "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-linux-amd64-1.0.0-3f338f50.tar.gz",
                             "type": "tar",
                             "md5": "b999cbd5a4ec17ccf501891f21093b57",
-                            "bin": "gwan-linux-amd64-1_0_0-3f338f50/gwan"
+                            "bin": "gwan-linux-amd64-1.0.0-3f338f50/gwan"
                         },
                         "bin": "gwan",
                         "commands": {
