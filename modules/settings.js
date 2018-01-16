@@ -43,7 +43,7 @@ const argv = require('yargs')
         network: {
             demand: false,
             default: 'main',
-            describe: 'Network to connect to: main-beta, internal, pluto',
+            describe: 'Network to connect to: main, testnet',
             requiresArg: true,
             nargs: 1,
             type: 'string',
@@ -314,7 +314,7 @@ class Settings {
         if(argv.network){
             return argv.network;
         }else if(defaultConfig.internal){
-            return 'internal';
+            return 'main';
         }else{
             return 'main'
         }
