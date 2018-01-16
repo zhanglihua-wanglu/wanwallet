@@ -33,15 +33,15 @@
                             "md5": "98aacfbf0c7cb1a0ac98a33d77b6f2da",
                             "bin": "geth-mac-amd64-0.9.3-3676f9a1/gwan"
                         },
-                        "bin": "geth",
+                        "bin": "gwan",
                         "commands": {
                             "sanity": {
                                 "args": [
                                     "version"
                                 ],
                                 "output": [
-                                    "Geth",
-                                    "0.9.3"
+                                    "Gwan",
+                                    "1.0.0"
                                 ]
                             }
                         }
@@ -62,7 +62,7 @@
                                     "version"
                                 ],
                                 "output": [
-                                    "Geth",
+                                    "Gwan",
                                     "1.0.0"
                                 ]
                             }
