@@ -94,7 +94,7 @@ class EthereumNode extends EventEmitter {
     get otaDbKey(){
         if(this._network == 'pluto'){
             return '0x0000000000000000000000000000000000000002';
-        } else if(this._network == 'internal'){
+        } else if(this._network == 'testnet'){
             return '0x0000000000000000000000000000000000000001';
         } else {
             return '0x0000000000000000000000000000000000000000';

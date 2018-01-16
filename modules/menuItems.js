@@ -516,72 +516,38 @@ let menuTempl = function (webviews) {
     }
 
     // add network switch
-    if (Settings.internal){
-        devToolsMenu.push({
-            label: i18n.t('mist.applicationMenu.develop.network'),
-            submenu: [
-                {
-                    //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
-                    label: 'main network',
-                    accelerator: 'CommandOrControl+Alt+1',
-                    checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
-                    enabled: ethereumNode.isOwnNode,
-                    type: 'radio',
-                    click() {
-                        //restartNode(ethereumNode.type, 'main');
-                        if(!ethereumNode.isMainNetwork) {
-                            ClientBinaryManager._relaunch({args: ['--network', 'main']});
-                        }
-                    },
-                },
-                {
-                    label: 'Test network',
-                    accelerator: 'CommandOrControl+Alt+2',
-                    checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
-                    enabled: ethereumNode.isOwnNode,
-                    type: 'radio',
-                    click() {
-                        //restartNode(ethereumNode.type, 'testnet');
-                        if(!ethereumNode.isTestNetwork) {
-                            ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
-                        }
-                    },
+    devToolsMenu.push({
+    label: i18n.t('mist.applicationMenu.develop.network'),
+    submenu: [
+        {
+            //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
+            label: 'main network',
+            accelerator: 'CommandOrControl+Alt+1',
+            checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
+            enabled: ethereumNode.isOwnNode,
+            type: 'radio',
+            click() {
+                //restartNode(ethereumNode.type, 'main');
+                if(!ethereumNode.isMainNetwork) {
+                    ClientBinaryManager._relaunch({args: ['--network', 'main']});
                 }
-            ] });
-    } else {
-        devToolsMenu.push({
-            label: i18n.t('mist.applicationMenu.develop.network'),
-            submenu: [
-                {
-                    //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
-                    label: 'main network',
-                    accelerator: 'CommandOrControl+Alt+1',
-                    checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
-                    enabled: ethereumNode.isOwnNode,
-                    type: 'radio',
-                    click() {
-                        //restartNode(ethereumNode.type, 'main');
-                        if(!ethereumNode.isMainNetwork){
-                            ClientBinaryManager._relaunch({args:  ['--network', 'main']});
-                        }
-                    },
-                },
-                {
-                    //label: i18n.t('mist.applicationMenu.develop.mainNetwork'),
-                    label: 'Test network',
-                    accelerator: 'CommandOrControl+Alt+2',
-                    checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
-                    enabled: ethereumNode.isOwnNode,
-                    type: 'radio',
-                    click() {
-                        //restartNode(ethereumNode.type, 'testnet');
-                        if(!ethereumNode.isTestNetwork) {
-                            ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
-                        }
-                    }
+            },
+        },
+        {
+            label: 'Test network',
+            accelerator: 'CommandOrControl+Alt+2',
+            checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
+            enabled: ethereumNode.isOwnNode,
+            type: 'radio',
+            click() {
+                //restartNode(ethereumNode.type, 'testnet');
+                if(!ethereumNode.isTestNetwork) {
+                    ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
                 }
-            ] });
-    }
+            },
+        }
+    ] });
+
 
 
     // Light mode switch should appear when not in Solo Mode (dev network)
