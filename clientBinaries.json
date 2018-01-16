@@ -28,10 +28,10 @@
                 "mac": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v0.9.3/gwan-mac-amd64-0.9.3-3676f9a1.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-mac-amd64-1.0.0-3f338f50.tar.gz",
                             "type": "tar",
-                            "md5": "98aacfbf0c7cb1a0ac98a33d77b6f2da",
-                            "bin": "geth-mac-amd64-0.9.3-3676f9a1/gwan"
+                            "md5": "9a19f2ad9776bcbcf62cb34687b9561b",
+                            "bin": "gwan-mac-amd64-1.0.0-3f338f50/gwan"
                         },
                         "bin": "gwan",
                         "commands": {
