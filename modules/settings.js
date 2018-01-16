@@ -313,8 +313,6 @@ class Settings {
     get network() {
         if(argv.network){
             return argv.network;
-        }else if(defaultConfig.internal){
-            return 'main';
         }else{
             return 'main'
         }
