@@ -1,15 +1,15 @@
 {
     "clients": {
         "Gwan": {
-            "version": "1.0.0",
+            "version": "1.0.2",
             "platforms": {
                 "linux": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-linux-amd64-1.0.0-3f338f50.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.2/gwan-linux-amd64-1.0.2-196c3d6d.tar.gz",
                             "type": "tar",
-                            "md5": "b999cbd5a4ec17ccf501891f21093b57",
-                            "bin": "gwan-linux-amd64-1.0.0-3f338f50/gwan"
+                            "md5": "efdf580802a4a860d285db392fd301dd",
+                            "bin": "gwan-linux-amd64-1.0.2-196c3d6d/gwan"
                         },
                         "bin": "gwan",
                         "commands": {
@@ -19,7 +19,7 @@
                                 ],
                                 "output": [
                                     "Gwan",
-                                    "1.0.0"
+                                    "1.0.2"
                                 ]
                             }
                         }
@@ -28,10 +28,10 @@
                 "mac": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-mac-amd64-1.0.0-3f338f50.tar.gz",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.2/gwan-mac-amd64-1.0.2-196c3d6d.tar.gz",
                             "type": "tar",
-                            "md5": "9a19f2ad9776bcbcf62cb34687b9561b",
-                            "bin": "gwan-mac-amd64-1.0.0-3f338f50/gwan"
+                            "md5": "f6b06ed54563355380317858f75c47b3",
+                            "bin": "gwan-mac-amd64-1.0.2-196c3d6d/gwan"
                         },
                         "bin": "gwan",
                         "commands": {
@@ -41,7 +41,7 @@
                                 ],
                                 "output": [
                                     "Gwan",
-                                    "1.0.0"
+                                    "1.0.2"
                                 ]
                             }
                         }
@@ -50,10 +50,10 @@
                 "win": {
                     "x64": {
                         "download": {
-                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.0/gwan-windows-amd64-1.0.0-3f338f50.zip",
+                            "url": "https://github.com/wanchain/go-wanchain/releases/download/v1.0.2/gwan-windows-amd64-1.0.2-196c3d6d.zip",
                             "type": "zip",
-                            "md5": "c5b4faff5d6d23380a33a852ddf875f1",
-                            "bin": "gwan-windows-amd64-1.0.0-3f338f50/gwan.exe"
+                            "md5": "f4a5f86ad8aa034862c95b2e69152732",
+                            "bin": "gwan-windows-amd64-1.0.2-196c3d6d/gwan.exe"
                         },
                         "bin": "gwan.exe",
                         "commands": {
@@ -63,7 +63,7 @@
                                 ],
                                 "output": [
                                     "Gwan",
-                                    "1.0.0"
+                                    "1.0.2"
                                 ]
                             }
                         }
