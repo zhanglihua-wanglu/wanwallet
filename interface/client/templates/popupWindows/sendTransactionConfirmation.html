@@ -166,7 +166,9 @@
                     <h2>{{i18n "mist.popupWindows.sendTransactionConfirmation.unlocking"}}</h2>
                 {{else}}
 
-                    <input type="password" placeholder="{{i18n 'mist.popupWindows.sendTransactionConfirmation.enterPassword'}}">
+                    <input type="password" placeholder="{{i18n 'mist.popupWindows.sendTransactionConfirmation.enterPassword'}}"
+                           disabled="{{#unless isInputPassword}}true{{/unless}}"
+                    />
 
                     <div class="dapp-modal-buttons">
                         <button class="cancel" type="button">{{i18n "buttons.cancel"}}</button>

@@ -216,6 +216,15 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
 
         return amount ? amount.substr(0, dotPos) + '<small style="font-size: 0.5em;">' + amount.substr(dotPos) + '</small>' : '0';
     },
+
+    'isInputPassword': function() {
+        if (this.isWaddress === '0x00') {
+            return false
+        }
+
+        return true
+    },
+
     /**
     Calculates the fee used for this transaction in ether
 
