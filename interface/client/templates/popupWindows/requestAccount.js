@@ -40,7 +40,7 @@ Template['popupWindows_requestAccount'].events({
         // check passwords
         if((!account1) || account1.length< 2){
             GlobalNotification.warning({
-                content: "Make a longer name",
+                content: "Please provide a longer account name",
                 duration: 3
             });
         }

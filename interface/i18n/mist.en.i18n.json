@@ -187,14 +187,14 @@
                 "noUpdateFound": "No update found. You are running the latest version of __name__."
             },
             "requestAccount": {
-                "title": "Create account",
-                "enterPassword": "Enter password",
-                "repeatPassword": "Repeat password",
+                "title": "Account– Create Account",
+                "enterPassword": "Enter password(length no less than 8)",
+                "repeatPassword": "Re-enter Password",
                 "creating": "Generating account...",
                 "backupHint": "Make sure you backup your KEYFILES and PASSWORD!\n\nYou can find your keyfiles folder using the main File -> Backup -> Accounts. Keep a copy of the \"keystore\" folder where you can't lose it!",
                 "errors": {
-                    "passwordMismatch": "Your passwords don't match.",
-                    "passwordTooShort": "Make a longer password"
+                    "passwordMismatch": "Please make sure your password are match",
+                    "passwordTooShort": "Please provide a longer password"
                 }
             },
             "changeMasterPassword":{
@@ -205,8 +205,8 @@
                 "repeatNewPassword": "Repeat new password"
             },
             "unlockMasterPassword": {
-                "title": "Enter master password",
-                "enterPassword": "Enter master password",
+                "title": "Enter Account Password",
+                "enterPassword": "Enter Account Password",
                 "unlocking": "Unlocking...",
                 "errors": {
                     "wrongPassword": "Password is wrong. Try again."
