@@ -177,7 +177,7 @@ let menuTempl = function (webviews) {
                     Windows.createPopup('requestAccount', {
                         ownerId : Windows.getByType('main').id,
                         electronOptions: {
-                            width: 420, height: 380, alwaysOnTop: true,
+                            width: 1120, height: 600, alwaysOnTop: true,
                         },
                     });
                 },

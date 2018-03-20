@@ -187,8 +187,8 @@
                 "noUpdateFound": "No update found. You are running the latest version of __name__."
             },
             "requestAccount": {
-                "title": "Account– Create Account",
-                "enterPassword": "Enter password(length no less than 8)",
+                "title": "Create Account",
+                "enterPassword": "Please provide NOT less than 8 digits length password",
                 "repeatPassword": "Re-enter Password",
                 "creating": "Generating account...",
                 "backupHint": "Make sure you backup your KEYFILES and PASSWORD!\n\nYou can find your keyfiles folder using the main File -> Backup -> Accounts. Keep a copy of the \"keystore\" folder where you can't lose it!",

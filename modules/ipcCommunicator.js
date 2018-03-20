@@ -247,8 +247,8 @@ const createAccountPopup = (e) => {
     Windows.createPopup('requestAccount', {
         ownerId: e.sender.id,
         electronOptions: {
-            width: 420,
-            height: 380,
+            width: 1120,
+            height: 600,
             alwaysOnTop: true,
         },
     });
@@ -265,8 +265,8 @@ ipc.on('wan_inputAccountPassword', (e,param) => {
     },{
         ownerId: e.sender.id,
         electronOptions: {
-            width: 400,
-            height: 230,
+            width: 1120,
+            height: 600,
             alwaysOnTop: true,
         },
     }));

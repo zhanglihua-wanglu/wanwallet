@@ -15,6 +15,7 @@ Template['popupWindows_inputAccountPassword'].onRendered(function () {
     var template = this;
 
     template.$('input.password').focus();
+    TemplateVar.set('showPassword', false);
 
     template.autorun(function () {
         var data = Session.get('masterPasswordWrong');
@@ -46,9 +47,19 @@ Template['popupWindows_inputAccountPassword'].onRendered(function () {
 });
 
 
+Template['popupWindows_inputAccountPassword'].helpers({
+    'passwordInputType': function () {
+        return TemplateVar.get('showPassword') ? 'text' : 'password';
+    }
+});
+
+
 Template['popupWindows_inputAccountPassword'].events({
     'click .cancel': function () {
         ipc.send('backendAction_closePopupWindow');
+    },
+    'click .showPassIco': function () {
+        TemplateVar.set('showPassword', !TemplateVar.get('showPassword'));
     },
     'submit form': function (e, template) {
         e.preventDefault();

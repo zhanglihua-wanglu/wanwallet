@@ -37,20 +37,24 @@ aside.sidebar {
     perspective: 800px;
 
     .field-container{
+        width: 470px;
+        margin: 0 auto;
  //       transform-style: preserve-3d;
  //       transition: transform 0.5s;
  //       transition-timing-function:  ease-out;
  //       transition-timing-function:  cubic-bezier(0.000, 1.125, 0.335, 1.650);
  //       height: @gridHeight*1.5;
 
-        &>* {
-//            position: absolute;
-            left: @gridWidth*2;
-            top: -1*@gridHeight;
-            backface-visibility: hidden;
-            border-bottom: solid 1px #f7f8fc;
-            background-color: #f7f8fc;
-        }
+//        &>* {
+////            position: absolute;
+//            left: @gridWidth*2;
+//            top: -1*@gridHeight;
+//            backface-visibility: hidden;
+//            border-bottom: solid 1px #f7f8fc;
+//            background-color: #ffffff;
+//            font-size: 14px;
+//            padding-left: 0;
+//        }
 /*
         .password-repeat {
             transform: rotateX( 180deg );
@@ -62,3 +66,73 @@ aside.sidebar {
         */
     }
 }
+.show-password-container {
+    width: 470px !important;
+}
+.errorDiv{
+    width: 470px;
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: 0 auto 10px auto;
+    input{
+        background: #ffffff;
+        width: 470px;
+        border-bottom: solid 1px #ccc6c6;
+        padding-left: 0;
+        line-height: 32px;
+    }
+}
+.errorP{
+    position: absolute;
+    right: 0;
+    width: 470px;
+    margin: 2px 0 0 60px!important;
+    background: white!important;
+    border: none!important;
+    text-align: right!important;
+    font-size: 12px!important;
+    padding: 0;
+    color: red;
+    //display: none;
+}
+.passwordPic{
+    background: url("/images/pic3.jpg") no-repeat;
+    background-size: 100%;
+    width: 150px;
+    height: 150px;
+    margin: 80px auto 10px;
+}
+.createOk{
+    h3{
+        font-size: 20px;
+        text-transform: uppercase;
+        margin: 50px auto 80px;
+        color: #3e465c;
+        font-weight: bold;
+    }
+    h4{
+        font-size: 14px;
+        text-align: center;
+    }
+}
+.showPassIco{
+    background: url("/images/pic2.jpg") no-repeat;
+    background-size: 100%;
+    width: 14px;
+    height: 10px;
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: 35px;
+    cursor: pointer;
+}
+.creatPic1{
+    background: url("/images/pic1.jpg") no-repeat;
+    background-size: 100%;
+    width: 150px;
+    height: 150px;
+    margin: 80px auto 25px;
+}
+
+
