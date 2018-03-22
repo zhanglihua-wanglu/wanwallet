@@ -37,7 +37,7 @@ Template['popupWindows_inputAccountPassword'].onRendered(function () {
         var startScan = Session.get('startScan');
         if(startScan)
         {
-            alert("OTA scan generated. Will take few moments to show up in the wallet.");
+            // alert("OTA scan generated. Will take few moments to show up in the wallet.");
 
             ipc.send('backendAction_closePopupWindow');
 
@@ -52,7 +52,6 @@ Template['popupWindows_inputAccountPassword'].helpers({
         return TemplateVar.get('showPassword') ? 'text' : 'password';
     }
 });
-
 
 Template['popupWindows_inputAccountPassword'].events({
     'click .cancel': function () {
