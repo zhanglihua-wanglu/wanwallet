@@ -37,7 +37,7 @@ aside.sidebar {
     perspective: 800px;
 
     .field-container{
-        width: 470px;
+        width: 485px;
         margin: 0 auto;
  //       transform-style: preserve-3d;
  //       transition: transform 0.5s;
@@ -152,36 +152,10 @@ aside.sidebar {
     height: 150px;
     margin: 70px auto 10px;
 }
-.checkPassword{
-    width: 470px;
-    display: inline-block;
-    height: 60px;
-    position: relative;
-    left: 0;
-    top: 0;
-    margin: 25px auto 30px auto;
-    label{
-        width: 100%;
-        display: inline-block;
-        text-align: left;
-        input{
-            vertical-align: middle;
-            margin-right: 5px;
-        }
-    }
-    .password-check{
-        width: 470px;
-        border-bottom: solid 1px #ccc6c6;
-        padding-left: 0;
-        margin-top: 5px;
-        font-size: 14px;
-        line-height: 32px;
-    }
+.checkmes{
     p{
-        position: absolute;
-        top: 70px;
-        left: 0;
-        text-align: left;
+        text-align: center;
+        margin: 10px 0 0;
         em{
             background: url("/images/checkIco.png") no-repeat;
             background-size: 100%;
@@ -194,6 +168,45 @@ aside.sidebar {
             color: #929cb8;
             font-size: 12px;
             margin-left: 5px;
+        }
+    }
+}
+.checkPassword{
+    margin: 25px auto 30px auto;
+    label{
+        width: 100%;
+        display: inline-block;
+        text-align: left;
+        input{
+            vertical-align: middle;
+            margin-right: 2px;
+        }
+        .checkpassTit{
+            font-size: 12px;
+            font-family: MicrosoftYaHei-Bold, Arial;
+        }
+        .checkpassError{
+            color: red!important;
+            font-size: 11px!important;
+            font-family: MicrosoftYaHei-Bold, Arial;
+        }
+    }
+    .password-check{
+        width: 470px;
+        border-bottom: solid 1px #ccc6c6;
+        padding-left: 0;
+        margin-top: 5px;
+        font-size: 14px;
+        line-height: 32px;
+    }
+    p{
+        text-align: left;
+        margin: 20px 0 0;
+        span{
+            color: #929cb8;
+            font-size: 12px;
+            margin-left: 5px;
+            font-family: MicrosoftYaHei-Bold, Arial;
         }
     }
 }

@@ -1,7 +1,11 @@
 <template name="popupWindows_requestAccount">
     <div class="popup-windows request-account" style="background: white;">
         <form action="#">
-            <h1 style="margin: 50px 0 35px!important; font-weight: bold;">{{i18n "mist.popupWindows.requestAccount.title"}}</h1>
+            <h1 style="margin: 50px 0 20px!important; font-weight: bold;">{{i18n "mist.popupWindows.requestAccount.title"}}</h1>
+
+            <div class="checkmes">
+                <p><em></em><span>Important：Your password is NO longer changable once account created</span></p>
+            </div>
 
             {{#if TemplateVar.get "creating"}}
                 {{#if TemplateVar.get "created"}}
@@ -44,13 +48,21 @@
                     <div class="checkPassword">
                         <label for="">
                             <input type="checkbox" class="reminder">
-                            Password Reminder
+                            <span class="checkpassTit">Password Reminder</span>
+
+                            {{#if TemplateVar.get "reminderRisk"}}
+                                <span class="checkpassError">Duplicate your password for reminder will led your account at high risk</span>
+                            {{/if}}
                         </label>
 
                         {{#if TemplateVar.get "showReminder"}}
                             <input placeholder="PLEASE ENTER A PROMPT" class='password-check' style="background: white;">
                         {{/if}}
-                        <p><em></em><span>Please enter any words that will help you to remind your password</span></p>
+                        <p>
+                            <span>
+                                Please enter any words /digits  that will help you to remind your password
+                            </span>
+                        </p>
                     </div>
                 </div>
 

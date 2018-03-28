@@ -49,15 +49,17 @@ Template['popupWindows_requestAccount'].events({
         TemplateVar.set('accountLow', false);
     },
 
-    // 'input .account': function (e) {
-    //     var account1 = e.target.value;
-    //
-    //     if((!account1) || account1.length< 2){
-    //         TemplateVar.set('accountLow', true);
-    //     } else {
-    //         TemplateVar.set('accountLow', false);
-    //     }
-    // },
+    'input .password-check': function (e, template) {
+        var pw = template.find('input.password').value;
+
+        if (pw && pw.length >= 8) {
+            var reminder = e.target.value;
+
+            if (reminder === pw) {
+                TemplateVar.set('reminderRisk', true);
+            }
+        }
+    },
 
     'focus .password': function () {
         TemplateVar.set('passwordLow', false);
