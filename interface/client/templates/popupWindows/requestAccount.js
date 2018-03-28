@@ -14,6 +14,7 @@ The request account popup window template
 Template['popupWindows_requestAccount'].onRendered(function () {
     this.$('input.account').focus();
     TemplateVar.set('showPassword', false);
+    TemplateVar.set('showReminder', false);
     TemplateVar.set('accountLow', false);
     TemplateVar.set('passwordLow', false);
     TemplateVar.set('passwordRepat', false);
@@ -29,13 +30,15 @@ Template['popupWindows_requestAccount'].events({
     'click .cancel': function () {
         ipc.send('backendAction_closePopupWindow');
     },
-    'click .show-password': function (e) {
-        TemplateVar.set('showPassword', e.currentTarget.checked);
-    },
+
     'click #close-window': function () {
         TemplateVar.set('creating', false);
         ipc.send('backendAction_closePopupWindow');
 
+    },
+
+    'click .reminder': function (e) {
+        TemplateVar.set('showReminder', e.currentTarget.checked);
     },
 
     'click .showPassIco': function () {
@@ -70,6 +73,11 @@ Template['popupWindows_requestAccount'].events({
         var account1 = template.find('input.account').value;
         var pw = template.find('input.password').value;
         var pwRepeat = template.find('input.password-repeat').value;
+        var reminder = '';
+
+        if (TemplateVar.get('showReminder')) {
+            reminder = template.find('input.password-check').value;
+        }
 
         // ask for password repeat
         // check passwords
@@ -102,6 +110,7 @@ Template['popupWindows_requestAccount'].events({
                         type: 'account',
                         address: res,
                         name: account1,
+                        reminder: reminder
                     };
                     ipc.send('backendAction_windowMessageToOwner', null, insert);
                 } else {

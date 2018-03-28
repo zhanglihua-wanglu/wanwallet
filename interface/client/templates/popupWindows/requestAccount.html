@@ -1,7 +1,7 @@
 <template name="popupWindows_requestAccount">
     <div class="popup-windows request-account" style="background: white;">
         <form action="#">
-            <h1 style="margin: 50px 0 50px!important; font-weight: bold;">{{i18n "mist.popupWindows.requestAccount.title"}}</h1>
+            <h1 style="margin: 50px 0 35px!important; font-weight: bold;">{{i18n "mist.popupWindows.requestAccount.title"}}</h1>
 
             {{#if TemplateVar.get "creating"}}
                 {{#if TemplateVar.get "created"}}
@@ -41,11 +41,19 @@
                             <p class="errorP">{{i18n "mist.popupWindows.requestAccount.errors.passwordMismatch"}}</p>
                         {{/if}}
                     </div>
+                    <div class="checkPassword">
+                        <label for="">
+                            <input type="checkbox" class="reminder">
+                            Password Reminder
+                        </label>
+
+                        {{#if TemplateVar.get "showReminder"}}
+                            <input placeholder="PLEASE ENTER A PROMPT" class='password-check' style="background: white;">
+                        {{/if}}
+                        <p><em></em><span>Please enter any words that will help you to remind your password</span></p>
+                    </div>
                 </div>
-                <!--<div class="show-password-container">-->
-                    <!--<input type="checkbox" name="elements_input_bool" class="show-password abi-input" style="background: white;margin-left: 0!important;">-->
-                    <!--<label for="show-password">{{i18n "mist.popupWindows.onboarding.buttons.showPassword"}}</label>-->
-                <!--</div>-->
+
                 <div class="dapp-modal-buttons" style="background: white!important;width: 170px;margin: 50px auto 0;">
                     <button class="cancel" type="button" style=" color: #c6cdb7; width: 75px; height: 26px; line-height: 26px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0;">{{i18n "buttons.cancel"}}</button>
                     <button class="ok dapp-primary-button" style=" color: #fff; width: 75px; height: 28px; line-height: 28px; border-radius: 50px; margin-left: 15px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);" type="submit">{{i18n "buttons.ok"}}</button>

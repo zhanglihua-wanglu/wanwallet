@@ -18,6 +18,18 @@ Template['popupWindows_inputAccountPassword'].onRendered(function () {
     TemplateVar.set('showPassword', false);
 
     template.autorun(function () {
+        var data = Session.get('accountReminder');
+
+        if (data && data[0]) {
+
+            TemplateVar.set('reminder', data[0].reminder);
+
+            Session.set('accountReminder', false);
+        }
+
+    });
+
+    template.autorun(function () {
         var data = Session.get('masterPasswordWrong');
 
         if (data ) {
@@ -30,6 +42,16 @@ Template['popupWindows_inputAccountPassword'].onRendered(function () {
                 content: TAPi18n.__('mist.popupWindows.unlockMasterPassword.errors.wrongPassword'),
                 duration: 3
             });
+
+            var data = Session.get('data');
+            const action = data.action;
+
+            if(action === 'refundCoin') {
+                var rfOta = data.para;
+                ipc.send('requireAccountReminder', rfOta.rfAddress);
+            }else {
+                ipc.send('requireAccountReminder', data.scAddress);
+            }
 
             Session.set('masterPasswordWrong', false);
         }

@@ -84,13 +84,16 @@ exports.firstNewAccount = (newAccount) =>
 {
     var accountCollection = db.getCollection('firstNewAccount');
     var found = accountCollection.findOne({'address': newAccount.address});
+
     if(found == null)
     {
-        accountCollection.insert({'address': newAccount.address, 'name': newAccount.name});
+        accountCollection.insert({'address': newAccount.address, 'name': newAccount.name, 'reminder': newAccount.reminder});
     }
-}
+};
+
 exports.requireAccountName = (address) =>
 {
     var accountCollection = db.getCollection('firstNewAccount');
+
     return accountCollection.find({'address': address});
 }

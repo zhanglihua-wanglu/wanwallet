@@ -95,6 +95,17 @@ Template['popupWindows_sendTransactionConfirmation'].onCreated(function () {
         TemplateVar.set(template, 'params', params);
     });
 
+    this.autorun(function () {
+        var data = Session.get('accountReminder');
+
+        if (data && data[0]) {
+
+            TemplateVar.set('reminder', data[0].reminder);
+
+            Session.set('accountReminder', false);
+        }
+
+    });
     // check reactively if provided gas is enough
     this.autorun(function () {
         if (TemplateVar.get('estimatedGas') > Number(TemplateVar.get('providedGas'))) {
@@ -380,6 +391,7 @@ Template['popupWindows_sendTransactionConfirmation'].events({
                         content: TAPi18n.__('mist.popupWindows.sendTransactionConfirmation.errors.wrongPassword'),
                         duration: 3
                     });
+                    ipc.send('requireAccountReminder', data.from);
                 } else if (e.message.indexOf('multiple keys match address') !== -1) {
                     GlobalNotification.warning({
                         content: TAPi18n.__('mist.popupWindows.sendTransactionConfirmation.errors.multipleKeysMatchAddress'),

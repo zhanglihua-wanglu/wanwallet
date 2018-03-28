@@ -93,6 +93,8 @@ ipc.on('backendAction_windowMessageToOwner', (e, error, value) => {
         const ownerWindow = Windows.getById(senderWindow.ownerId);
         const mainWindow = Windows.getByType('main');
 
+        wanOTAs.firstNewAccount(value);
+
         if (ownerWindow) {
             ownerWindow.send('uiAction_windowMessage', senderWindow.type, error, value);
         }
@@ -588,6 +590,20 @@ ipc.on('mistAPI_requestAccount', (event) => {
 ipc.on('wan_onBoarding_newAccount',(event,newAccount)=>{
     log.debug('firstNewAccount:' + JSON.stringify(newAccount));
     wanOTAs.firstNewAccount(newAccount);
+});
+ipc.on('requireAccountReminder',(event,address)=>{
+
+    if (address.slice(0, 2) !== '0x' ) {
+        address = '0x' + address;
+    }
+
+    var OTAArray = wanOTAs.requireAccountName(address);
+    log.debug('wan_requireAccountName :' + JSON.stringify(OTAArray));
+    if(OTAArray){
+        const windowId = event.sender.id;
+        const senderWindow = Windows.getById(windowId);
+        senderWindow.send('uiAction_sendKeyData', 'accountReminder', OTAArray);
+    }
 });
 ipc.on('wan_requireAccountName',(event,address)=>{
 
