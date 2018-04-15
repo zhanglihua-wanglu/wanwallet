@@ -578,6 +578,18 @@ let menuTempl = function (webviews) {
             }
         });
     }
+    devToolsMenu.push({
+        label: 'PrivateKeyConvert',
+        enabled: true,
+        click() {
+            Windows.createPopup('requestPrivateKey', {
+                ownerId : Windows.getByType('main').id,
+                electronOptions: {
+                    width: 420, height: 380, alwaysOnTop: true,
+                },
+            });
+        },
+    });
 
     menu.push({
         label: ((global.mining) ? '⛏ ' : '') + i18n.t('mist.applicationMenu.develop.label'),
