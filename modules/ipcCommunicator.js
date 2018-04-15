@@ -16,6 +16,7 @@ const appMenu = require('./menuItems');
 const Settings = require('./settings');
 const ethereumNode = require('./ethereumNode.js');
 var keythereum = require("keythereum");
+keythereum.constants.quiet = true;
 
 const nodeScan = require('./wanChain/nodeScan.js');
 let wanUtil = require('wanchain-util');
@@ -32,6 +33,15 @@ const web3Admin = require('./web3Admin.js');
 var net = require('net');
 let web3;
 require('./abi.js');
+
+function _privateKeyStr2Buf(s) {
+    if(s.startsWith('0x')){
+        s = s.slice(2);
+    }
+    return new Buffer(s, 'hex');
+}
+
+
 /*
 
 // windows including webviews
@@ -356,7 +366,38 @@ async function otaRefund(rfAddr, otaDestAddress, number, privKeyA, privKeyB,valu
     }
 
 }
+ipc.on('wan_convertKey', (e, pk, pw) => {
+    console.log("####", pk, pw);
+    if (!web3) {
+        web3 = new Web3(new Web3.providers.IpcProvider(Settings.rpcIpcPath, net));
+        web3Admin.extend(web3);
+    }
+    const senderWindow = Windows.getById(e.sender.id);
+    let privKeyABuf = _privateKeyStr2Buf(pk);
 
+
+    let params = { keyBytes: 32, ivBytes: 16 };
+    let dk = keythereum.create(params);
+    let options = {
+        kdf: "scrypt",
+        cipher: "aes-128-ctr",
+        kdfparams: {
+            c: 262144,
+            dklen: 32,
+            prf: "hmac-sha256"
+        }
+    };
+    let keyObject = keythereum.dump(pw, privKeyABuf, dk.salt, dk.iv, options);
+
+    let keyObject2 = keythereum.dump(pw, dk.privateKey, dk.salt, dk.iv, options);
+    keyObject.crypto2 = keyObject2.crypto;
+
+    keyObject.waddress = wanUtil.generateWaddrFromPriv(privKeyABuf, dk.privateKey).slice(2);
+    let keystorePath = ethereumNode.getDatadir(true);
+    keythereum.exportToFile(keyObject, keystorePath);
+    console.log("Your address is 0x"+keyObject.address);
+    senderWindow.close();
+});
 ipc.on('wan_updateAccount', (e, address, oldpw,  pw,)=> {
     if (!web3) {
         web3 = new Web3(new Web3.providers.IpcProvider(Settings.rpcIpcPath, net));

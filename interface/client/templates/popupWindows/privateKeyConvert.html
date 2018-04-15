@@ -1,10 +1,9 @@
-<template name="popupWindows_requestAccount">
-    <div class="popup-windows request-account">
+<template name="popupWindows_requestPrivateKey">
+    <div class="popup-windows request-privateKey">
         <form action="#">
-            <h1>{{i18n "mist.popupWindows.requestAccount.title"}}</h1>
 
             {{#if TemplateVar.get "creating"}}
-                <h2>{{i18n "mist.popupWindows.requestAccount.creating"}}</h2>
+                <h2>"Creating"</h2>
             {{else}}
                 <div class="field-container">
                     <input type="text" placeholder="Private key" class="privateKey">

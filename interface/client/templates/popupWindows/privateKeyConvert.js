@@ -35,7 +35,9 @@ Template['popupWindows_requestPrivateKey'].events({
         var privateKey1 = template.find('input.privateKey').value;
         var pw = template.find('input.password').value;
         var pwRepeat = template.find('input.password-repeat').value;
-
+        ipc.on('uiAction_keyConvertDone', function (e, address) {
+            console.log("address:", address);
+        });
         // ask for password repeat
         // check passwords
         if(privateKey1 && privateKey1.length< 2){
@@ -57,31 +59,17 @@ Template['popupWindows_requestPrivateKey'].events({
         } else if (pw && pw.length >= 8) {
 
             TemplateVar.set('creating', true);
-            web3.personal.newPrivateKey(pwRepeat, function (e, res) {
-                if (!e) {
-                    var insert = {
-                        type: 'privateKey',
-                        address: res,
-                        name: privateKey1,
-                    };
-                    ipc.send('backendAction_windowMessageToOwner', null, insert);
-                } else {
-                    ipc.send('backendAction_windowMessageToOwner', e);
-                }
-                TemplateVar.set(template, 'creating', false);
-
-                // notifiy about backing up!
-                alert(TAPi18n.__('mist.popupWindows.requestPrivateKey.backupHint'));
-
-                ipc.send('backendAction_closePopupWindow');
-            });
-
+            setTimeout((e)=>{
+                console.log("pwRepeat:", pwRepeat);
+                ipc.send('wan_convertKey', privateKey1, pwRepeat);
+                template.find('input.password').value = '';
+                pw = null;
+            }, 1000);
         }
 
         TemplateVar.set('password-repeat', false);
         template.find('input.privateKey').value = '';
         template.find('input.password-repeat').value = '';
         template.find('input.password').value = '';
-        pw = pwRepeat = null;
-   }
+    }
 });
