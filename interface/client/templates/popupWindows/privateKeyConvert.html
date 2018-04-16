@@ -1,0 +1,24 @@
+<template name="popupWindows_requestPrivateKey">
+    <div class="popup-windows request-privateKey">
+        <form action="#">
+
+            {{#if TemplateVar.get "creating"}}
+                <h2>"Creating"</h2>
+            {{else}}
+                <div class="field-container">
+                    <input type="text" placeholder="Private key" class="privateKey">
+                    <input type="{{passwordInputType}}" placeholder="{{i18n 'mist.popupWindows.requestAccount.enterPassword'}}" class="password">
+                    <input type="{{passwordInputType}}" placeholder="{{i18n 'mist.popupWindows.requestAccount.repeatPassword'}}" class='password-repeat'>
+                </div>
+                <div class="show-password-container">
+                    <input type="checkbox" name="elements_input_bool" class="show-password abi-input">
+                    <label for="show-password">{{i18n "mist.popupWindows.onboarding.buttons.showPassword"}}</label>
+                </div>
+                <div class="dapp-modal-buttons">
+                    <button class="cancel" type="button">{{i18n "buttons.cancel"}}</button>
+                    <button class="ok dapp-primary-button" type="submit">{{i18n "buttons.ok"}}</button>
+                </div>
+            {{/if}}
+        </form>
+    </div>
+</template>

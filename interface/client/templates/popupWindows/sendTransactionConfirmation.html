@@ -167,18 +167,23 @@
                 {{else}}
 
                     {{#if isInputPassword}}
-                        <input type="password" placeholder="{{i18n 'mist.popupWindows.sendTransactionConfirmation.enterPassword'}}" style="width: 100%;"/>
-                        {{#if TemplateVar.get "reminder"}}
-                            <p class="passwordReminder-p"><span class="passwordReminder-tit">Password Reminder：</span> <span class="passwordReminder-cont">{{TemplateVar.get "reminder"}}</span></p>
-                        {{/if}}
-                        {{else}}
-                        <p style="font-size: 12px;">Please confirm this transaction on your ledger first and click "Send Transaction"</p>
-                    {{/if}}
+                            <input type="password" placeholder="{{i18n 'mist.popupWindows.sendTransactionConfirmation.enterPassword'}}" style="width: 100%;"/>
+                            {{#if TemplateVar.get "reminder"}}
+                                <p class="passwordReminder-p"><span class="passwordReminder-tit">Password Reminder：</span> <span class="passwordReminder-cont">{{TemplateVar.get "reminder"}}</span></p>
+                            {{/if}}
 
-                    <div class="dapp-modal-buttons" style="padding-bottom: 20px;">
-                        <button class="cancel" type="button" style="width: 75px;height: 28px; line-height: 28px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0; color: #c6cdb7;">{{i18n "buttons.cancel"}}</button>
-                        <button class="ok dapp-primary-button" type="submit" style="height: 28px; font-weight: 400; line-height: 28px; border-radius: 50px; margin-left: 15px; padding: 0 10px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);color: #fff;">{{i18n "mist.popupWindows.sendTransactionConfirmation.buttons.sendTransaction"}}</button>
-                    </div>
+                            <div class="dapp-modal-buttons" style="padding-bottom: 20px;">
+                                <button class="cancel" type="button" style="width: 75px;height: 28px; line-height: 28px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0; color: #c6cdb7;">{{i18n "buttons.cancel"}}</button>
+                                <button class="ok dapp-primary-button" type="submit" style="height: 28px; font-weight: 400; line-height: 28px; border-radius: 50px; margin-left: 15px; padding: 0 10px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);color: #fff;">{{i18n "mist.popupWindows.sendTransactionConfirmation.buttons.sendTransaction"}}</button>
+                            </div>
+                        {{else}}
+                            <input type="password" class="ledger" placeholder='Please click "CHECK LEDGER" button to process transaction on your ledger' disabled="true"/>
+
+                            <div class="dapp-modal-buttons" style="padding-bottom: 20px;">
+                                <button class="cancel" type="button" style="width: 75px;height: 28px; line-height: 28px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0; color: #c6cdb7;">{{i18n "buttons.cancel"}}</button>
+                                <button class="ok dapp-primary-button" type="submit" style="height: 28px; font-weight: 400; line-height: 28px; border-radius: 50px; margin-left: 15px; padding: 0 10px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);color: #fff;">CHECK LEDGER</button>
+                            </div>
+                    {{/if}}
 
                 {{/if}}
                 </footer>

@@ -333,7 +333,12 @@ Template['popupWindows_sendTransactionConfirmation'].events({
     @event click .cancel
     */
     'click .cancel': function () {
-        ipc.send('backendAction_unlockedAccountAndSentTransaction', 'Transaction not confirmed');
+        console.log('this.isWaddress', this.isWaddress);
+        if (this.isWaddress === '0x00') {
+            ipc.send('backendAction_unlockedAccountAndSentTransaction', 'Transaction not confirmed. Please DO NOT process your transaction on ledger');
+        } else {
+            ipc.send('backendAction_unlockedAccountAndSentTransaction', 'Transaction not confirmed');
+        }
         ipc.send('backendAction_closePopupWindow');
     },
     /**
@@ -403,8 +408,12 @@ Template['popupWindows_sendTransactionConfirmation'].events({
                         duration: 5
                     });
                 } else {
+                    var message = e.message;
+                    if (e.message === 'reply lacks signature' && ! TemplateVar.get(template, 'isInputPassword')) {
+                        message = 'Transaction Cancelled on Ledger';
+                    }
                     GlobalNotification.warning({
-                        content: e.message,
+                        content: message,
                         duration: 5
                     });
                 }
