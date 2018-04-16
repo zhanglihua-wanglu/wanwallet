@@ -30,7 +30,7 @@ module.exports = class extends BaseProcessor {
         return new Q((resolve, reject) => {
             this._log.info('Ask user for password');
 
-            this._log.info(payload.params[0]);
+            this._log.info('payload.params[0]', payload.params[0]);
 
             // validate data
             try {
@@ -74,7 +74,7 @@ module.exports = class extends BaseProcessor {
                 // user cancelled?
                 if (!modalWindow.processed) {
                     // reject(this.ERRORS.METHOD_DENIED);
-                    reject('Transaction not confirmed');
+                    reject('Transaction not confirmed.');
                 }
             });
 
