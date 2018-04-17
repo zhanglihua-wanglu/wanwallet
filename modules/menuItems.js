@@ -585,10 +585,7 @@ let menuTempl = function (webviews) {
         enabled: true,
         click() {
             Windows.createPopup('requestPrivateKey', {
-                ownerId : Windows.getByType('main').id,
-                electronOptions: {
-                    width: 420, height: 380, alwaysOnTop: true,
-                },
+                ownerId : Windows.getByType('main').id
             });
         },
     });

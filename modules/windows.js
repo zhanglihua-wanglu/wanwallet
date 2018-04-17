@@ -261,8 +261,8 @@ class Windows {
             useWeb3: true,
             electronOptions: {
                 title: '',
-                width: 400,
-                height: 400,
+                // width: 400,
+                // height: 400,
                 resizable: false,
                 center: true,
                 useContentSize: true,
