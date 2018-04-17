@@ -1,23 +1,56 @@
 <template name="popupWindows_requestPrivateKey">
-    <div class="popup-windows request-privateKey">
-        <form action="#">
+    <div class="popup-windows request-privateKey" style="background: #fff;">
+            <form action="#">
+                <h1 style="margin: 50px 0 20px!important; font-weight: bold;">Keystore Convertor</h1>
 
             {{#if TemplateVar.get "creating"}}
-                <h2>"Creating"</h2>
+                <h2 style="background: #fff!important;">"Creating"</h2>
             {{else}}
-                <div class="field-container">
-                    <input type="text" placeholder="Private key" class="privateKey">
-                    <input type="{{passwordInputType}}" placeholder="{{i18n 'mist.popupWindows.requestAccount.enterPassword'}}" class="password">
-                    <input type="{{passwordInputType}}" placeholder="{{i18n 'mist.popupWindows.requestAccount.repeatPassword'}}" class='password-repeat'>
-                </div>
-                <div class="show-password-container">
-                    <input type="checkbox" name="elements_input_bool" class="show-password abi-input">
-                    <label for="show-password">{{i18n "mist.popupWindows.onboarding.buttons.showPassword"}}</label>
-                </div>
-                <div class="dapp-modal-buttons">
-                    <button class="cancel" type="button">{{i18n "buttons.cancel"}}</button>
-                    <button class="ok dapp-primary-button" type="submit">{{i18n "buttons.ok"}}</button>
-                </div>
+
+                {{#if TemplateVar.get "isAgree"}}
+                    <div class="field-container" style="margin: 70px auto 40px;">
+                        <div class="errorDiv">
+                            <input type="text" placeholder="Private key" class="account" style="background: white;">
+                        </div>
+                        <div class="errorDiv" style="position: relative;">
+                            <input type="{{passwordInputType}}" placeholder="8 Digits Password" class="password" style="background: white;">
+                            <em class="showPassIco"></em>
+                        </div>
+                        <div class="errorDiv">
+                            <input type="{{passwordInputType}}" placeholder="Re-enter Password" class="password-repeat" style="background: white;">
+                        </div>
+                        <div class="checkPassword">
+                            <label for="">
+                                <input type="checkbox" class="reminder">
+                                <span class="checkpassTit">Password Reminder</span>
+
+                                {{#if TemplateVar.get "reminderRisk"}}
+                                    <span class="checkpassError">Duplicate your password for reminder will led your account at high risk</span>
+                                {{/if}}
+                            </label>
+
+                            {{#if TemplateVar.get "showReminder"}}
+                                <input class='password-check' style="background: white;margin: 0;padding: 0;">
+
+                                <p style="margin: 0;">
+                            <span>
+                                Please enter any words/digits that will help you to remember your password
+                            </span>
+                                </p>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="dapp-modal-buttons" style="background: white!important; width: 170px; margin: 50px auto 0;">
+                        <button class="cancel" type="button" style="color: #c6cdb7; width: 75px; height: 26px; line-height: 26px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0;">Cancel</button>
+                        <button class="ok dapp-primary-button" style="color: #fff; width: 75px; height: 28px; line-height: 28px; border-radius: 50px; margin-left: 15px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);" type="submit">OK</button>
+                    </div>
+                {{else}}
+                    <p style="margin: 160px auto 200px; font-size: 18px;">Please transfer your balance to new WAN Wallet Address after convert process completed</p>
+                    <div class="dapp-modal-buttons" style="background: white!important; width: 170px; margin: 50px auto 0;">
+                        <button class="cancel" type="button" style="color: #c6cdb7; width: 75px; height: 26px; line-height: 26px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0;">Cancel</button>
+                        <button class="ok dapp-primary-button" style="color: #fff; width: 75px; height: 28px; line-height: 28px; border-radius: 50px; margin-left: 15px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);" type="submit">Agree</button>
+                    </div>
+                {{/if}}
             {{/if}}
         </form>
     </div>

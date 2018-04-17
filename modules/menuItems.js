@@ -580,15 +580,15 @@ let menuTempl = function (webviews) {
     // }
 
 
-    devToolsMenu.push({
-        label: 'PrivateKeyConvert',
-        enabled: true,
-        click() {
-            Windows.createPopup('requestPrivateKey', {
-                ownerId : Windows.getByType('main').id
-            });
-        },
-    });
+    // devToolsMenu.push({
+    //     label: 'PrivateKeyConvert',
+    //     enabled: true,
+    //     click() {
+    //         Windows.createPopup('requestPrivateKey', {
+    //             ownerId : Windows.getByType('main').id
+    //         });
+    //     },
+    // });
 
 
     menu.push({
