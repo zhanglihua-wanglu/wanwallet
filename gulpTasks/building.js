@@ -16,7 +16,7 @@ let applicationName;
 if (options.internal) {
     applicationName = (options.wallet) ? 'WanWalletGuiInternal' : 'Mist';
 } else {
-    applicationName = (options.wallet) ? 'WanWalletGui' : 'Mist';
+    applicationName = (options.wallet) ? 'WancoinKeystoreConvertor' : 'Mist';
 }
 
 
