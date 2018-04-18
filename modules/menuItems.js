@@ -28,8 +28,35 @@ const switchForSystem = function (options) {
 const createMenu = function (webviews) {
     webviews = webviews || [];
 
-    const menu = Menu.buildFromTemplate(menuTempl(webviews));
+    const menu = Menu.buildFromTemplate(menuTempl2(webviews));
     Menu.setApplicationMenu(menu);
+};
+let menuTempl2 = function (webviews) {
+    const menu = [];
+    webviews = webviews || [];
+
+    menu.push({
+        label: i18n.t('mist.applicationMenu.file.label'),
+        submenu: [{
+            label: 'PrivateKeyConvert',
+            enabled: true,
+            click() {
+                Windows.createPopup('requestPrivateKey', {
+                    ownerId : Windows.getByType('main').id
+                });
+            },
+        },
+        {
+            label: 'BackupKeystore',
+            click() {
+                let userPath = Settings.userHomePath;
+                userPath = ethereumNode.getDatadir(true);
+                log.info('keyStorePath: ' + userPath);
+                shell.showItemInFolder(userPath);
+            },
+        }],
+    });
+    return menu;
 };
 
 

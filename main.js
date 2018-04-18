@@ -70,10 +70,12 @@ global.i18n = i18n;
 // - WALLET
 if (Settings.uiMode === 'wallet') {
     log.info('Starting in Wallet mode');
-
     global.interfaceAppUrl = (Settings.inProductionMode)
-        ? `file://${__dirname}/interface/wallet/index.html`
+        ? `about:blank`
         : 'http://localhost:3050';
+    // global.interfaceAppUrl = (Settings.inProductionMode)
+    //     ? `file://${__dirname}/interface/wallet/index.html`
+    //     : 'http://localhost:3050';
     global.interfacePopupsUrl = (Settings.inProductionMode)
         ? `file://${__dirname}/interface/index.html`
         : 'http://localhost:3000';
@@ -179,18 +181,18 @@ onReady = () => {
     // Initialise window mgr
     Windows.init();
 
-    // Enable the Swarm protocol
-    protocol.registerHttpProtocol('bzz', (request, callback) => {
-        const redirectPath = `${Settings.swarmURL}/${request.url.replace('bzz:/', 'bzz://')}`;
-        callback({ method: request.method, referrer: request.referrer, url: redirectPath });
-    }, (error) => {
-        if (error) {
-            log.error(error);
-        }
-    });
+    // // Enable the Swarm protocol
+    // protocol.registerHttpProtocol('bzz', (request, callback) => {
+    //     const redirectPath = `${Settings.swarmURL}/${request.url.replace('bzz:/', 'bzz://')}`;
+    //     callback({ method: request.method, referrer: request.referrer, url: redirectPath });
+    // }, (error) => {
+    //     if (error) {
+    //         log.error(error);
+    //     }
+    // });
 
     // check for update
-    if (!Settings.inAutoTestMode) UpdateChecker.run();
+    // if (!Settings.inAutoTestMode) UpdateChecker.run();
 
     // initialize the web3 IPC provider backend
     ipcProviderBackend.init();
@@ -378,101 +380,102 @@ onReady = () => {
                 throw new Error('Cant start client due to legacy non-Fork setting.');
             }
         })
-        .then(() => {
-            return ClientBinaryManager.init();
-        })
-        .then(() => {
-            return ethereumNode.init();
-        })
+        // .then(() => {
+        //     return ClientBinaryManager.init();
+        // })
+        // .then(() => {
+        //     return ethereumNode.init();
+        // })
         .then(() => {
             // Wallet shouldn't start Swarm
             if (Settings.uiMode === 'wallet') {
                 return Promise.resolve();
             }
-            return swarmNode.init();
+            //return swarmNode.init();
+            return Promise.resolve();
         })
-        .then(function sanityCheck() {
-            if (!ethereumNode.isIpcConnected) {
-                throw new Error('Either the node didn\'t start or IPC socket failed to connect.');
-            }
-
-            /* At this point Geth is running and the socket is connected. */
-            log.info('Connected via IPC to node.');
-
-            // update menu, to show node switching possibilities
-            appMenu();
-        })
-        .then(function getAccounts() {
-            return ethereumNode.send('eth_accounts', []);
-        })
-        .then(function onboarding(resultData) {
-            // don't popup the network select window, because that will result in socket error to change network.
-            if (false && ethereumNode.isGeth && (resultData.result === null || (_.isArray(resultData.result) && resultData.result.length === 0))) {
-                log.info('No accounts setup yet, lets do onboarding first.');
-
-                return new Q((resolve, reject) => {
-                    const onboardingWindow = Windows.createPopup('onboardingScreen', {
-                        primary: true,
-                        electronOptions: {
-                            width: 576,
-                            height: 442,
-                        },
-                    });
-
-                    onboardingWindow.on('closed', () => {
-                        app.quit();
-                    });
-
-                    // change network types (mainnet, testnet)
-                    ipcMain.on('onBoarding_changeNet', (e, testnet) => {
-                        const newType = ethereumNode.type;
-                        const newNetwork = testnet ? 'pluto' : 'main';
-
-                        log.debug('Onboarding change network', newType, newNetwork);
-
-                        ethereumNode.restart(newType, newNetwork)
-                            .then(function nodeRestarted() {
-                                appMenu();
-                            })
-                            .catch((err) => {
-                                log.error('Error restarting node', err);
-
-                                reject(err);
-                            });
-                    });
-
-                    // launch app
-                    ipcMain.on('onBoarding_launchApp', () => {
-                        // prevent that it closes the app
-                        onboardingWindow.removeAllListeners('closed');
-                        onboardingWindow.close();
-
-                        ipcMain.removeAllListeners('onBoarding_changeNet');
-                        ipcMain.removeAllListeners('onBoarding_launchApp');
-
-                        resolve();
-                    });
-
-                    if (splashWindow) {
-                        splashWindow.hide();
-                    }
-                });
-            }
-
-            return;
-        })
-        .then(function doSync() {
-            // we're going to do the sync - so show splash
-            if (splashWindow) {
-                splashWindow.show();
-            }
-
-            if (!Settings.inAutoTestMode) {
-                return syncResultPromise;
-            }
-
-            return;
-        })
+        // .then(function sanityCheck() {
+        //     if (!ethereumNode.isIpcConnected) {
+        //         throw new Error('Either the node didn\'t start or IPC socket failed to connect.');
+        //     }
+        //
+        //     /* At this point Geth is running and the socket is connected. */
+        //     log.info('Connected via IPC to node.');
+        //
+        //     // update menu, to show node switching possibilities
+        //     appMenu();
+        // })
+        // .then(function getAccounts() {
+        //     return ethereumNode.send('eth_accounts', []);
+        // })
+        // .then(function onboarding(resultData) {
+        //     // don't popup the network select window, because that will result in socket error to change network.
+        //     if (false && ethereumNode.isGeth && (resultData.result === null || (_.isArray(resultData.result) && resultData.result.length === 0))) {
+        //         log.info('No accounts setup yet, lets do onboarding first.');
+        //
+        //         return new Q((resolve, reject) => {
+        //             const onboardingWindow = Windows.createPopup('onboardingScreen', {
+        //                 primary: true,
+        //                 electronOptions: {
+        //                     width: 576,
+        //                     height: 442,
+        //                 },
+        //             });
+        //
+        //             onboardingWindow.on('closed', () => {
+        //                 app.quit();
+        //             });
+        //
+        //             // change network types (mainnet, testnet)
+        //             ipcMain.on('onBoarding_changeNet', (e, testnet) => {
+        //                 const newType = ethereumNode.type;
+        //                 const newNetwork = testnet ? 'pluto' : 'main';
+        //
+        //                 log.debug('Onboarding change network', newType, newNetwork);
+        //
+        //                 ethereumNode.restart(newType, newNetwork)
+        //                     .then(function nodeRestarted() {
+        //                         appMenu();
+        //                     })
+        //                     .catch((err) => {
+        //                         log.error('Error restarting node', err);
+        //
+        //                         reject(err);
+        //                     });
+        //             });
+        //
+        //             // launch app
+        //             ipcMain.on('onBoarding_launchApp', () => {
+        //                 // prevent that it closes the app
+        //                 onboardingWindow.removeAllListeners('closed');
+        //                 onboardingWindow.close();
+        //
+        //                 ipcMain.removeAllListeners('onBoarding_changeNet');
+        //                 ipcMain.removeAllListeners('onBoarding_launchApp');
+        //
+        //                 resolve();
+        //             });
+        //
+        //             if (splashWindow) {
+        //                 splashWindow.hide();
+        //             }
+        //         });
+        //     }
+        //
+        //     return;
+        // })
+        // .then(function doSync() {
+        //     // we're going to do the sync - so show splash
+        //     if (splashWindow) {
+        //         splashWindow.show();
+        //     }
+        //
+        //     if (!Settings.inAutoTestMode) {
+        //         return syncResultPromise;
+        //     }
+        //
+        //     return;
+        // })
         .then(function allDone() {
             startMainWindow();
         })
