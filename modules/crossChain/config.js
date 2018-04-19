@@ -79,6 +79,6 @@ config.databasePath = __dirname + '/LocalDb';
 // 	TypeSixteen:4
 // };
 config.wanKeyStorePath = config.keyStorePath;
-config.ethKeyStorePath = config.keyStorePath;
+config.ethKeyStorePath = config.ethkeyStorePath;
 require('wanchainwalletcore/config.js').setConfig(config);
 module.exports = config;

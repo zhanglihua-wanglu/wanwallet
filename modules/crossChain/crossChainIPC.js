@@ -6,7 +6,8 @@ let ethSend = require('wanchainwalletcore').ethSend;
 let wanSend = require('wanchainwalletcore').wanSend;
 let CoinAmount = require('wanchaintrans').CoinAmount;
 let GWeiAmount = require('wanchaintrans').GWeiAmount;
-
+let EthKeyStoreDir = require('wanchainwalletcore').EthKeyStoreDir;
+let WanKeyStoreDir = require('wanchainwalletcore').WanKeyStoreDir;
 const Windows = require('../windows');
 ipc.on('CrossChain_ETH2WETH', (e, data) => {
     console.log('CrossChainIPC : ',data);
@@ -50,6 +51,15 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             console.log('signed trans : ', data.value);
             callbackMessage('CrossChain_ETH2WETH', e, data);
         });
+    }
+    else if(data.action == 'getAddressList'){
+        if(data.chainType == 'ETH'){
+            data.value = Object.keys(EthKeyStoreDir.Accounts);
+        }
+        else {
+            data.value = Object.keys(WanKeyStoreDir.Accounts);
+        }
+        callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if(data.action == 'sendRawTrans'){
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
