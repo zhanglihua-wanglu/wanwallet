@@ -93,6 +93,9 @@ window.addEventListener('message', function message(event) {
             ipcRenderer.sendToHost(data.type, data.message);
         }
     }
+    else if(data.type == 'CrossChain_ETH2WETH'){
+        ipcRenderer.send('CrossChain_ETH2WETH', data.message);
+    }
     //cranelv add wan-Message 2017-11-17
     else if (/^wan_[a-z]/i.test(data.type)) {
         ipcRenderer.send(data.type, data);
@@ -136,8 +139,17 @@ const postMessage = function (payload) {
         });
     });
 });
+//crosss chain transactions
+['Callback_CrossChain_ETH2WETH','Callback_CrossChain_WETH2ETH'].forEach(function (type) {
+    ipcRenderer.on(type, function onIpcRenderer(e, result) {
 
-
+        // this type needs special packaging
+        postMessage({
+            type: type,
+            message: result
+        });
+    });
+});
 // load ethereumProvider
 const bignumber = fs.readFileSync(path.join(__dirname, '/injected/BigNumber.js')).toString();
 const eventEmitter3 = fs.readFileSync(path.join(__dirname, '/injected/EventEmitter3.js')).toString();

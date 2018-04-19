@@ -48,6 +48,7 @@ const db = global.db = require('./modules/db');
 
 
 require('./modules/ipcCommunicator.js');
+require('./modules/crossChain/crossChainIPC.js');
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
 const ethereumNode = require('./modules/ethereumNode.js');

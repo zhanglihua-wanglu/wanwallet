@@ -17,6 +17,12 @@
     },
     "main": "main.js",
     "dependencies": {
+        "stepcell" : "file:../npm_wallet/stepcell",
+        "wanchaindb" : "file:../npm_wallet/wanchaindb",
+        "wanchaintrans" : "file:../npm_wallet/wanchainTrans",
+        "keystore_dir" : "file:../npm_wallet/keystore_dir",
+        "wanchainwalletcore" : "file:../npm_wallet/wanchainwalletcore",
+        "wanchainsender" : "file:../npm_wallet/wanChainSender",
         "bignumber.js": "^4.0.1",
         "bluebird": "^3.5.0",
         "chai-as-promised": "^6.0.0",

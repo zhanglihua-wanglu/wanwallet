@@ -38,7 +38,6 @@
         }
         return newStr;
     };
-
     /**
      Mist API
 
@@ -48,7 +47,10 @@
      @constructor
      */
     const mist = {
+
+
         callbacks: {},
+
         //cranelv add permanent callbacks; 2017-11-19
         permanentCallbacks: {},
         popEventsCallback: [],
@@ -325,7 +327,12 @@
                 mist.menu.entries[id].callback();
             }
 
-        } else if (data.type === 'uiAction_windowMessage') {
+        } else if (data.type === 'Callback_CrossChain_ETH2WETH'){
+            console.log('mist api: ', data);
+            if(mist.ETH2WETH) {
+                mist.ETH2WETH().invokeCallback(data.message);
+            }
+        }else if (data.type === 'uiAction_windowMessage') {
             var params = data.message;
 
             if (mist.callbacks[params.type]) {
