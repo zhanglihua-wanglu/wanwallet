@@ -80,5 +80,5 @@ config.databasePath = __dirname + '/LocalDb';
 // };
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
-require('wanchainwalletcore').setConfig(config);
+require('wanchainwalletcore').start(config);
 module.exports = config;
