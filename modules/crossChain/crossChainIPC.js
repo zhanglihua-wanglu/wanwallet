@@ -8,6 +8,7 @@ let GWeiAmount = require('wanchaintrans').GWeiAmount;
 const Windows = require('../windows');
 ipc.on('CrossChain_ETH2WETH', (e, data) => {
     console.log('CrossChainIPC : ',data);
+    let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
     if(data.action == 'signLockTrans'){
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
@@ -83,19 +84,11 @@ function callbackMessage(message,e,data){
 }
 
 function sendRawTransactions(message,e,data) {
-    if(data.chainType == 'ETH'){
-        ethSend.sendRawTrans(data.parameters.tx,function (err,result) {
+    let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
+    sendServer.sendRawTrans(data.parameters.tx,function (err,result) {
             data.error = err;
             data.value = result;
             callbackMessage(message,e,data);
         });
-    }
-    else {
-        wanSend.sendRawTrans(data.parameters.tx,function (err,result) {
-            data.error = err;
-            data.value = result;
-            callbackMessage(message,e,data);
-        });
-    }
     //data.value = 'aaaa';
 }
