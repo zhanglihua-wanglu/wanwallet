@@ -16,7 +16,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.from,data.parameters.tx.tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,"200",crossType);
+            data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
         sendTransaction.trans.setLockData();
         data.value = sendTransaction.trans.trans.data;
         callbackMessage('CrossChain_ETH2WETH',e,data);
