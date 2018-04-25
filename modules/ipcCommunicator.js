@@ -574,7 +574,7 @@ ipc.on('mistAPI_requestAccount', (event) => {
         createAccountPopup(event);
     } else { // Mist
         Windows.createPopup('connectAccount', {
-            ownerId: e.sender.id,
+            ownerId: event.sender.id,
             electronOptions: {
                 width: 460,
                 height: 520,

@@ -2,8 +2,10 @@
 const config = require('./config.js');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let wanchainCore = require('wanchainwalletcore');
-let CoinAmount = require('wanchaintrans').CoinAmount;
-let GWeiAmount = require('wanchaintrans').GWeiAmount;
+console.log("wanchainCore");
+console.log(wanchainCore.sendFromSocket);
+
+let sendFromSocket = wanchainCore.sendFromSocket;
 
 const Windows = require('../windows');
 ipc.on('CrossChain_ETH2WETH', (e, data) => {
@@ -58,24 +60,33 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         }
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
+    /*
     else if(data.action == 'getGasPrice'){
+        let result = {};
         if(data.chainType == 'ETH'){
-            let result = {};
-            result.gasPrice = 12345;
             result.LockGas = config.ethLockGas;
             result.RefundGas = config.ethRefundGas;
             result.RevokeGas = config.ethRevokeGas;
-            data.value = result;
+
         } else {
             let result = {};
-            result.gasPrice = 12345;
             result.LockGas = config.wanLockGas;
             result.RefundGas = config.wanRefundGas;
             result.RevokeGas = config.wanRevokeGas;
             data.value = result;
         }
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        sendFromSocket.getGasPrice(data.chainType,function(err, r){
+            if(err){
+                data.err = err;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }else{
+                result.gasPrice = r;
+                data.value = result;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
+        });
     }
+    */
     else if(data.action == 'sendRawTrans'){
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
     }
