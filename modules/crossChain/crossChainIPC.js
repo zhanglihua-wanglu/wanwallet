@@ -1,5 +1,5 @@
 //require('stepcell');
-require('./config.js');
+const config = require('./config.js');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let wanchainCore = require('wanchainwalletcore');
 let CoinAmount = require('wanchaintrans').CoinAmount;
@@ -55,6 +55,24 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         }
         else {
             data.value = Object.keys(wanchainCore.WanKeyStoreDir.Accounts);
+        }
+        callbackMessage('CrossChain_ETH2WETH', e, data);
+    }
+    else if(data.action == 'getGasPrice'){
+        if(data.chainType == 'ETH'){
+            let result = {};
+            result.gasPrice = 12345;
+            result.LockGas = config.ethLockGas;
+            result.RefundGas = config.ethRefundGas;
+            result.RevokeGas = config.ethRevokeGas;
+            data.value = result;
+        } else {
+            let result = {};
+            result.gasPrice = 12345;
+            result.LockGas = config.wanLockGas;
+            result.RefundGas = config.wanRefundGas;
+            result.RevokeGas = config.wanRevokeGas;
+            data.value = result;
         }
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }

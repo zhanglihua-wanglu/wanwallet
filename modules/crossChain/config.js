@@ -80,5 +80,17 @@ config.databasePath = __dirname + '/LocalDb';
 // };
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
+
+config.ethGasPrice = 123;
+config.wanGasPrice = 123;
+config.ethLockGas = 171866;
+config.ethRefundGas = 39829;
+config.ethRevokeGas = 40323;
+config.wanLockGas = 150070;
+config.wanRefundGas = 39937;
+config.wanRevokeGas = 40017;
+
+
+
 require('wanchainwalletcore').start(config);
 module.exports = config;
