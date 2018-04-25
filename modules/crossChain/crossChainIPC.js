@@ -18,7 +18,10 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         sendTransaction.createTransaction(data.parameters.tx.from,data.parameters.tx.tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
             data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
         sendTransaction.trans.setLockData();
-        data.value = sendTransaction.trans.trans.data;
+        let lockDataResult = {};
+        lockDataResult.lockTransData = sendTransaction.trans.trans.data;
+        lockDataResult.secretX = sendTransaction.trans.Contract.key;
+        data.value = lockDataResult;
         callbackMessage('CrossChain_ETH2WETH',e,data);
     }
     else if(data.action == 'signLockTrans'){
@@ -26,6 +29,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.from,data.parameters.tx.tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
             data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+        sendTransaction.trans.setKey(data.parameters.secretX);
         sendTransaction.trans.setLockData();
         sendTransaction.getNonce(function () {
             console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
