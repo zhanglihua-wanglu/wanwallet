@@ -6,24 +6,27 @@ console.log("wanchainCore");
 console.log(wanchainCore.sendFromSocket);
 
 let sendFromSocket = wanchainCore.sendFromSocket;
+let hashContract = wanchainCore.wanchaintrans.hashContract;
 
 const Windows = require('../windows');
 ipc.on('CrossChain_ETH2WETH', (e, data) => {
     console.log('CrossChainIPC : ',data);
     let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
     if(data.action == 'signLockTrans'){
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createTransaction(data.parameters.tx.from,data.parameters.tx.tokenAddress,new CoinAmount(data.parameters.tx.amount),data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,new GWeiAmount(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.trans.setLockData();
-        sendTransaction.getNonce(function () {
-            console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
-            data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            console.log('signed trans : ',data.value);
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-
-        });
+        data.value = hashContract.getLockData(data.parameters.tx.amount);
+        callbackMessage('CrossChain_ETH2WETH',e,data);
+        // let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
+        // let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+        // sendTransaction.createTransaction(data.parameters.tx.from,data.parameters.tx.tokenAddress,new CoinAmount(data.parameters.tx.amount),data.parameters.tx.storemanGroup,
+        //     data.parameters.tx.cross,data.parameters.tx.gas,new GWeiAmount(data.parameters.tx.gasPrice),crossType);
+        // sendTransaction.trans.setLockData();
+        // sendTransaction.getNonce(function () {
+        //     console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
+        //     data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
+        //     console.log('signed trans : ',data.value);
+        //     callbackMessage('CrossChain_ETH2WETH',e,data);
+        //
+        // });
     }
     else if(data.action == 'signUnlockTrans'){
         let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
