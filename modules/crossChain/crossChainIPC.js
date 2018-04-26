@@ -97,6 +97,31 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             callbackMessage('CrossChain_ETH2WETH', e, data);
         });
     }
+    else if(data.action == 'getGasPrice'){
+        let result = {};
+        if(data.chainType == 'ETH'){
+            result.LockGas = config.ethLockGas;
+            result.RefundGas = config.ethRefundGas;
+            result.RevokeGas = config.ethRevokeGas;
+
+        } else {
+            let result = {};
+            result.LockGas = config.wanLockGas;
+            result.RefundGas = config.wanRefundGas;
+            result.RevokeGas = config.wanRevokeGas;
+            data.value = result;
+        }
+        sendFromSocket.getGasPrice(data.chainType,function(err, r){
+            if(err){
+                data.err = err;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }else{
+                result.gasPrice = r;
+                data.value = result;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
+        });
+    }
     else if(data.action == 'getAddressList'){
         if(data.chainType == 'ETH'){
             data.value = Object.keys(wanchainCore.EthKeyStoreDir.Accounts);
