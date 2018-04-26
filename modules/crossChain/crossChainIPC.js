@@ -111,7 +111,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             result.RevokeGas = config.wanRevokeGas;
             data.value = result;
         }
-        sendFromSocket.getGasPrice(data.chainType,function(err, r){
+        sendServer.sendMessage('getGasPrice',function(err, r){
             if(err){
                 data.err = err;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
@@ -134,7 +134,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendRawTrans'){
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
     }
-    else if(sendServer.hasMessage[data.action]){
+    else if(sendServer.hasMessage(data.action)){
         console.log('sendServer :', data);
         let args = data.parameters;
         console.log(args);
