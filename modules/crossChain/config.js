@@ -56,28 +56,10 @@ if (process.platform === 'win32') {
     config.ethkeyStorePath = process.env.APPDATA + '\\ethereum\\'+ethereumNet+'keystore\\';
 }
 
-config.host = 'http://52.39.32.90:8545'; // http://localhost
-config.port = 8545;
-config.OTAMixNumber = 8;
-config.StampMixNumber = 3;
-
 config.loglevel = 'debug';
-config.listOption = true;
-//config.noLogAccount = true;
-// console color
-config.consoleColor = {
-    'COLOR_FgRed': '\x1b[31m',
-    'COLOR_FgYellow': '\x1b[33m',
-    'COLOR_FgGreen': "\x1b[32m"
-};
+
 config.databasePath = __dirname + '/LocalDb';
-// config.stampType = {
-// 	TypeOne:0,
-// 	TypeTwo:1,
-// 	TypeFour:2,
-// 	TypeEight:3,
-// 	TypeSixteen:4
-// };
+
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
 
@@ -90,7 +72,7 @@ config.wanLockGas = 150070;
 config.wanRefundGas = 39937;
 config.wanRevokeGas = 40017;
 
+config.originalChainHtlc = "0x17bcc853907a6eda7e3d0f5baa833700eb3c6a22";
+config.wanchainHtlcAddr = "0x00b56ac040d2e8df1f99c456fd5caa6623cda5b2";
 
-
-require('wanchainwalletcore').start(config);
 module.exports = config;
