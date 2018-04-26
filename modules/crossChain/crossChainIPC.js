@@ -122,6 +122,14 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             callbackMessage('CrossChain_ETH2WETH',e,data);
         });
     }
+    else if(data.action == 'listHistory'){
+        let collection = wanchainCore.getCollection('crossTransDb','crossTransaction');
+        let history = collection.find({ 'from' : { '$in' : data.parameters.addrList } });
+        data.value = history;
+        console.log("listHistory:", history);
+        callbackMessage('CrossChain_ETH2WETH',e,data);
+    }
+
     else if(data.action == 'signRevokeTrans') {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
