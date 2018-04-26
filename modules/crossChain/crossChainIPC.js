@@ -134,7 +134,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendRawTrans'){
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
     }
-    else if(sendServer.hasMessage[data.action]){
+    else if(sendServer.hasMessage(data.action)){
         console.log('sendServer :', data);
         let args = data.parameters;
         console.log(args);
