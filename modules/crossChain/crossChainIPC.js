@@ -3,6 +3,7 @@ const config = require('./config.js');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let wanchainCore = require('wanchainwalletcore');
 const pu = require('promisefy-util');
+const BigNumber = require('bignumber.js');
 
 // let sendFromSocket = wanchainCore.sendFromSocket;
 // let hashContract = wanchainCore.wanchaintrans.hashContract;
@@ -153,7 +154,10 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
                 data.err = err;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }else{
-                result.gasPrice = r;
+                let exp = new BigNumber(10);
+                let wei = new BigNumber(r);
+                let gwei = wei.dividedBy(exp.pow(9));
+                result.gasPrice = gwei.toString(10);
                 data.value = result;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }
