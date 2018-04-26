@@ -15,6 +15,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         sendTransaction.createTransaction(data.parameters.tx.from,data.parameters.tx.tokenAddress,new CoinAmount(data.parameters.tx.amount),data.parameters.tx.storemanGroup,
             data.parameters.tx.cross,data.parameters.tx.gas,new GWeiAmount(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setLockData();
+
         sendTransaction.getNonce(function () {
             console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
             data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
@@ -61,7 +62,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendRawTrans'){
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
     }
-    else if(sendServer[data.action]){
+    else if(sendServer.hasMessage[data.action]){
         console.log('sendServer :', data);
         let args = data.parameters;
         console.log(args);
@@ -72,7 +73,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             callbackMessage('CrossChain_ETH2WETH',e,data);
 
         });
-        sendServer[data.action](...args);
+        sendServer.sendMessage(data.action , ...args);
     }
 });
 
