@@ -52,9 +52,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'getRevokeTransData') {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
+        sendTransaction.createFromLockTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
             null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-        sendTransaction.trans.setRefundData();
+        sendTransaction.trans.setRevokeData();
         sendTransaction.getNonce(function () {
             console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
             data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
