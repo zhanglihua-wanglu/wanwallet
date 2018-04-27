@@ -1,3 +1,5 @@
+"use strict";
+
 //require('stepcell');
 const config = require('./config.js');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
@@ -9,7 +11,12 @@ const BigNumber = require('bignumber.js');
 // let hashContract = wanchainCore.wanchaintrans.hashContract;
 
 const Windows = require('../windows');
-
+function toGweiString(swei){
+    let exp = new BigNumber(10);
+    let wei = new BigNumber(swei);
+    let gwei = wei.dividedBy(exp.pow(9));
+    return  gwei.toString(10);
+}
 
 ipc.on('CrossChain_ETH2WETH', (e, data) => {
     console.log('CrossChainIPC : ',data);
@@ -24,7 +31,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setLockData();
         let lockDataResult = {};
         lockDataResult.lockTransData = sendTransaction.trans.trans.data;
@@ -36,7 +43,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setLockData();
         let lockDataResult = {};
         lockDataResult.lockTransData = sendTransaction.trans.trans.data;
@@ -48,7 +55,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
-            null, data.parameters.tx.gas, data.parameters.tx.gasPrice, crossType);
+            null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
         sendTransaction.trans.setRefundData();
         sendTransaction.getNonce(function () {
             console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
@@ -61,7 +68,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setKey(data.parameters.secretX);
         sendTransaction.sendLockTrans(data.parameters.password,function(err,result){
             data.error = err;
@@ -73,7 +80,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
-            null,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+            null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setKey(data.parameters.secretX);
         sendTransaction.sendRefundTrans(data.parameters.password,function(err,result){
             data.error = err;
@@ -85,7 +92,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
-            null, data.parameters.tx.gas, data.parameters.tx.gasPrice, crossType);
+            null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
         sendTransaction.trans.setKey(data.parameters.secretX);
         sendTransaction.sendRevokeTrans(data.parameters.password,function(err,result){
             data.error = err;
@@ -98,7 +105,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setKey(data.parameters.secretX);
         sendTransaction.trans.setLockData();
 
@@ -113,7 +120,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         sendTransaction.createTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
-            null,data.parameters.tx.gas,data.parameters.tx.gasPrice,crossType);
+            null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setUnlockData();
         sendTransaction.getNonce(function () {
             console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
@@ -134,7 +141,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
-            null, data.parameters.tx.gas, data.parameters.tx.gasPrice, crossType);
+            null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
         sendTransaction.trans.setRefundData();
         sendTransaction.getNonce(function () {
             console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
@@ -162,10 +169,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
                 data.err = err;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }else{
-                let exp = new BigNumber(10);
-                let wei = new BigNumber(r);
-                let gwei = wei.dividedBy(exp.pow(9));
-                result.gasPrice = gwei.toString(10);
+                result.gasPrice = r;
                 data.value = result;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }
@@ -219,6 +223,15 @@ async function main(){
     console.log("wanchainCore");
     console.log(wanchainCore.sendFromSocket);
     //let backend = new Backend();
+    //setInterval(monitorTask, 1000);
+}
+
+function monitorTask(){
+    console.log("monitorTask");
+    let collection = wanchainCore.getCollection('crossTransDb','crossTransaction');
+    let history = collection.find({ 'status' : { '$ne' : 'finished' } });
+    console.log(history);
 
 }
+
 main();
