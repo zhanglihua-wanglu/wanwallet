@@ -65,15 +65,16 @@ config.ethKeyStorePath = config.ethkeyStorePath;
 
 config.ethGasPrice = 123;
 config.wanGasPrice = 123;
-config.ethLockGas = 171866;
-config.ethRefundGas = 39829;
-config.ethRevokeGas = 40323;
-config.wanLockGas = 150070;
-config.wanRefundGas = 39937;
-config.wanRevokeGas = 40017;
+config.ethLockGas = 230000; //171866;
+config.ethRefundGas = 120000;  // 91663;
+config.ethRevokeGas = 60000; // 40323;
 
-config.originalChainHtlc = "0x17bcc853907a6eda7e3d0f5baa833700eb3c6a22";
-config.wanchainHtlcAddr = "0x00b56ac040d2e8df1f99c456fd5caa6623cda5b2";
+config.wanLockGas = 300000; // 232665;
+config.wanRefundGas = 60000; // 34881;
+config.wanRevokeGas = 80000; // 49917;
+
+config.originalChainHtlc = "0x6623c049b4cdc76f315c2ced3e4fa288b86ab780";
+config.wanchainHtlcAddr = "0xe8c4834d02e5a717fdfa7374ac4e7edb2f2e6b19";
 
 config.crossDbname = 'crossTransDb';
 config.crossCollection = 'crossTransaction';

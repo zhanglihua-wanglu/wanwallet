@@ -60,7 +60,10 @@ class Backend {
         let bs = pu.promisefy(sender.sendMessage, ['getTransactionReceipt',txhash], sender);
         return bs;
     }
-
+    getTxReceipt(sender,txhash){
+        let bs = pu.promisefy(sender.sendMessage, ['getTransactionReceipt',txhash], sender);
+        return bs;
+    }
     getTxHistory(option) {
         let collection = wanchainwalletcore.getCollection(crossDB,'crossTransaction');
         let Data = collection.find(option);
@@ -165,13 +168,26 @@ async function checkHashOnline(chain, record){
     }catch(err){
         console.log("checkTxOnline:", err);
     }
-
 }
+
+async function checkHashConfirm(chain, record){
+    try {
+        let sender = await backend.createrSender(chain);
+        let receipt = await backend.getTxReceipt(sender,record.txhash);
+        if(receipt){
+            updateStatus(record.HashX, 'sentHashConfirming');
+        }
+    }catch(err){
+        console.log("checkTxOnline:", err);
+    }
+}
+
+
 
 function updateStatus(key, Status){
     let value = collection.findOne({HashX:trans.Contract.hashKey});
     if(value){
-        value.refundTxHash = result;
+        value.status = Status;
         collection.update(value);
     }
 }
@@ -180,6 +196,8 @@ function monitorRecord(record){
     switch(record.status) {
         case 'sentHashPending':
             checkHashOnline(record.chain, record);
+            break;
+        case 'sentHashConfirming':
             break;
 
         default:
