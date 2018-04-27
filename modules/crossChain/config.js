@@ -75,4 +75,7 @@ config.wanRevokeGas = 40017;
 config.originalChainHtlc = "0x17bcc853907a6eda7e3d0f5baa833700eb3c6a22";
 config.wanchainHtlcAddr = "0x00b56ac040d2e8df1f99c456fd5caa6623cda5b2";
 
+config.crossDbname = 'crossTransDb';
+config.crossCollection = 'crossTransaction';
+
 module.exports = config;
