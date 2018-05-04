@@ -103,7 +103,7 @@ class nodeScanOta  extends EventEmitter{
                     blockEnd = scanBlockIndex + burst;
                     checkInterval = 10;
                 }
-                log.info("scanBlock blockCur,blockEnd: ",blockCur,blockEnd);
+                // log.info("scanBlock blockCur,blockEnd: ",blockCur,blockEnd);
                 while(blockCur <= blockEnd ) {
                     let paramArrary = [blockCur, true];
 

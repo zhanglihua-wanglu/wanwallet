@@ -17,7 +17,7 @@ function toGweiString(swei){
 }
 
 ipc.on('CrossChain_ETH2WETH', (e, data) => {
-    console.log('CrossChainIPC : ',data);
+    // console.log('CrossChainIPC : ',data);
     let tokenAddress;
     if(data.chainType == 'ETH'){
         tokenAddress = config.originalChainHtlc;
@@ -56,9 +56,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
         sendTransaction.trans.setRevokeData();
         sendTransaction.getNonce(function () {
-            console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
+            // console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
             data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            console.log('signed trans : ', data.value);
+            // console.log('signed trans : ', data.value);
             callbackMessage('CrossChain_ETH2WETH', e, data);
         });
     }
@@ -107,9 +107,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         sendTransaction.trans.setLockData();
 
         sendTransaction.getNonce(function () {
-            console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
+            // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
             data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            console.log('signed trans : ',data.value);
+            // console.log('signed trans : ',data.value);
             callbackMessage('CrossChain_ETH2WETH',e,data);
         });
     }
@@ -120,9 +120,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setUnlockData();
         sendTransaction.getNonce(function () {
-            console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
+            // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
             data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            console.log('signed trans : ',data.value);
+            // console.log('signed trans : ',data.value);
             callbackMessage('CrossChain_ETH2WETH',e,data);
         });
     }
@@ -130,7 +130,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let collection = wanchainCore.getCollection('crossTransDb','crossTransaction');
         let history = collection.find({ 'from' : { '$in' : data.parameters.addrList } });
         data.value = history;
-        console.log("listHistory:", history);
+        // console.log("listHistory:", history);
         callbackMessage('CrossChain_ETH2WETH',e,data);
     }
 
@@ -141,9 +141,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
         sendTransaction.trans.setRefundData();
         sendTransaction.getNonce(function () {
-            console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
+            // console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
             data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            console.log('signed trans : ', data.value);
+            // console.log('signed trans : ', data.value);
             callbackMessage('CrossChain_ETH2WETH', e, data);
         });
     }
@@ -185,13 +185,13 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
     }
     else if(sendServer.hasMessage(data.action)){
-        console.log('sendServer :', data);
+        // console.log('sendServer :', data);
         let args = data.parameters;
-        console.log(args);
+        // console.log(args);
         args.push(function (err,result) {
             data.error = err;
             data.value = result;
-            console.log(err,result);
+            // console.log(err,result);
             callbackMessage('CrossChain_ETH2WETH',e,data);
         });
         sendServer.sendMessage(data.action , ...args);
@@ -215,8 +215,8 @@ function sendRawTransactions(message,e,data) {
 
 async function main(){
     await pu.promisefy(wanchainCore.start, [config], wanchainCore);
-    console.log("wanchainCore");
-    console.log(wanchainCore.sendFromSocket);
+    // console.log("wanchainCore");
+    // console.log(wanchainCore.sendFromSocket);
     //let backend = new Backend();
     //setInterval(ccUtil.monitorTask, 1000);
 }
