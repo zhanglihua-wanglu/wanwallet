@@ -217,8 +217,7 @@ async function main(){
     await pu.promisefy(wanchainCore.start, [config], wanchainCore);
     console.log("wanchainCore");
     console.log(wanchainCore.sendFromSocket);
-    //let backend = new Backend();
-    //setInterval(ccUtil.monitorTask, 1000);
+    setInterval(ccUtil.monitorTask, 1000);
 }
 
 
