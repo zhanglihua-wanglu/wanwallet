@@ -214,10 +214,13 @@ function sendRawTransactions(message,e,data) {
 }
 
 async function main(){
-    await pu.promisefy(wanchainCore.start, [config], wanchainCore);
-    console.log("wanchainCore");
-    console.log(wanchainCore.sendFromSocket);
-    setInterval(ccUtil.monitorTask, 1000);
+    const Backend =  require('./ccUtil.js').Backend;
+    let be = new Backend();
+    be.init(()=>{
+        setInterval(function(){
+            be.monitorTask();
+        }, 9000);
+    });
 }
 
 
