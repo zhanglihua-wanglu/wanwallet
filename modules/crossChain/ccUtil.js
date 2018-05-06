@@ -119,34 +119,47 @@ class Backend {
         let txhash =  await pu.promisefy(newTrans.sendRevokeTrans, [passwd], newTrans);
         return txhash;
     }
-    getEthLockEvent(sender, hashX) {
-        let topics = ['0x'+wanUtil.sha3(config.ethLockEventFunc).toString('hex'), null, null, hashX];
+    getDepositOrigenLockEvent(sender, hashX) {
+        let topics = ['0x'+wanUtil.sha3(config.depositOriginLockEvent).toString('hex'), null, null, hashX];
         let b = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
         return b;
     }
-    getWethLockEvent(sender, hashX) {
-        let topics = ['0x'+wanUtil.sha3(config.wethLockEventFunc).toString('hex'), null, null, hashX];
-        //let topics = [null, null, null, hashX];
+    getWithdrawOrigenLockEvent(sender, hashX) {
+        let topics = ['0x'+wanUtil.sha3(config.withdrawOriginLockEvent).toString('hex'), null, null, hashX];
+        let b = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
+        return b;
+    }
+    getWithdrawCrossLockEvent(sender, hashX) {
+        let topics = ['0x'+wanUtil.sha3(config.withdrawCrossLockEvent).toString('hex'), null, null, hashX];
+        let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
+        return p;
+    }
+    getDepositCrossLockEvent(sender, hashX) {
+        let topics = ['0x'+wanUtil.sha3(config.depositCrossLockEvent).toString('hex'), null, null, hashX];
         let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
         return p;
     }
-    getWethXEvent(sender, hashX) {
-        let topics = ['0x'+wanUtil.sha3(config.wethXeventFunc).toString('hex'), null, null, hashX];
+    getDepositOriginRefundEvent(sender, hashX) {
+        let topics = ['0x'+wanUtil.sha3(config.depositOriginRefundEvent).toString('hex'), null, null, hashX];
         let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
         return p;
     }
-    getEthXEvent(sender, hashX) {
-        let topics = ['0x'+wanUtil.sha3(config.wethXeventFunc).toString('hex'), null, null, hashX];
-        let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
+    getWithdrawOriginRefundEvent(sender, hashX) {
+        let topics = ['0x'+wanUtil.sha3(config.withdrawOriginRefundEvent).toString('hex'), null, null, hashX];
+        let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
         return p;
     }
-    getethRevokeEvent(sender, hashX) {
+    getDepositethRevokeEvent(sender, hashX) {
         let topics = ['0x'+wanUtil.sha3(config.ethRevokeEvent).toString('hex'), null,  hashX];
         let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
         return p;
     }
-    getHTLCLeftLockedTime(sender, hashX){
+    getDepositHTLCLeftLockedTime(sender, hashX){
         let p = pu.promisefy(sender.sendMessage, ['callScFunc', config.originalChainHtlc, 'getHTLCLeftLockedTime',[hashX],config.HTLCETHInstAbi], sender);
+        return p;
+    }
+    getWithdrawHTLCLeftLockedTime(sender, hashX){
+        let p = pu.promisefy(sender.sendMessage, ['callScFunc', config.wanchainHtlcAddr, 'getHTLCLeftLockedTime',[hashX],config.HTLCWETHInstAbi], sender);
         return p;
     }
     monitorTxConfirm(sender, txhash, waitBlocks) {
@@ -223,10 +236,17 @@ class Backend {
             }
         })
     }
-    async checkHashOnline(chain, record){
+    async checkOriginLockOnline(record){
         try {
-            let sender = await this.createrSender(chain);
-            let receipt = await this.getEthLockEvent(sender,record.HashX);
+            let sender;
+            let receipt;
+            if(record.chain == "ETH"){
+                sender = await this.createrSender("ETH");
+                receipt = await this.getDepositOrigenLockEvent(sender,record.HashX);
+            }else {
+                sender = await this.createrSender("WAN");
+                receipt = await this.getWithdrawOrigenLockEvent(sender,record.HashX);
+            }
             if(receipt && receipt.length>0){
                 record.status = 'sentHashConfirming';
                 this.updateRecord(record );
@@ -235,10 +255,17 @@ class Backend {
             console.log("checkTxOnline:", err);
         }
     }
-    async checkXOnline(chain, record){
+    async checkXOnline(record){
         try {
-            let sender = await this.createrSender(chain);
-            let receipt = await this.getWethXEvent(sender,record.HashX);
+            let sender;
+            let receipt;
+            if(record.chain == "ETH"){
+                sender = await this.createrSender("WAN");
+                receipt = await this.getDepositOriginRefundEvent(sender,record.HashX);
+            } else {
+                sender = await this.createrSender("ETH");
+                receipt = await this.getWithdrawOriginRefundEvent(sender,record.HashX);
+            }
             if(receipt && receipt.length>0){
                 record.status = 'sentXConfirming';
                 this.updateRecord(record );
@@ -259,9 +286,9 @@ class Backend {
             console.log("checkTxOnline:", err);
         }
     }
-    async checkHashConfirm(chain, record, waitBlocks){
+    async checkHashConfirm(record, waitBlocks){
         try {
-            let sender = await this.createrSender(chain);
+            let sender = await this.createrSender(record.chain);
             let receipt = await this.monitorTxConfirm(sender, record.lockTxHash, waitBlocks);
             if(receipt){
                 record.lockConfirmed += 1;
@@ -274,8 +301,9 @@ class Backend {
             console.log("checkHashConfirm:", err);
         }
     }
-    async checkXConfirm(chain, record, waitBlocks){
+    async checkXConfirm(record, waitBlocks){
         try {
+            let chain = record.chain=='ETH'?"WAN":"ETH";
             let sender = await this.createrSender(chain);
             let receipt = await this.monitorTxConfirm(sender, record.refundTxHash, waitBlocks);
             if(receipt){
@@ -286,7 +314,7 @@ class Backend {
                 this.updateRecord(record);
             }
         }catch(err){
-            console.log("checkHashConfirm:", err);
+            console.log("checkXConfirm:", err);
         }
     }
     async checkRevokeConfirm(chain, record, waitBlocks){
@@ -304,8 +332,9 @@ class Backend {
             console.log("checkHashConfirm:", err);
         }
     }
-    async checkCrossHashConfirm(chain, record, waitBlocks){
+    async checkCrossHashConfirm(record, waitBlocks){
         try {
+            let chain = record.chain=='ETH'?"WAN":"ETH";
             let sender = await this.createrSender(chain);
             let receipt = await this.monitorTxConfirm(sender, record.crossLockHash, waitBlocks);
             if(receipt){
@@ -321,9 +350,19 @@ class Backend {
         }
     }
     async checkHashTimeout( record){
+        if(record.status == "waitingRevoke,"
+            || record.status =="sentRevokePending"
+            || record.status =="sentRevokeConfirming"){
+            return true;
+        }
         try {
             let sender = await this.createrSender(record.chain);
-            let timeout = await this.getHTLCLeftLockedTime(sender, record.HashX);
+            let timeout;
+            if(record.chain == "ETH"){
+                timeout = await this.getDepositHTLCLeftLockedTime(sender, record.HashX);
+            }else {
+                timeout = await this.getWithdrawHTLCLeftLockedTime(sender, record.HashX);
+            }
             if(timeout == "0"){
                 record.status = 'waitingRevoke';
                 this.updateRecord(record);
@@ -335,10 +374,16 @@ class Backend {
         }
         return false;
     }
-    async checkCrossHashOnline(chain, record){
+    async checkCrossHashOnline(record){
         try {
-            let sender = await this.createrSender(chain);
-            let receipt = await this.getWethLockEvent(sender,record.HashX);
+            let receipt;
+            if(record.chain=="ETH"){
+                let sender = await this.createrSender("WAN");
+                receipt = await this.getDepositCrossLockEvent(sender,record.HashX);
+            }else {
+                let sender = await this.createrSender("ETH");
+                receipt = await this.getWithdrawCrossLockEvent(sender,record.HashX);
+            }
             if(receipt && receipt.length>0){
                 record.crossConfirmed = 1;
                 record.crossLockHash = receipt[0].transactionHash;
@@ -365,18 +410,21 @@ class Backend {
     async monitorRecord(record){
         let waitBlock = config.confirmBlocks;
         let chain = record.chain;
+        // if(this.checkHashTimeout(record) == true){
+        //     console.log("tx timeout: ", record);
+        // }
+
         switch(record.status) {
+            case 'sentHashPending':
+                await this.checkOriginLockOnline(record);
+                break;
             case 'sentHashConfirming':
                 waitBlock = record.lockConfirmed < config.confirmBlocks ? record.lockConfirmed: config.confirmBlocks;
-                await this.checkHashConfirm(record.chain, record, waitBlock);
+                await this.checkHashConfirm(record, waitBlock);
                 console.log("######sentHashConfirming confirmed ", record.lockConfirmed);
                 break;
             case 'waitingCross':
-                if(this.checkHashTimeout(record) == true){
-                    break;
-                }
-                chain = record.chain=='ETH'?"WAN":"ETH";
-                await this.checkCrossHashOnline(chain, record);
+                await this.checkCrossHashOnline(record);
                 break;
             case 'waitingCrossConfirming':
                 if(record.refundTxHash){
@@ -384,9 +432,8 @@ class Backend {
                     this.updateRecord(record);
                     break;
                 }
-                chain = record.chain=='ETH'?"WAN":"ETH";
-                await this.checkCrossHashConfirm(chain, record, config.confirmBlocks);
-                console.log("######waitingCrossConfirming done ");
+                await this.checkCrossHashConfirm( record, config.confirmBlocks);
+                console.log("######waitingCrossConfirming  ", record.crossConfirmed);
                 break;
             case 'waitingX':
                 if(record.refundTxHash){
@@ -410,19 +457,15 @@ class Backend {
                 break;
 
             case 'sentXPending':
-                chain = record.chain=='ETH'?"WAN":"ETH";
-                await this.checkXOnline(chain, record);
+                await this.checkXOnline(record);
                 break;
             case 'sentXConfirming':
                 chain = record.chain=='ETH'?"WAN":"ETH";
                 waitBlock = record.refundConfirmed < config.confirmBlocks ? record.refundConfirmed: config.confirmBlocks;
-                await this.checkXConfirm(chain, record, waitBlock);
+                await this.checkXConfirm(record, waitBlock);
                 console.log("######sentXConfirming confirmed ", record.refundConfirmed);
                 break;
 
-            case 'sentHashPending':
-                await this.checkHashOnline(record.chain, record);
-                break;
             case 'finished':
                 break;
             default:
