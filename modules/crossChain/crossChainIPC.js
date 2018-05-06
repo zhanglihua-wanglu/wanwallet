@@ -155,7 +155,6 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
             result.RevokeGas = config.ethRevokeGas;
 
         } else {
-            let result = {};
             result.LockGas = config.wanLockGas;
             result.RefundGas = config.wanRefundGas;
             result.RevokeGas = config.wanRevokeGas;
