@@ -1,5 +1,5 @@
 const config = {};
-config.socketUrl = 'ws://18.237.12.175:8080/';
+config.socketUrl = 'ws://18.237.12.175:80/';
 var wanchainNet = 'testnet';
 var ethereumNet = '';
 config.dataName = wanchainNet;
@@ -64,7 +64,27 @@ config.hasLocalNode = false;
 config.loglevel = 'debug';
 
 
-// const logDebug = require('log4js');
+const logDebug = require('log4js');
+const log4jsOptions = {
+    appenders: [
+        {
+            type: 'console',
+        },
+    ],
+    levels: {
+        '[all]': (config.loglevel || 'info').toUpperCase(),
+    },
+};
+if (config.logfile) {
+    log4jsOptions.appenders.push(
+        {
+            type: 'dateFile',
+            filename: config.logfile,
+            maxLogSize: 10 * 1000 * 1000,
+            alwaysIncludePattern: true
+        }
+    );
+}
 // let log4jsOptions = {
 //     appenders: {
 //         ruleConsole: {type: 'console'},
@@ -78,7 +98,7 @@ config.loglevel = 'debug';
 //         }
 //     },
 //     categories: {
-//         default: {appenders: ['ruleConsole', 'ruleFile'], level: (config.loglevel || 'info')}
+//         default: {appenders: ['ruleConsole', 'ruleFile'], level: (config.loglevel || 'INFO')}
 //     }
 // };
 // if(config.logfile)
@@ -89,9 +109,11 @@ config.loglevel = 'debug';
 //         maxLogSize: 10 * 1000 * 1000,
 //         alwaysIncludePattern: true
 //     };
-//     log4jsOptions.categories.default.appenders.push('ruleFile');
+//     log4jsOptions.categories.default.appenders.push(log4jsOptions.appenders.ruleFile);
 // }
-// logDebug.configure(log4jsOptions);
+
+
+logDebug.configure(log4jsOptions);
 
 
 config.listOption = true;
