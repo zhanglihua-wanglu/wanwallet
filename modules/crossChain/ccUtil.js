@@ -10,6 +10,7 @@ const wanUtil = require("wanchain-util");
 let crossDB = 'crossTransDb';
 let backendConfig = {};
 const logger = config.log4js.getLogger("crossUtil");
+
 class Backend {
     constructor() {
         backendConfig.ethGroupAddr = config.originalChainHtlc;
@@ -21,16 +22,17 @@ class Backend {
         let gwei = wei.dividedBy(exp.pow(9));
         return  gwei.toString(10);
     }
-    init(cb){
-        wanchainwalletcore.start(config,()=>{
-            ethAddrs  = Object.keys(wanchainwalletcore.EthKeyStoreDir.Accounts);
-            wanAddrs  = Object.keys(wanchainwalletcore.WanKeyStoreDir.Accounts);
-            collection = wanchainwalletcore.getCollection(config.crossDbname,config.crossCollection);
-            cb();
-        });
-
+    async init(cb){
+        await pu.promisefy(wanchainwalletcore.start,[config], wanchainwalletcore);
+        ethAddrs  = Object.keys(wanchainwalletcore.EthKeyStoreDir.Accounts);
+        wanAddrs  = Object.keys(wanchainwalletcore.WanKeyStoreDir.Accounts);
+        collection = wanchainwalletcore.getCollection(config.crossDbname,config.crossCollection);
+        this.ethSender = await this.createrSocketSender("ETH");
+        this.wanSender = await this.createrSocketSender("WAN");
     }
-
+    getSenderbyChain(chainType){
+        return chainType == "ETH"? this.ethSender : this.wanSender;
+    }
     async createrSender(ChainType,local=false){
         if(config.hasLocalNode && ChainType=="WAN" && local){
             return this.createrWeb3Sender(config.rpcIpcPath);
@@ -248,10 +250,10 @@ class Backend {
             let sender;
             let receipt;
             if(record.chain == "ETH"){
-                sender = await this.createrSender("ETH");
+                sender = this.getSenderbyChain("ETH");
                 receipt = await this.getDepositOrigenLockEvent(sender,record.HashX);
             }else {
-                sender = await this.createrSender("WAN");
+                sender = this.getSenderbyChain("WAN");
                 receipt = await this.getWithdrawOrigenLockEvent(sender,record.HashX);
             }
             sender.close();
@@ -268,10 +270,10 @@ class Backend {
             let sender;
             let receipt;
             if(record.chain == "ETH"){
-                sender = await this.createrSender("WAN");
+                sender = this.getSenderbyChain("WAN");
                 receipt = await this.getDepositOriginRefundEvent(sender,record.HashX);
             } else {
-                sender = await this.createrSender("ETH");
+                sender = this.getSenderbyChain("ETH");
                 receipt = await this.getWithdrawOriginRefundEvent(sender,record.HashX);
             }
             sender.close();
@@ -285,7 +287,7 @@ class Backend {
     }
     async checkRevokeOnline(chain, record){
         try {
-            let sender = await this.createrSender(chain);
+            let sender = this.getSenderbyChain(chain);
             let receipt = await this.getethRevokeEvent(sender,record.HashX);
             sender.close();
             if(receipt && receipt.length>0){
@@ -298,7 +300,7 @@ class Backend {
     }
     async checkHashConfirm(record, waitBlocks){
         try {
-            let sender = await this.createrSender(record.chain);
+            let sender = this.getSenderbyChain(record.chain);
             let receipt = await this.monitorTxConfirm(sender, record.lockTxHash, waitBlocks);
             sender.close();
             if(receipt){
@@ -315,7 +317,7 @@ class Backend {
     async checkXConfirm(record, waitBlocks){
         try {
             let chain = record.chain=='ETH'?"WAN":"ETH";
-            let sender = await this.createrSender(chain);
+            let sender = this.getSenderbyChain(chain);
             let receipt = await this.monitorTxConfirm(sender, record.refundTxHash, waitBlocks);
             sender.close();
             if(receipt){
@@ -331,7 +333,7 @@ class Backend {
     }
     async checkRevokeConfirm(chain, record, waitBlocks){
         try {
-            let sender = await this.createrSender(chain);
+            let sender = this.getSenderbyChain(chain);
             let receipt = await this.monitorTxConfirm(sender, record.revokeTxHash, waitBlocks);
             sender.close();
             if(receipt){
@@ -348,7 +350,7 @@ class Backend {
     async checkCrossHashConfirm(record, waitBlocks){
         try {
             let chain = record.chain=='ETH'?"WAN":"ETH";
-            let sender = await this.createrSender(chain);
+            let sender = this.getSenderbyChain(chain);
             let receipt = await this.monitorTxConfirm(sender, record.crossLockHash, waitBlocks);
             sender.close();
             if(receipt){
@@ -370,7 +372,7 @@ class Backend {
             return true;
         }
         try {
-            let sender = await this.createrSender(record.chain);
+            let sender = this.getSenderbyChain(record.chain);
             let timeout;
             if(record.chain == "ETH"){
                 timeout = await this.getDepositHTLCLeftLockedTime(sender, record.HashX);
@@ -392,11 +394,12 @@ class Backend {
     async checkCrossHashOnline(record){
         try {
             let receipt;
+            let sender
             if(record.chain=="ETH"){
-                let sender = await this.createrSender("WAN");
+                sender = this.getSenderbyChain("WAN");
                 receipt = await this.getDepositCrossLockEvent(sender,record.HashX);
             }else {
-                let sender = await this.createrSender("ETH");
+                sender = this.getSenderbyChain("ETH");
                 receipt = await this.getWithdrawCrossLockEvent(sender,record.HashX);
             }
             sender.close();
