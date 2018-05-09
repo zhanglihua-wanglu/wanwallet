@@ -9,7 +9,7 @@ const wanUtil = require("wanchain-util");
 
 let crossDB = 'crossTransDb';
 let backendConfig = {};
-const logger = config.log4js.getLogger("crossUtil");
+//const logger = config.log4js.getLogger("crossUtil");
 
 class Backend {
     constructor() {

@@ -173,10 +173,10 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     }
     else if(data.action == 'getAddressList'){
         if(data.chainType == 'ETH'){
-            data.value = Object.keys(wanchainCore.EthKeyStoreDir.Accounts);
+            data.value = Object.keys(wanchainCore.EthKeyStoreDir.getAccounts());
         }
         else {
-            data.value = Object.keys(wanchainCore.WanKeyStoreDir.Accounts);
+            data.value = Object.keys(wanchainCore.WanKeyStoreDir.getAccounts());
         }
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
