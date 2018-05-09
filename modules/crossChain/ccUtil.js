@@ -3,17 +3,24 @@
 
 const pu = require('promisefy-util');
 const config = require('./config.js');
+const BigNumber = require('bignumber.js');
 const wanchainwalletcore = require('wanchainwalletcore');
 const wanUtil = require("wanchain-util");
 
 let crossDB = 'crossTransDb';
 let backendConfig = {};
+const logger = config.log4js.getLogger("crossUtil");
 class Backend {
     constructor() {
         backendConfig.ethGroupAddr = config.originalChainHtlc;
         backendConfig.wethGroupAddr = config.wanchainHtlcAddr;
     }
-
+    toGweiString(swei){
+        let exp = new BigNumber(10);
+        let wei = new BigNumber(swei);
+        let gwei = wei.dividedBy(exp.pow(9));
+        return  gwei.toString(10);
+    }
     init(cb){
         wanchainwalletcore.start(config,()=>{
             ethAddrs  = Object.keys(wanchainwalletcore.EthKeyStoreDir.Accounts);
@@ -101,20 +108,20 @@ class Backend {
     }
     async sendEthHash(sender, tx) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction(tx.from, backendConfig.ethGroupAddr,tx.value.toString(),tx.to,tx.wanAddr,tx.gas,tx.gasPrice.toString(),'ETH2WETH');
+        newTrans.createTransaction(tx.from, backendConfig.ethGroupAddr,tx.value.toString(),tx.to,tx.wanAddr,tx.gas,this.toGweiString(tx.gasPrice.toString()),'ETH2WETH',tx.nonce);
         let txhash =  await pu.promisefy(newTrans.sendLockTrans, [tx.passwd], newTrans);
         return txhash;
     }
     async sendDepositX(sender, from,gas,gasPrice,x, passwd) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction(from, backendConfig.wethGroupAddr,null,null,null,gas,gasPrice,'ETH2WETH');
+        newTrans.createTransaction(from, backendConfig.wethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'ETH2WETH');
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRefundTrans, [passwd], newTrans);
         return txhash;
     }
     async sendEthCancel(sender, from,gas,gasPrice,x, passwd) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction(from, backendConfig.ethGroupAddr,null,null,null,gas,gasPrice,'ETH2WETH');
+        newTrans.createTransaction(from, backendConfig.ethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'ETH2WETH');
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRevokeTrans, [passwd], newTrans);
         return txhash;
@@ -187,20 +194,20 @@ class Backend {
     }
     async sendWanHash(sender, tx) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction(tx.from, backendConfig.wethGroupAddr, tx.value.toString(),tx.to,tx.ethAddr,tx.gas,tx.gasPrice.toString(),'WETH2ETH');
+        newTrans.createTransaction(tx.from, backendConfig.wethGroupAddr, tx.value.toString(),tx.to,tx.ethAddr,tx.gas,this.toGweiString(tx.gasPrice.toString()),'WETH2ETH',tx.nonce);
         let txhash =  await pu.promisefy(newTrans.sendLockTrans, [tx.passwd], newTrans);
         return txhash;
     }
     async sendWanX(sender, from,gas,gasPrice,x, passwd) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction( from, backendConfig.ethGroupAddr,null,null,null,gas,gasPrice,'WETH2ETH');
+        newTrans.createTransaction( from, backendConfig.ethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'WETH2ETH');
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRefundTrans, [passwd], newTrans);
         return txhash;
     }
     async sendWanCancel(sender, from,gas,gasPrice,x, passwd) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction( from, backendConfig.wethGroupAddr,null,null,null,gas,gasPrice,'WETH2ETH');
+        newTrans.createTransaction( from, backendConfig.wethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'WETH2ETH');
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRevokeTrans, [passwd], newTrans);
         return txhash;
@@ -223,7 +230,7 @@ class Backend {
         console.log("monitorTask");
 
         let history = collection.find({ 'status' : { '$ne' : 'finished' } });
-        console.log(history);
+        //console.log(history);
         let self = this;
         let handlingList = [];
         history.forEach(function(record,index){
@@ -247,6 +254,7 @@ class Backend {
                 sender = await this.createrSender("WAN");
                 receipt = await this.getWithdrawOrigenLockEvent(sender,record.HashX);
             }
+            sender.close();
             if(receipt && receipt.length>0){
                 record.status = 'sentHashConfirming';
                 this.updateRecord(record );
@@ -266,6 +274,7 @@ class Backend {
                 sender = await this.createrSender("ETH");
                 receipt = await this.getWithdrawOriginRefundEvent(sender,record.HashX);
             }
+            sender.close();
             if(receipt && receipt.length>0){
                 record.status = 'sentXConfirming';
                 this.updateRecord(record );
@@ -278,6 +287,7 @@ class Backend {
         try {
             let sender = await this.createrSender(chain);
             let receipt = await this.getethRevokeEvent(sender,record.HashX);
+            sender.close();
             if(receipt && receipt.length>0){
                 record.status = 'sentRevokeConfirming';
                 this.updateRecord(record );
@@ -290,6 +300,7 @@ class Backend {
         try {
             let sender = await this.createrSender(record.chain);
             let receipt = await this.monitorTxConfirm(sender, record.lockTxHash, waitBlocks);
+            sender.close();
             if(receipt){
                 record.lockConfirmed += 1;
                 if(record.lockConfirmed >= config.confirmBlocks){
@@ -306,6 +317,7 @@ class Backend {
             let chain = record.chain=='ETH'?"WAN":"ETH";
             let sender = await this.createrSender(chain);
             let receipt = await this.monitorTxConfirm(sender, record.refundTxHash, waitBlocks);
+            sender.close();
             if(receipt){
                 record.refundConfirmed += 1;
                 if(record.refundConfirmed >= config.confirmBlocks){
@@ -321,6 +333,7 @@ class Backend {
         try {
             let sender = await this.createrSender(chain);
             let receipt = await this.monitorTxConfirm(sender, record.revokeTxHash, waitBlocks);
+            sender.close();
             if(receipt){
                 record.revokeConfirmed += 1;
                 if(record.revokeConfirmed >= config.confirmBlocks){
@@ -337,6 +350,7 @@ class Backend {
             let chain = record.chain=='ETH'?"WAN":"ETH";
             let sender = await this.createrSender(chain);
             let receipt = await this.monitorTxConfirm(sender, record.crossLockHash, waitBlocks);
+            sender.close();
             if(receipt){
                 if(!record.crossConfirmed) record.crossConfirmed = 0;
                 record.crossConfirmed += 1;
@@ -363,6 +377,7 @@ class Backend {
             }else {
                 timeout = await this.getWithdrawHTLCLeftLockedTime(sender, record.HashX);
             }
+            sender.close();
             if(timeout == "0"){
                 record.status = 'waitingRevoke';
                 this.updateRecord(record);
@@ -384,6 +399,7 @@ class Backend {
                 let sender = await this.createrSender("ETH");
                 receipt = await this.getWithdrawCrossLockEvent(sender,record.HashX);
             }
+            sender.close();
             if(receipt && receipt.length>0){
                 record.crossConfirmed = 1;
                 record.crossLockHash = receipt[0].transactionHash;
