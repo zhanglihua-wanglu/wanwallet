@@ -213,9 +213,8 @@ function sendRawTransactions(message,e,data) {
 }
 
 async function main(){
-    const Backend =  require('./ccUtil.js').Backend;
-    let be = new Backend();
-    await pu.promisefy(be.init,[],be);
+    const be =  ccUtil.Backend;
+    await be.init();
     setInterval(function(){
         be.monitorTask();
     }, 3000);
