@@ -15,25 +15,23 @@ exports.setup = function (options) {
     }, options);
 
     // logging
-    const log4jsOptions = {
-        appenders: [
-            {
-                type: 'console',
-            },
-        ],
-        levels: {
-            '[all]': (options.loglevel || 'info').toUpperCase(),
+    var log4jsOptions = {
+        appenders: {
+            console: { type: 'console' }
         },
+        categories: {
+            default: { appenders: ['console'], level: (options.loglevel || 'info').toUpperCase()}
+        }
     };
 
     if (options.logfile) {
-        log4jsOptions.appenders.push(
-            {
-                type: 'file',
-                filename: options.logfile,
-            }
-        );
+        log4jsOptions.appenders.filelog = {
+            type: 'file',
+            filename: options.logfile
+        };
+
     }
+
 
     log4js.configure(log4jsOptions);
 };

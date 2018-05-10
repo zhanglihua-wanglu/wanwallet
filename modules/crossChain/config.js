@@ -66,25 +66,24 @@ config.loglevel = 'debug';
 
 const logDebug = require('log4js');
 const log4jsOptions = {
-    appenders: [
-        {
-            type: 'console',
-        },
-    ],
-    levels: {
-        '[all]': (config.loglevel || 'info').toUpperCase(),
+    appenders: {
+        console: { type: 'console' }
     },
+    categories: {
+        default: { appenders: ['console'], level: (config.loglevel || 'info').toUpperCase()}
+    }
 };
+
 if (config.logfile) {
-    log4jsOptions.appenders.push(
-        {
-            type: 'dateFile',
-            filename: config.logfile,
-            maxLogSize: 10 * 1000 * 1000,
-            alwaysIncludePattern: true
-        }
-    );
+    log4jsOptions.appenders.filelog = {
+        type: 'file',
+        filename: config.logfile,
+        maxLogSize: 10 * 1000 * 1000,
+        alwaysIncludePattern: true
+    };
+
 }
+
 // let log4jsOptions = {
 //     appenders: {
 //         ruleConsole: {type: 'console'},
