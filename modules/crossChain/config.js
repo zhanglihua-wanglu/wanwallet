@@ -2,6 +2,8 @@ const config = {};
 config.socketUrl = 'ws://18.237.12.175:80/';
 var wanchainNet = 'testnet';
 var ethereumNet = '';
+const path=require('path');
+
 config.dataName = wanchainNet;
 if(wanchainNet.length)
 {
@@ -15,7 +17,6 @@ if(wanchainNet.length)
     }
 }
 config.version = '1.0.0';
-// web3 parameter
 config.host = '// http://localhost'; // http://localhost
 config.rpcIpcPath = process.env.HOME;
 if (process.platform === 'darwin') {
@@ -62,7 +63,6 @@ config.StampMixNumber = 3;
 config.hasLocalNode = false;
 
 config.loglevel = 'debug';
-const path=require('path');
 
 
 const logDebug = require('log4js');
@@ -84,41 +84,9 @@ if (config.logfile) {
     };
 
 }
-
-// let log4jsOptions = {
-//     appenders: {
-//         ruleConsole: {type: 'console'},
-//         ruleFile: {
-//             type: 'dateFile',
-//             filename: 'logs/server-',
-//             pattern: 'yyyy-MM-dd.log',
-//             maxLogSize: 10 * 1000 * 1000,
-//             numBackups: 3,
-//             alwaysIncludePattern: true
-//         }
-//     },
-//     categories: {
-//         default: {appenders: ['ruleConsole', 'ruleFile'], level: (config.loglevel || 'INFO')}
-//     }
-// };
-// if(config.logfile)
-// {
-//     log4jsOptions.appenders.ruleFile = {
-//         type: 'dateFile',
-//         filename: config.logfile,
-//         maxLogSize: 10 * 1000 * 1000,
-//         alwaysIncludePattern: true
-//     };
-//     log4jsOptions.categories.default.appenders.push(log4jsOptions.appenders.ruleFile);
-// }
-
-
+config.logDebug = logDebug;
 logDebug.configure(log4jsOptions);
-
-
 config.listOption = true;
-//config.noLogAccount = true;
-// console color
 
 
 config.databasePath = process.env.HOME;
