@@ -215,9 +215,9 @@ function sendRawTransactions(message,e,data) {
 async function main(){
     const be =  ccUtil.Backend;
     await be.init();
-    setInterval(function(){
-        be.monitorTask();
-    }, 3000);
+    //setInterval(function(){
+    //    be.monitorTask();
+    //}, 3000);
 }
 
 

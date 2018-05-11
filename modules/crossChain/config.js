@@ -62,6 +62,7 @@ config.StampMixNumber = 3;
 config.hasLocalNode = false;
 
 config.loglevel = 'debug';
+const path=require('path');
 
 
 const logDebug = require('log4js');
@@ -120,8 +121,11 @@ config.listOption = true;
 // console color
 
 
-
-config.databasePath = __dirname + '/LocalDb';
+config.databasePath = process.env.HOME;
+if (process.platform === 'win32') {
+    config.databasePath = process.env.APPDATA;
+}
+config.databasePath =  path.join(config.databasePath, 'LocalDb');
 
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
@@ -133,7 +137,7 @@ config.ethRefundGas = 120000;  // 91663;
 config.ethRevokeGas = 60000; // 40323;
 
 config.wanLockGas = 300000; // 232665;
-config.wanRefundGas = 60000; // 34881;
+config.wanRefundGas = 120000; // 34881;
 config.wanRevokeGas = 80000; // 49917;
 
 config.originalChainHtlc = "0x803f2038c3e04add009be9c1e9bcefbe953650a1";

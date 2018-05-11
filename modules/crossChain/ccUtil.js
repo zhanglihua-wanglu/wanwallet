@@ -6,6 +6,8 @@ const config = require('./config.js');
 const BigNumber = require('bignumber.js');
 const wanchainwalletcore = require('wanchainwalletcore');
 const wanUtil = require("wanchain-util");
+const keythereum = require("keythereum");
+keythereum.constants.quiet = true;
 
 let crossDB = 'crossTransDb';
 let backendConfig = {};
@@ -102,6 +104,44 @@ const Backend = {
         let bs = pu.promisefy(sender.sendMessage, ['getTransactionReceipt',txhash], sender);
         return bs;
     },
+    createEthAddr(keyPassword){
+        let params = { keyBytes: 32, ivBytes: 16 };
+        let dk = keythereum.create(params);
+        let options = {
+            kdf: "scrypt",
+            cipher: "aes-128-ctr",
+            kdfparams: {
+                n: 8192,
+                dklen: 32,
+                prf: "hmac-sha256"
+            }
+        };
+        let keyObject = keythereum.dump(keyPassword, dk.privateKey, dk.salt, dk.iv, options);
+        keythereum.exportToFile(keyObject,config.ethKeyStorePath);
+        return keyObject.address;
+    },
+    createWanAddr(keyPassword) {
+        let params = { keyBytes: 32, ivBytes: 16 };
+        let options = {
+            kdf: "scrypt",
+            cipher: "aes-128-ctr",
+            kdfparams: {
+                n: 8192,
+                dklen: 32,
+                prf: "hmac-sha256"
+            }
+        };
+        let dk = keythereum.create(params);
+        let keyObject = keythereum.dump(keyPassword, dk.privateKey, dk.salt, dk.iv, options);
+
+        let dk2 = keythereum.create(params);
+        let keyObject2 = keythereum.dump(keyPassword, dk2.privateKey, dk2.salt, dk2.iv, options);
+        keyObject.crypto2 = keyObject2.crypto;
+
+        keyObject.waddress = wanUtil.generateWaddrFromPriv(dk.privateKey, dk2.privateKey).slice(2);
+        keythereum.exportToFile(keyObject, config.wanKeyStorePath);
+        return keyObject.address;
+    },
     getTxHistory(option) {
         let Data = this.collection.find(option);
         let his = [];
@@ -117,9 +157,9 @@ const Backend = {
         let txhash =  await pu.promisefy(newTrans.sendLockTrans, [tx.passwd], newTrans);
         return txhash;
     },
-    async sendDepositX(sender, from,gas,gasPrice,x, passwd) {
+    async sendDepositX(sender, from,gas,gasPrice,x, passwd, nonce) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction(from, backendConfig.wethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'ETH2WETH');
+        newTrans.createTransaction(from, backendConfig.wethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'ETH2WETH', nonce);
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRefundTrans, [passwd], newTrans);
         return txhash;
