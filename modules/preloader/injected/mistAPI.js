@@ -328,8 +328,8 @@
             }
 
         } else if (data.type === 'Callback_CrossChain_ETH2WETH'){
-            console.log('mist api: ', data);
-            if(mist.ETH2WETH) {
+            // console.log('mist api: ', data);
+            if(mist.ETH2WETH()) {
                 mist.ETH2WETH().invokeCallback(data.message);
             }
         }else if (data.type === 'uiAction_windowMessage') {

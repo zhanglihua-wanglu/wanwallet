@@ -1,6 +1,6 @@
 {
     "name": "wanWallet",
-    "version": "2.0.0",
+    "version": "1.2.0",
     "license": "GPL-3.0",
     "author": {
         "name": "wanchain wallet Team",
@@ -34,7 +34,7 @@
         "keythereum": "^1.0.2",
         "lodash": "^4.17.4",
         "log-rotate": "^0.2.7",
-        "log4js": "^1.1.1",
+        "log4js": "^2.5.3",
         "lokijs": "^1.4.3",
         "minimongo-standalone": "^1.1.0-3",
         "numeral": "^2.0.6",
