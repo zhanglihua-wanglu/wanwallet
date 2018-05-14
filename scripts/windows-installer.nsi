@@ -166,6 +166,11 @@ Section Mist MIST_IDX
 
     # create a shortcut for the program uninstaller
     CreateShortCut "$SHORTCUTDIR\Uninstall.lnk" "$FILEDIR\uninstall.exe"
+    # copy gwan.exe
+    IfFileExists $FILEDIR\gwan.exe 0 +2
+    createDirectory "$DATADIR\binaries\gwan\unpacked"
+    !insertmacro MoveFile "$FILEDIR\gwan.exe" "$DATADIR\binaries\gwan\unpacked\gwan.exe"
+
 
     ## Firewall - add rules
     #SimpleFC::AdvAddRule "Geth incoming peers (TCP:30303)" ""  6 1 1 2147483647 1 "$DATADIR\binaries\Geth\unpacked\geth.exe" "" "" "wanwallet" 30303 "" "" ""
