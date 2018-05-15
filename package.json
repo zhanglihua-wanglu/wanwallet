@@ -17,7 +17,7 @@
     },
     "main": "main.js",
     "dependencies": {
-        "wanchainwalletcore" : "file:../wanchain/wallet/new_wallet/wanchainwalletcore",
+        "wanchainwalletcore" : "file:../../wanchain/wallet/new_wallet/wanchainwalletcore",
         "bignumber.js": "^4.0.1",
 		"promisefy-util": "^1.0.1",
         "bluebird": "^3.5.0",
