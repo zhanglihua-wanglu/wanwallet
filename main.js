@@ -220,15 +220,22 @@ onReady = () => {
     appMenu();
 
     // Create the browser window.
-    var gwan = 'gwan';
+    let gwan = 'gwan';
+    let gwanto = 'gwan';
     if(process.platform === 'win32'){
         gwan = gwan + '.exe';
+        gwanto = gwan;
+    }else if(process.platform === 'darwin'){
+        gwan = gwan + '_mac';
+    }else {
+        gwan = gwan + '_linux';
     }
+
     let exePath = path.dirname(app.getPath('exe'));
     let filePath = path.join(Settings.userDataPath, 'binaries', 'Gwan', 'unpacked');
 
     let fromPath = path.join(exePath,gwan);
-    let toPath = path.join(filePath ,gwan);
+    let toPath = path.join(filePath ,gwanto);
     log.info('copy Gwan from :' + fromPath);
     log.info('copy Gwan to :' + toPath);
 
