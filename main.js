@@ -11,7 +11,8 @@ const UpdateChecker = require('./modules/updateChecker');
 const Settings = require('./modules/settings');
 const Q = require('bluebird');
 const windowStateKeeper = require('electron-window-state');
-
+const fs = require('fs');
+const path = require('path');
 Q.config({
     cancellation: true,
 });
@@ -167,7 +168,20 @@ Only do this if you have secured your HTTP connection or you know what you are d
         app.quit();
     });
 });
-
+function mkdirsSync(dirname) {
+    //console.log(dirname);
+    if (fs.existsSync(dirname)) {
+        return true;
+    } else {
+        if (mkdirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname);
+            return true;
+        }
+    }
+}
+function copy(src, dst) {
+    fs.writeFileSync(dst, fs.readFileSync(src));
+}
 // Allows the Swarm protocol to behave like http
 protocol.registerStandardSchemes(['bzz']);
 
@@ -206,7 +220,32 @@ onReady = () => {
     appMenu();
 
     // Create the browser window.
+    var gwan = 'gwan';
+    if(process.platform === 'win32'){
+        gwan = gwan + '.exe';
+    }
+    let exePath = path.dirname(app.getPath('exe'));
+    let filePath = path.join(Settings.userDataPath, 'binaries', 'Gwan', 'unpacked');
 
+    let fromPath = path.join(exePath,gwan);
+    let toPath = path.join(filePath ,gwan);
+    log.info('copy Gwan from :' + fromPath);
+    log.info('copy Gwan to :' + toPath);
+
+    if(fs.existsSync(fromPath))
+    {
+        if(!fs.existsSync(filePath))
+        {
+            log.info('create Gwan path:' + filePath);
+            mkdirsSync(filePath);
+        }
+        if (process.platform === 'win32') {
+            copy(fromPath,toPath);
+            fs.unlinkSync(fromPath);
+        } else {
+            fs.renameSync(fromPath,toPath);
+        }
+    }
     const defaultWindow = windowStateKeeper({
         defaultWidth: 1024 + 208,
         defaultHeight: 720
