@@ -6,7 +6,7 @@ const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let wanchainCore = require('wanchainwalletcore');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
-const ccUtil = require('./ccUtil.js');
+const be = require('./ccUtil.js').Backend;
 
 const Windows = require('../windows');
 function toGweiString(swei){
@@ -183,6 +183,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendRawTrans'){
         sendRawTransactions('CrossChain_ETH2WETH',e,data);
     }
+    else if(data.action == 'sendNormalTransaction'){
+        sendNormalTransaction('CrossChain_ETH2WETH',e,data);
+    }
     else if(sendServer.hasMessage(data.action)){
         // console.log('sendServer :', data);
         let args = data.parameters;
@@ -211,13 +214,18 @@ function sendRawTransactions(message,e,data) {
             callbackMessage(message,e,data);
         });
 }
-
+async function sendNormalTransaction(message,e,data) {
+    let tx = data.parameters.tx;
+    let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+    sendTransaction.createNormalTransaction(tx.from,tx.to, tx.value,tx.gas,toGweiString(tx.gasPrice),tx.nonce);
+    sendTransaction.sendNormalTrans(data.parameters.passwd, function(err,result){
+        data.error = err;
+        data.value = result;
+        callbackMessage('CrossChain_ETH2WETH',e,data);
+    });
+}
 async function main(){
-    const be =  ccUtil.Backend;
     await be.init();
-    //setInterval(function(){
-    //    be.monitorTask();
-    //}, 3000);
 }
 
 

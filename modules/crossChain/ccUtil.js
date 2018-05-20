@@ -155,48 +155,14 @@ const Backend = {
         let txhash =  await pu.promisefy(newTrans.sendRefundTrans, [passwd], newTrans);
         return txhash;
     },
-    async sendEthCancel(sender, from,gas,gasPrice,x, passwd) {
+    async sendEthCancel(sender, from,gas,gasPrice,x, passwd, nonce) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction(from, backendConfig.ethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'ETH2WETH');
+        newTrans.createTransaction(from, backendConfig.ethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'ETH2WETH', nonce);
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRevokeTrans, [passwd], newTrans);
         return txhash;
     },
-    // getDepositOrigenLockEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.depositOriginLockEvent).toString('hex'), null, null, hashX];
-    //     let b = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
-    //     return b;
-    // },
-    // getWithdrawOrigenLockEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.withdrawOriginLockEvent).toString('hex'), null, null, hashX];
-    //     let b = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
-    //     return b;
-    // },
-    // getWithdrawCrossLockEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.withdrawCrossLockEvent).toString('hex'), null, null, hashX];
-    //     let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
-    //     return p;
-    // },
-    // getDepositCrossLockEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.depositCrossLockEvent).toString('hex'), null, null, hashX];
-    //     let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
-    //     return p;
-    // },
-    // getDepositOriginRefundEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.depositOriginRefundEvent).toString('hex'), null, null, hashX];
-    //     let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.wanchainHtlcAddr, topics], sender);
-    //     return p;
-    // },
-    // getWithdrawOriginRefundEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.withdrawOriginRefundEvent).toString('hex'), null, null, hashX];
-    //     let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
-    //     return p;
-    // },
-    // getDepositethRevokeEvent(sender, hashX) {
-    //     let topics = ['0x'+wanUtil.sha3(config.ethRevokeEvent).toString('hex'), null,  hashX];
-    //     let p = pu.promisefy(sender.sendMessage, ['getScEvent', config.originalChainHtlc, topics], sender);
-    //     return p;
-    // },
+
     getDepositHTLCLeftLockedTime(sender, hashX){
         let p = pu.promisefy(sender.sendMessage, ['callScFunc', config.originalChainHtlc, 'getHTLCLeftLockedTime',[hashX],config.HTLCETHInstAbi], sender);
         return p;
@@ -208,6 +174,10 @@ const Backend = {
     monitorTxConfirm(sender, txhash, waitBlocks) {
         let p = pu.promisefy(sender.sendMessage, ['getTransactionConfirm', txhash, waitBlocks], sender);
         return p;
+    },
+    getEthNonce(sender, addr) {
+        let bs = pu.promisefy(sender.sendMessage, ['getNonce',addr], sender);
+        return bs;
     },
 
     getEthBalance(sender, addr) {
@@ -224,16 +194,16 @@ const Backend = {
         let txhash =  await pu.promisefy(newTrans.sendLockTrans, [tx.passwd], newTrans);
         return txhash;
     },
-    async sendWanX(sender, from,gas,gasPrice,x, passwd) {
+    async sendWanX(sender, from,gas,gasPrice,x, passwd, nonce) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction( from, backendConfig.ethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'WETH2ETH');
+        newTrans.createTransaction( from, backendConfig.ethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'WETH2ETH',nonce);
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRefundTrans, [passwd], newTrans);
         return txhash;
     },
-    async sendWanCancel(sender, from,gas,gasPrice,x, passwd) {
+    async sendWanCancel(sender, from,gas,gasPrice,x, passwd,nonce) {
         let newTrans = wanchainwalletcore.createSender(sender);
-        newTrans.createTransaction( from, backendConfig.wethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'WETH2ETH');
+        newTrans.createTransaction( from, backendConfig.wethGroupAddr,null,null,null,gas,this.toGweiString(gasPrice),'WETH2ETH',nonce);
         newTrans.trans.setKey(x);
         let txhash =  await pu.promisefy(newTrans.sendRevokeTrans, [passwd], newTrans);
         return txhash;
