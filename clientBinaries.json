@@ -7,7 +7,7 @@
                     "x64": {
                         "download": {
                             "url": "https://www.wanchain.org/download/gwanLinux",
-                            "type": "tar",
+                            "type": "gz",
                             "md5": "44a64932627802f53709963e4ecb09bf",
                             "bin": "gwan-linux-amd64-1.0.4-b7ce29ea/gwan"
                         },
