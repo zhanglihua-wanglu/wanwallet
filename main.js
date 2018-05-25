@@ -194,9 +194,9 @@ onReady = () => {
     // Initialise window mgr
     Windows.init();
 
-    // Enable the Swarm protocol
+    // Enable the Swarm protocolfv
     protocol.registerHttpProtocol('bzz', (request, callback) => {
-        const redirectPath = `${Settings.swarmURL}/${request.url.replace('bzz:/', 'bzz://')}`;
+        const redirectPath = `${Settings.swarmURL}/$request.url.replace('bzz:/', 'bzz://')}`;
         callback({ method: request.method, referrer: request.referrer, url: redirectPath });
     }, (error) => {
         if (error) {

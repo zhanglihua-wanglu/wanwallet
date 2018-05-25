@@ -18,11 +18,12 @@ let BINARY_URL;
 if (Settings.internal) {
     BINARY_URL = 'http://47.104.60.142:/clientBinaries.json';
 } else {
-    BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/main/clientBinaries.json';
+    BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/cc/clientBinaries.json';
+    // BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/main/clientBinaries.json';
 }
 
-// const ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www.wanchain.org\/download\/gwanLinux|gwanWin|gwanMac/;
-// https://wanchain.org/download/
+const ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
+// /^https:\/\/(?:(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)?ethereum\.org\/|gethstore\.blob\.core\.windows\.net\/|bintray\.com\/artifact\/download\/karalabe\/ethereum\/)(?:.+)/
 
 class Manager extends EventEmitter {
     constructor() {
