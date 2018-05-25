@@ -53,7 +53,7 @@ exports.insertOtabyWaddr = function(waddr, ota, value, state,timeStamp,from,bloc
     try {
         OTAsCollection.insert({'address': Key, '_id':ota, 'value':value, 'state':state, 'timeStamp':timeStamp,'otaFrom':from, 'blockNumber':blockNumber, 'txHash':txHash});
     }catch(err){
-        log.debug("insertOtabyWaddr:", err);
+        log.debug("insertOtabyWaddr:", err.Error);
     }
 }
 

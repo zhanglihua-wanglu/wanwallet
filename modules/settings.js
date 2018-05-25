@@ -182,7 +182,13 @@ class Settings {
     // Application Aupport/Mist
         return app.getPath('userData');
     }
-
+    // get crossDbPath() {
+    //     let dbFileName = 'corssdb.lokidb';
+    //     if(this.network === 'testnet'){
+    //         dbFileName = 'corssdb.testnet.lokidb';
+    //     }
+    //     return path.join(this.userDataPath, dbFileName);        
+    // }
     get dbFilePath() {
         //let dbFileName = (this.inAutoTestMode) ? 'mist.test.lokidb' : 'mist.lokidb';
         let dbFileName = 'mist.lokidb';

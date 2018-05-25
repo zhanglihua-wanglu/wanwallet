@@ -53,8 +53,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
 
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        sendTransaction.createFromLockTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
+        sendTransaction.createTransaction(data.parameters.tx.from, tokenAddress, null, null,
             null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
+        sendTransaction.trans.setKey(data.parameters.tx.x);
         sendTransaction.trans.setRevokeData();
 
         let revokeDataResult = {};
@@ -89,9 +90,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendRevokeTrans') {
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        sendTransaction.createFromLockTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
+        sendTransaction.createTransaction(data.parameters.tx.from, tokenAddress, null, null,
             null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-        sendTransaction.trans.setKey(data.parameters.secretX);
+        sendTransaction.trans.setKey(data.parameters.tx.x);
         sendTransaction.sendRevokeTrans(data.parameters.password,function(err,result){
             data.error = err;
             data.value = result;

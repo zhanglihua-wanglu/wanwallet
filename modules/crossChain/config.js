@@ -1,8 +1,10 @@
 const config = {};
 config.socketUrl = 'ws://18.237.12.175:80/';
-var wanchainNet = 'testnet';
 var ethereumNet = '';
+const settings=require('../settings.js');
 const path=require('path');
+var wanchainNet = settings.network;
+console.log("######################wanchainNet :", wanchainNet);
 
 config.dataName = wanchainNet;
 if(wanchainNet.length)
@@ -18,16 +20,10 @@ if(wanchainNet.length)
 }
 config.version = '1.0.0';
 config.host = '// http://localhost'; // http://localhost
-config.rpcIpcPath = process.env.HOME;
-if (process.platform === 'darwin') {
-    config.rpcIpcPath += '/Library/Wanchain/'+wanchainNet+'gwan.ipc';
-} else if (process.platform === 'freebsd' ||
-    process.platform === 'linux' ||
-    process.platform === 'sunos') {
-    config.rpcIpcPath += '/.wanchain/'+wanchainNet+'gwan.ipc';
-} else if (process.platform === 'win32') {
-    config.rpcIpcPath = '\\\\.\\pipe\\gwan.ipc';
-}
+config.rpcIpcPath = settings.rpcIpcPath;
+
+
+
 config.keyStorePath = process.env.HOME;
 if (process.platform === 'darwin') {
     config.keyStorePath += '/Library/wanchain/'+wanchainNet+'keystore/';
@@ -89,17 +85,13 @@ logDebug.configure(log4jsOptions);
 config.listOption = true;
 
 
-config.databasePath = process.env.HOME;
-if (process.platform === 'win32') {
-    config.databasePath = process.env.APPDATA;
-}
-config.databasePath =  path.join(config.databasePath, 'LocalDb');
+config.databasePath = settings.userDataPath;
 
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
 
-config.ethGasPrice = 123;
-config.wanGasPrice = 123;
+config.ethGasPrice = 60;
+config.wanGasPrice = 200;
 config.ethLockGas = 230000; //171866;
 config.ethRefundGas = 120000;  // 91663;
 config.ethRevokeGas = 60000; // 40323;
