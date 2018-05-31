@@ -188,6 +188,10 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendNormalTransaction'){
         sendNormalTransaction('CrossChain_ETH2WETH',e,data);
     }
+    else if(data.action == 'getWan2CoinRatio'){
+            data.value = global.w2cRatio;
+            callbackMessage('CrossChain_ETH2WETH',e,data);
+    }
     else if(sendServer.hasMessage(data.action)){
         // console.log('sendServer :', data);
         let args = data.parameters;
