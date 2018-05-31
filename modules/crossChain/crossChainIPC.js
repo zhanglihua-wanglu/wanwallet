@@ -40,7 +40,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'getRefundTransData'){
         let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
+        sendTransaction.createRefundFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
             data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setRefundData();
         let refundDataResult = {};
@@ -79,7 +79,7 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
     else if(data.action == 'sendRefundTrans'){
         let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
+        sendTransaction.createRefundFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
             null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.sendRefundTrans(data.parameters.password,function(err,result){
             data.error = err;
