@@ -235,7 +235,8 @@ async function sendNormalTransaction(message,e,data) {
     });
 }
 function init(){
-    return be.init(config);
+    return pu.promisefy(wanchainCore.start,[config], wanchainCore);
+    //return be.init(config);
 }
 exports.init = init;
 
