@@ -49,7 +49,7 @@ const db = global.db = require('./modules/db');
 
 
 require('./modules/ipcCommunicator.js');
-require('./modules/crossChain/crossChainIPC.js');
+let startCCinit = require('./modules/crossChain/crossChainIPC.js').init;
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
 const ethereumNode = require('./modules/ethereumNode.js');
@@ -66,7 +66,6 @@ global.mode = Settings.uiMode;
 global.dirname = __dirname;
 
 global.i18n = i18n;
-
 
 // INTERFACE PATHS
 // - WALLET
@@ -179,6 +178,14 @@ function mkdirsSync(dirname) {
         }
     }
 }
+async function startCrossChain(){
+    await startCCinit();
+    return new Q((resolve, reject) => {
+        resolve(this);
+    });
+}
+
+
 function copy(src, dst) {
     fs.writeFileSync(dst, fs.readFileSync(src));
 }
@@ -430,6 +437,9 @@ onReady = () => {
         })
         .then(() => {
             return ethereumNode.init();
+        })
+        .then(()=>{
+            return startCrossChain();
         })
         .then(() => {
             // Wallet shouldn't start Swarm

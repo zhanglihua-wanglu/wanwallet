@@ -6,7 +6,8 @@ const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let wanchainCore = require('wanchainwalletcore');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
-const be = require('./ccUtil.js').Backend;
+//const be = require('./ccUtil.js').Backend;
+const be = wanchainCore.be;
 
 const Windows = require('../windows');
 function toGweiString(swei){
@@ -16,7 +17,7 @@ function toGweiString(swei){
     return  gwei.toString(10);
 }
 
-ipc.on('CrossChain_ETH2WETH', (e, data) => {
+ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
     let tokenAddress;
     if(data.chainType == 'ETH'){
@@ -25,6 +26,9 @@ ipc.on('CrossChain_ETH2WETH', (e, data) => {
         tokenAddress = config.wanchainHtlcAddr;
     }
     let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
+    if(sendServer.socket.connection.readyState != 1){
+        await wanchainCore.connectApiServer();
+    }
     if(data.action == 'getLockTransData'){
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
@@ -230,9 +234,8 @@ async function sendNormalTransaction(message,e,data) {
         callbackMessage('CrossChain_ETH2WETH',e,data);
     });
 }
-async function main(){
-    await be.init();
+function init(){
+    return be.init(config);
 }
+exports.init = init;
 
-
-main();
