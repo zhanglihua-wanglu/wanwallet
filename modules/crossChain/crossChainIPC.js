@@ -3,11 +3,9 @@
 //require('stepcell');
 const config = require('./config.js');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
-let wanchainCore = require('wanchainwalletcore');
+let WanchainCore = require('wanchainwalletcore');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
-//const be = require('./ccUtil.js').Backend;
-const be = wanchainCore.be;
 
 const Windows = require('../windows');
 function toGweiString(swei){
@@ -16,7 +14,7 @@ function toGweiString(swei){
     let gwei = wei.dividedBy(exp.pow(9));
     return  gwei.toString(10);
 }
-
+let wanchainCore;
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
     let tokenAddress;
@@ -235,8 +233,8 @@ async function sendNormalTransaction(message,e,data) {
     });
 }
 function init(){
-    return pu.promisefy(wanchainCore.start,[config], wanchainCore);
-    //return be.init(config);
+    wanchainCore = new WanchainCore(config);
+    return wanchainCore.init(config);
 }
 exports.init = init;
 
