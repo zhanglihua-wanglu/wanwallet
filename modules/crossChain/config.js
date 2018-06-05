@@ -1,6 +1,6 @@
 const config = {};
 //config.socketUrl = 'ws://18.237.12.175:80/';
-config.socketUrl = 'ws://18.237.190.242:80/';
+config.socketUrl = 'ws://34.219.84.192';
 
 var ethereumNet = '';
 const settings=require('../settings.js');
