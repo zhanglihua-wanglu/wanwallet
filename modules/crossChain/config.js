@@ -58,7 +58,7 @@ if (process.platform === 'win32') {
 config.port = 8545;
 config.OTAMixNumber = 8;
 config.StampMixNumber = 3;
-config.hasLocalNode = false;
+config.useLocalNode = false;
 
 config.loglevel = 'debug';
 

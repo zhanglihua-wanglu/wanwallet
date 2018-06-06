@@ -6,6 +6,8 @@ const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let WanchainCore = require('wanchainwalletcore');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
+const Web3 = require("web3");
+var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows');
 function toGweiString(swei){
@@ -72,6 +74,15 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
             data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setKey(data.parameters.secretX);
+        let valueFee = data.parameters.tx.valueFee;
+        if(!valueFee){
+            let wei = web3.toWei(data.parameters.tx.amount);
+            const wan2CoinRatio = 20;
+            const txFeeratio = 1;
+            valueFee = wei * wan2CoinRatio * txFeeratio / 1000 / 1000;
+        }
+        sendTransaction.trans.setValue(valueFee);
+
         sendTransaction.sendLockTrans(data.parameters.password,function(err,result){
             data.error = err;
             data.value = result;
