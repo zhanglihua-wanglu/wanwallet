@@ -230,6 +230,13 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
 
     'isInputPassword': function() {
         if (this.isWaddress === '0x00') {
+            TemplateVar.set('hardwareAccount', 'Hardware');
+            return false
+        } else if (this.isWaddress === '0x11') {
+            TemplateVar.set('hardwareAccount', 'Ledger');
+            return false
+        } else if (this.isWaddress === '0x12') {
+            TemplateVar.set('hardwareAccount', 'Trezor');
             return false
         }
 
