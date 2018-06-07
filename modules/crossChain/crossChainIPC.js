@@ -74,14 +74,16 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
             data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
         sendTransaction.trans.setKey(data.parameters.secretX);
-        let valueFee = data.parameters.tx.valueFee;
-        if(!valueFee){
-            let wei = web3.toWei(data.parameters.tx.amount);
-            const wan2CoinRatio = 20;
-            const txFeeratio = 1;
-            valueFee = wei * wan2CoinRatio * txFeeratio / 1000 / 1000;
+        if(data.chainType == 'WAN'){
+            let valueFee = data.parameters.tx.value;
+            if(!valueFee){
+                let wei = web3.toWei(data.parameters.tx.amount);
+                const wan2CoinRatio = 20;
+                const txFeeratio = 1;
+                valueFee = web3.fromWei(wei * wan2CoinRatio * txFeeratio / 1000 / 1000);
+            }           
+            sendTransaction.trans.setValue(valueFee);
         }
-        sendTransaction.trans.setValue(valueFee);
 
         sendTransaction.sendLockTrans(data.parameters.password,function(err,result){
             data.error = err;
