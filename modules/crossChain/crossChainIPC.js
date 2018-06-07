@@ -6,8 +6,6 @@ const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let WanchainCore = require('wanchainwalletcore');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
-const Web3 = require("web3");
-var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows');
 function toGweiString(swei){
@@ -17,6 +15,7 @@ function toGweiString(swei){
     return  gwei.toString(10);
 }
 let wanchainCore;
+let be;
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
     let tokenAddress;
@@ -59,7 +58,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
         sendTransaction.createTransaction(data.parameters.tx.from, tokenAddress, null, null,
             null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-        sendTransaction.trans.setKey(data.parameters.tx.x);
+        sendTransaction.trans.setKey(data.parameters.tx.X);
         sendTransaction.trans.setRevokeData();
 
         let revokeDataResult = {};
@@ -69,49 +68,138 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         callbackMessage('CrossChain_ETH2WETH',e,data);
     }
     else if(data.action == 'sendLockTrans'){
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.trans.setKey(data.parameters.secretX);
-        let valueFee = data.parameters.tx.valueFee;
-        if(!valueFee){
-            let wei = web3.toWei(data.parameters.tx.amount);
-            const wan2CoinRatio = 20;
-            const txFeeratio = 1;
-            valueFee = wei * wan2CoinRatio * txFeeratio / 1000 / 1000;
+        // let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
+        // let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+        // sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
+        //     data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
+        // sendTransaction.trans.setKey(data.parameters.secretX);
+        // let value = data.parameters.tx.value;
+        // if(!value){
+        //     let wei = web3.toWei(data.parameters.tx.amount);
+        //     const wan2CoinRatio = 20;
+        //     const txFeeratio = 1;
+        //     value = wei * wan2CoinRatio * txFeeratio / 1000 / 1000;
+        // }
+        // sendTransaction.trans.setValue(value);
+        //
+        // sendTransaction.sendLockTrans(data.parameters.password,function(err,result){
+        //     data.error = err;
+        //     data.value = result;
+        //     callbackMessage('CrossChain_ETH2WETH',e,data);
+        // });
+        //
+        data.parameters.tx.passwd = data.parameters.password;
+        if(data.chainType == 'WAN'){
+            // withdraw transaction.
+            let cfgWeb3 = 'WAN';
+            if(config.useLocalNode){
+                cfgWeb3 = 'web3'
+            }
+            try {
+                let sender = await be.getSenderbyChain(cfgWeb3);
+                let txHash = await be.sendWanHash(sender, data.parameters.tx);
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }catch(error){
+                console.log("sendLockTrans WAN: ", error);
+                data.error = error;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }
+        }else {
+            try {
+                let sender = await be.getSenderbyChain("ETH");
+                let txHash = await be.sendEthHash(sender, data.parameters.tx);
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }catch(error){
+                console.log("sendDeposit: ", error);
+                data.error = error;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }
         }
-        sendTransaction.trans.setValue(valueFee);
-
-        sendTransaction.sendLockTrans(data.parameters.password,function(err,result){
-            data.error = err;
-            data.value = result;
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-        });
     }
     else if(data.action == 'sendRefundTrans'){
-        let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createRefundFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
-            null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.sendRefundTrans(data.parameters.password,function(err,result){
-            data.error = err;
-            data.value = result;
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-        });
+        // let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
+        // let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+        // sendTransaction.createRefundFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
+        //     null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
+        // sendTransaction.sendRefundTrans(data.parameters.password,function(err,result){
+        //     data.error = err;
+        //     data.value = result;
+        //     callbackMessage('CrossChain_ETH2WETH',e,data);
+        // });
+
+        let tx = data.parameters.tx;
+        if(data.chainType == 'WAN'){
+            let cfgWeb3 = 'WAN';
+            if(config.useLocalNode){
+                cfgWeb3 = 'web3'
+            }
+            try {
+                let sender = await be.getSenderbyChain(cfgWeb3);
+                let txHash = await be.sendDepositX(sender, tx.cross,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }catch(error){
+                console.log("sendDepositX: ", error);
+                data.error = error;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }
+        }else {
+            try {
+                let sender = await be.getSenderbyChain("ETH");
+                let txHash = await be.sendWanX(sender, tx.cross,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }catch(error){
+                console.log("sendWithdrawX: ", error);
+                data.error = error;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }
+        }
+
+
     }
     else if(data.action == 'sendRevokeTrans') {
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        sendTransaction.createTransaction(data.parameters.tx.from, tokenAddress, null, null,
-            null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-        sendTransaction.trans.setKey(data.parameters.tx.x);
-        sendTransaction.sendRevokeTrans(data.parameters.password,function(err,result){
-            data.error = err;
-            data.value = result;
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-        });
+        // let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+        // let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
+        // sendTransaction.createTransaction(data.parameters.tx.from, tokenAddress, null, null,
+        //     null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
+        // sendTransaction.trans.setKey(data.parameters.tx.X);
+        // sendTransaction.sendRevokeTrans(data.parameters.password,function(err,result){
+        //     data.error = err;
+        //     data.value = result;
+        //     callbackMessage('CrossChain_ETH2WETH',e,data);
+        // });
 
+        if(data.chainType == 'WAN') {
+            // withdraw transaction.
+            let cfgWeb3 = 'WAN';
+            if (config.useLocalNode) {
+                cfgWeb3 = 'web3'
+            }
+            try {
+                let sender = await backend.getSenderbyChain(cfgWeb3);
+                let txHash = await backend.sendWanCancel(sender, tx.from,gas, gasPrice, tx.X, data.parameters.password);
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }catch(error){
+                console.log("sendWithdrawCancel: ", error);
+                data.error = error;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }
+        }else{
+            try {
+                let sender = await backend.getSenderbyChain("ETH");
+                let txHash = await backend.sendEthCancel(sender, tx.from,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }catch(error){
+                console.log("sendDepositCancel: ", error);
+                data.error = error;
+                callbackMessage('CrossChain_ETH2WETH',e,data);
+            }
+        }
     }
     else if(data.action == 'signLockTrans'){
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
@@ -245,6 +333,7 @@ async function sendNormalTransaction(message,e,data) {
 }
 function init(){
     wanchainCore = new WanchainCore(config);
+    be = wanchainCore.be;
     return wanchainCore.init(config);
 }
 exports.init = init;

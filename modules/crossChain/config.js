@@ -55,10 +55,10 @@ if (process.platform === 'win32') {
     config.ethkeyStorePath = process.env.APPDATA + '\\ethereum\\'+ethereumNet+'keystore\\';
 }
 
-config.port = 8545;
-config.OTAMixNumber = 8;
-config.StampMixNumber = 3;
-config.useLocalNode = false;
+// config.port = 8545;
+// config.OTAMixNumber = 8;
+// config.StampMixNumber = 3;
+config.useLocalNode = true;
 
 config.loglevel = 'debug';
 
