@@ -172,6 +172,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         //     callbackMessage('CrossChain_ETH2WETH',e,data);
         // });
 
+        let tx = data.parameters.tx;
         if(data.chainType == 'WAN') {
             // withdraw transaction.
             let cfgWeb3 = 'WAN';
@@ -179,8 +180,8 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 cfgWeb3 = 'web3'
             }
             try {
-                let sender = await backend.getSenderbyChain(cfgWeb3);
-                let txHash = await backend.sendWanCancel(sender, tx.from,gas, gasPrice, tx.X, data.parameters.password);
+                let sender = await be.getSenderbyChain(cfgWeb3);
+                let txHash = await be.sendWanCancel(sender, tx.from,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
                 data.value = txHash;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
@@ -190,8 +191,8 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             }
         }else{
             try {
-                let sender = await backend.getSenderbyChain("ETH");
-                let txHash = await backend.sendEthCancel(sender, tx.from,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
+                let sender = await be.getSenderbyChain("ETH");
+                let txHash = await be.sendEthCancel(sender, tx.from,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
                 data.value = txHash;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
