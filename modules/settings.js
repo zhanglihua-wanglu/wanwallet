@@ -214,16 +214,14 @@ class Settings {
         }
         return app.getPath('appData')+'\\'+'wanchain';
     }
-    getKeystoreDir(){
+    getKeystoreDir(chain){ //wanchain  /  ethereum
         let keystorePath = this.userHomePath;
 
-        let ksdir = 'wanchain';
-
-        if (process.platform === 'darwin') keystorePath += '/Library/' + ksdir;
+        if (process.platform === 'darwin') keystorePath += '/Library/' + chain;
 
         if (process.platform === 'freebsd' ||
             process.platform === 'linux' ||
-            process.platform === 'sunos') keystorePath += '/.' + ksdir;
+            process.platform === 'sunos') keystorePath += '/.' + chain;
 
         if (process.platform === 'win32') keystorePath = this.appDataPath;
 
@@ -234,6 +232,7 @@ class Settings {
         keystorePath =  path.join(keystorePath, 'keystore');
         return  keystorePath;
     }
+
     get userHomePath() {
         return app.getPath('home');
     }

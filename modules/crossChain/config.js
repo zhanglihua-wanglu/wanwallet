@@ -22,7 +22,9 @@ config.host = '// http://localhost'; // http://localhost
 config.rpcIpcPath = settings.rpcIpcPath;
 
 
-config.keyStorePath = settings.getKeystoreDir();
+config.keyStorePath = settings.getKeystoreDir('wanchain');
+config.ethkeyStorePath = settings.getKeystoreDir('ethereum');
+
 // config.keyStorePath = process.env.HOME;
 // if (process.platform === 'darwin') {
 //     config.keyStorePath += '/Library/wanchain/'+wanchainNet+'keystore/';
