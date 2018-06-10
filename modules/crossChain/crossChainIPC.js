@@ -102,7 +102,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendLockTrans WAN: ", error);
-                data.error = error;
+                data.error = error.toString();
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }else {
@@ -113,7 +113,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendDeposit: ", error);
-                data.error = error;
+                data.error = error.toString();
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }
@@ -142,7 +142,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendDepositX: ", error);
-                data.error = error;
+                data.error = error.toString();
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }else {
@@ -153,7 +153,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendWithdrawX: ", error);
-                data.error = error;
+                data.error = error.toString();
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }
@@ -186,7 +186,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendWithdrawCancel: ", error);
-                data.error = error;
+                data.error = error.toString();
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }else{
@@ -197,59 +197,58 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendDepositCancel: ", error);
-                data.error = error;
+                data.error = error.toString();
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }
     }
-    else if(data.action == 'signLockTrans'){
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.trans.setKey(data.parameters.secretX);
-        sendTransaction.trans.setLockData();
-
-        sendTransaction.getNonce(function () {
-            // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
-            data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            // console.log('signed trans : ',data.value);
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-        });
-    }
-    else if(data.action == 'signRefundTrans'){
-        let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
-            null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.trans.setUnlockData();
-        sendTransaction.getNonce(function () {
-            // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
-            data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            // console.log('signed trans : ',data.value);
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-        });
-    }
+    // else if(data.action == 'signLockTrans'){
+    //     let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
+    //     let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+    //     sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
+    //         data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
+    //     sendTransaction.trans.setKey(data.parameters.secretX);
+    //     sendTransaction.trans.setLockData();
+    //
+    //     sendTransaction.getNonce(function () {
+    //         // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
+    //         data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
+    //         // console.log('signed trans : ',data.value);
+    //         callbackMessage('CrossChain_ETH2WETH',e,data);
+    //     });
+    // }
+    // else if(data.action == 'signRefundTrans'){
+    //     let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
+    //     let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+    //     sendTransaction.createTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
+    //         null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
+    //     sendTransaction.trans.setUnlockData();
+    //     sendTransaction.getNonce(function () {
+    //         // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
+    //         data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
+    //         // console.log('signed trans : ',data.value);
+    //         callbackMessage('CrossChain_ETH2WETH',e,data);
+    //     });
+    // }
+    // else if(data.action == 'signRevokeTrans') {
+    //     let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+    //     let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
+    //     sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
+    //         null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
+    //     sendTransaction.trans.setRefundData();
+    //     sendTransaction.getNonce(function () {
+    //         // console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
+    //         data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
+    //         // console.log('signed trans : ', data.value);
+    //         callbackMessage('CrossChain_ETH2WETH', e, data);
+    //     });
+    // }
     else if(data.action == 'listHistory'){
         let collection = wanchainCore.getCollection('crossTransDb','crossTransaction');
         let history = collection.find({ 'from' : { '$in' : data.parameters.addrList } });
         data.value = history;
         // console.log("listHistory:", history);
         callbackMessage('CrossChain_ETH2WETH',e,data);
-    }
-
-    else if(data.action == 'signRevokeTrans') {
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
-            null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-        sendTransaction.trans.setRefundData();
-        sendTransaction.getNonce(function () {
-            // console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
-            data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-            // console.log('signed trans : ', data.value);
-            callbackMessage('CrossChain_ETH2WETH', e, data);
-        });
     }
     else if(data.action == 'getGasPrice'){
         let result = {};
