@@ -187,7 +187,7 @@ class Settings {
     //     if(this.network === 'testnet'){
     //         dbFileName = 'corssdb.testnet.lokidb';
     //     }
-    //     return path.join(this.userDataPath, dbFileName);        
+    //     return path.join(this.userDataPath, dbFileName);
     // }
     get dbFilePath() {
         //let dbFileName = (this.inAutoTestMode) ? 'mist.test.lokidb' : 'mist.lokidb';
@@ -214,7 +214,26 @@ class Settings {
         }
         return app.getPath('appData')+'\\'+'wanchain';
     }
+    getKeystoreDir(){
+        let keystorePath = this.userHomePath;
 
+        let ksdir = 'wanchain';
+
+        if (process.platform === 'darwin') keystorePath += '/Library/' + ksdir;
+
+        if (process.platform === 'freebsd' ||
+            process.platform === 'linux' ||
+            process.platform === 'sunos') keystorePath += '/.' + ksdir;
+
+        if (process.platform === 'win32') keystorePath = this.appDataPath;
+
+
+        if(this.network == 'testnet'){
+            keystorePath =  path.join(keystorePath, 'testnet');
+        }
+        keystorePath =  path.join(keystorePath, 'keystore');
+        return  keystorePath;
+    }
     get userHomePath() {
         return app.getPath('home');
     }

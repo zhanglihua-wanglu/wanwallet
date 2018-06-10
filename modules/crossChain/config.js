@@ -27,35 +27,35 @@ config.host = '// http://localhost'; // http://localhost
 config.rpcIpcPath = settings.rpcIpcPath;
 
 
-
-config.keyStorePath = process.env.HOME;
-if (process.platform === 'darwin') {
-    config.keyStorePath += '/Library/wanchain/'+wanchainNet+'keystore/';
-}
-
-if (process.platform === 'freebsd' ||
-    process.platform === 'linux' ||
-    process.platform === 'sunos') {
-    config.keyStorePath += '/.wanchain/'+wanchainNet+'keystore/';
-}
-
-if (process.platform === 'win32') {
-    config.keyStorePath = process.env.APPDATA + '\\wanchain\\'+wanchainNet+'keystore\\';
-}
-config.ethkeyStorePath = process.env.HOME;
-if (process.platform === 'darwin') {
-    config.ethkeyStorePath += '/Library/ethereum/'+ethereumNet+'keystore/';
-}
-
-if (process.platform === 'freebsd' ||
-    process.platform === 'linux' ||
-    process.platform === 'sunos') {
-    config.ethkeyStorePath += '/.ethereum/'+ethereumNet+'keystore/';
-}
-
-if (process.platform === 'win32') {
-    config.ethkeyStorePath = process.env.APPDATA + '\\ethereum\\'+ethereumNet+'keystore\\';
-}
+config.keyStorePath = settings.getKeystoreDir();
+// config.keyStorePath = process.env.HOME;
+// if (process.platform === 'darwin') {
+//     config.keyStorePath += '/Library/wanchain/'+wanchainNet+'keystore/';
+// }
+//
+// if (process.platform === 'freebsd' ||
+//     process.platform === 'linux' ||
+//     process.platform === 'sunos') {
+//     config.keyStorePath += '/.wanchain/'+wanchainNet+'keystore/';
+// }
+//
+// if (process.platform === 'win32') {
+//     config.keyStorePath = process.env.APPDATA + '\\wanchain\\'+wanchainNet+'keystore\\';
+// }
+// config.ethkeyStorePath = process.env.HOME;
+// if (process.platform === 'darwin') {
+//     config.ethkeyStorePath += '/Library/ethereum/'+ethereumNet+'keystore/';
+// }
+//
+// if (process.platform === 'freebsd' ||
+//     process.platform === 'linux' ||
+//     process.platform === 'sunos') {
+//     config.ethkeyStorePath += '/.ethereum/'+ethereumNet+'keystore/';
+// }
+//
+// if (process.platform === 'win32') {
+//     config.ethkeyStorePath = process.env.APPDATA + '\\ethereum\\'+ethereumNet+'keystore\\';
+// }
 
 // config.port = 8545;
 // config.OTAMixNumber = 8;
