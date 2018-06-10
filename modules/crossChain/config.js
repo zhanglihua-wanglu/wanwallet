@@ -96,13 +96,13 @@ config.ethKeyStorePath = config.ethkeyStorePath;
 
 config.ethGasPrice = 60;
 config.wanGasPrice = 200;
-config.ethLockGas = 230000; //171866;
+config.ethLockGas = 300000; //171866;
 config.ethRefundGas = 120000;  // 91663;
-config.ethRevokeGas = 60000; // 40323;
+config.ethRevokeGas = 100000; // 40323;
 
 config.wanLockGas = 300000; // 232665;
 config.wanRefundGas = 120000; // 34881;
-config.wanRevokeGas = 80000; // 49917;
+config.wanRevokeGas = 100000; // 49917;
 
 config.originalChainHtlc = "0xc99dd674d4821f9d7e2471547e769cc62878ff13";
 config.wanchainHtlcAddr = "0xa7cd98f9fad5b0eb0151b8af0dec959dda3d018f";
