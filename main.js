@@ -178,7 +178,19 @@ function mkdirsSync(dirname) {
         }
     }
 }
+function mkdirsSync(dirname) {
+    if (fs.existsSync(dirname)) {
+        return true;
+    } else {
+        if (mkdirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname);
+            return true;
+        }
+    }
+}
 async function startCrossChain(){
+    mkdirsSync(Settings.getKeystoreDir('ethereum'));
+    mkdirsSync(Settings.getKeystoreDir('wanchain'));
     await startCCinit();
     return new Q((resolve, reject) => {
         resolve(this);
