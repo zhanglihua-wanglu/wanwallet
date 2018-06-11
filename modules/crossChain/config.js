@@ -59,7 +59,7 @@ config.ethkeyStorePath = settings.getKeystoreDir('ethereum');
 // config.StampMixNumber = 3;
 config.useLocalNode = true;
 
-config.loglevel = 'debug';
+// config.loglevel = 'debug';
 
 
 const logDebug = require('log4js');

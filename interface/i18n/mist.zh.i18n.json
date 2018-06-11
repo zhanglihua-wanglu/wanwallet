@@ -129,7 +129,7 @@
             "stoppingNode": "Stopping Wanchain node...",
             "nodeStarting": "Wanchain node starting up...",
             "nodeStarted": "Wanchain node started",
-            "nodeConnected": "Wanchain node connected",
+            "nodeConnected": "Wanchain node connected\n\rServer API connecting...",
             "nodeStopping": "Wanchain node stopping...",
             "nodeStopped": "Wanchain node stopped",
             "nodeError": "Wanchain node connection error :'(",
