@@ -67,13 +67,15 @@ class Manager extends EventEmitter {
 
         // fetch config
         return got(BINARY_URL, {
-            timeout: 3000,
+            timeout: 10000,
             json: true,
         })
             .then((res) => {
                 if (!res || _.isEmpty(res.body)) {
                     throw new Error('Invalid fetch result');
                 } else {
+                    log.info('got BINARY_URL clients Gwan version: ', res.body.clients.Gwan.version);
+
                     return res.body;
                 }
             })
