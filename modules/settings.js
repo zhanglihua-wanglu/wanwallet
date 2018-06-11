@@ -152,6 +152,16 @@ const argv = require('yargs')
 
 argv.nodeOptions = [];
 
+function mkdirsSync(dirname) {
+    if (fs.existsSync(dirname)) {
+        return true;
+    } else {
+        if (mkdirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname);
+            return true;
+        }
+    }
+}
 for (const optIdx in argv) {
     if (optIdx.indexOf('node-') === 0) {
         argv.nodeOptions.push(`--${optIdx.substr(5)}`);
@@ -173,7 +183,9 @@ if (argv.nodeOptions && argv.nodeOptions.syncmode) {
 
 class Settings {
     init() {
-        logger.setup(argv);
+    mkdirsSync(this.getKeystoreDir('ethereum'));
+    mkdirsSync(this.getKeystoreDir('wanchain'));
+       logger.setup(argv);
 
         this._log = logger.create('Settings');
     }
