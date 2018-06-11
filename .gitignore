@@ -12,3 +12,6 @@ nodes/geth/
 mist.log
 npm-debug.log
 /yarn.lock
+gwan.exe
+gwan_linux
+gwan_ mac
