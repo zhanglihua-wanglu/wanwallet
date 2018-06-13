@@ -213,7 +213,7 @@ class Settings {
 
     }
     get appDataPath() {
-    // Application Support/
+        // Application Support/
         for(var i=0;i<argv.nodeOptions.length;i++)
         {
             if(argv.nodeOptions[i] == '--datadir')
@@ -226,6 +226,20 @@ class Settings {
         }
         return app.getPath('appData')+'\\'+'wanchain';
     }
+    getAppDataPath(chain) {
+        // Application Support/
+        for(var i=0;i<argv.nodeOptions.length;i++)
+        {
+            if(argv.nodeOptions[i] == '--datadir')
+            {
+                if(i+1<argv.nodeOptions.length)
+                {
+                    return argv.nodeOptions[i+1];
+                }
+            }
+        }
+        return app.getPath('appData')+'\\'+chain;
+    }
     getKeystoreDir(chain){ //wanchain  /  ethereum
         let keystorePath = this.userHomePath;
 
@@ -235,7 +249,7 @@ class Settings {
             process.platform === 'linux' ||
             process.platform === 'sunos') keystorePath += '/.' + chain;
 
-        if (process.platform === 'win32') keystorePath = this.appDataPath;
+        if (process.platform === 'win32') keystorePath = this.getAppDataPath(chain);
 
 
         if(this.network == 'testnet'){
