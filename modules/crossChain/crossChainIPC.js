@@ -113,7 +113,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendDeposit: ", error);
-                data.error = error.toString();
+                data.error = error.error;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }
@@ -153,7 +153,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendWithdrawX: ", error);
-                data.error = error.toString();
+                data.error = error.error;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }
@@ -197,7 +197,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }catch(error){
                 console.log("sendDepositCancel: ", error);
-                data.error = error.toString();
+                data.error = error.error;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
             }
         }
