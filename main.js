@@ -261,6 +261,19 @@ onReady = () => {
             fs.renameSync(fromPath,toPath);
         }
     }
+    // copy clientBinarys.json
+    let cbJsonFrom = path.join(exePath, 'clientBinaries.json');
+    let cbJsonTo = path.join(Settings.userDataPath, 'clientBinaries.json');
+    if(fs.existsSync(cbJsonFrom))
+    {
+        if (process.platform === 'win32') {
+            copy(cbJsonFrom, cbJsonTo);
+            fs.unlinkSync(cbJsonFrom);
+        } else {
+            fs.renameSync(cbJsonFrom, cbJsonTo);
+        }
+    }
+
     const defaultWindow = windowStateKeeper({
         defaultWidth: 1024 + 208,
         defaultHeight: 720
