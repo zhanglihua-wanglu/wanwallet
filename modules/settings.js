@@ -234,7 +234,14 @@ class Settings {
             {
                 if(i+1<argv.nodeOptions.length)
                 {
-                    return argv.nodeOptions[i+1];
+                    let cfgDataDir =  argv.nodeOptions[i+1];  // there is a hardcode wanchain.
+                    if(chain == 'wanchain'){
+                        return cfgDataDir;
+                    }else {
+                        let dir = path.dirname(cfgDataDir);
+                        return path.join(dir, chain);
+                    }
+
                 }
             }
         }
@@ -256,6 +263,7 @@ class Settings {
             keystorePath =  path.join(keystorePath, 'testnet');
         }
         keystorePath =  path.join(keystorePath, 'keystore');
+        console.log("keystorePath is ", keystorePath);
         return  keystorePath;
     }
 
