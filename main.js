@@ -230,6 +230,8 @@ onReady = () => {
     // Create the browser window.
     let gwan = 'gwan';
     let gwanto = 'gwan';
+
+    log.info('platform: ' + process.platform);
     if(process.platform === 'win32'){
         gwan = gwan + '.exe';
         gwanto = gwan;

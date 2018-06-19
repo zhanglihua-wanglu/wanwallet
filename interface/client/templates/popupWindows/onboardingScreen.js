@@ -377,6 +377,99 @@ Template['popupWindows_onboardingScreen_importAccount'].events({
 });
 
 
+///---start--
+/**
+ The onboardingScreen account import template
+
+ @class [template] popupWindows_onboardingScreen_importEthAccount
+ @constructor
+ */
+
+Template['popupWindows_onboardingScreen_importEthAccount'].helpers({
+    /**
+     Show password
+
+     @method showPassword
+     */
+    'showPassword': function () {
+        return TemplateVar.get('showPassword') ? 'text' : 'password';
+    }
+});
+
+
+Template['popupWindows_onboardingScreen_importEthAccount'].events({
+    /**
+     On drag enter, change class
+
+     @event dragenter .dropable
+     */
+    'dragenter .dropable': function (e) {
+        $(e.currentTarget).addClass('active');
+    },
+    /**
+     On drag leave, change class
+
+     @event dragleave .dropable
+     */
+    'dragleave .dropable': function (e) {
+        $(e.currentTarget).removeClass('active');
+    },
+    /**
+     When the file is droped, read the path
+
+     @event drop .dropable
+     */
+    'drop .dropable': function (e, template) {
+        e.preventDefault();
+
+        if (e.originalEvent.dataTransfer) {
+            files = e.originalEvent.dataTransfer.files;
+        }
+
+        if (files.length) {
+            ipc.send('backendAction_checkEthWalletFile', files[0].path);
+
+            ipc.on('uiAction_checkedEthWalletFile', function (ev, error, type) {
+                switch (type) {
+                    case 'presale':
+                        console.log(`Imported ${type} account`);
+                        TemplateVar.set(template, 'filePath', files[0].path);
+                        Tracker.afterFlush(function () {
+                            template.$('.password').focus();
+                        });
+                        break;
+                    case 'web3':
+                        console.log(`Imported ${type} account`);
+                        TemplateVar.set(template, 'filePath', files[0].path);
+                        TemplateVar.set(template, 'importing', true);
+                        setTimeout(function () {
+                            ipc.send('backendAction_closePopupWindow');
+                        }, 750);
+                        break;
+                    default:
+                        GlobalNotification.warning({
+                            content: TAPi18n.__('mist.popupWindows.onboarding.errors.unknownFile'),
+                            duration: 4
+                        });
+                }
+            });
+        }
+
+        $(e.currentTarget).removeClass('active');
+    },
+    /**
+     On drag over prevent redirect
+
+     @event dragover .dropable
+     */
+    'dragover .dropable': function (e) {
+        e.preventDefault();
+    },
+});
+
+//--end---
+
+
 /**
 The onboardingScreen password template
 

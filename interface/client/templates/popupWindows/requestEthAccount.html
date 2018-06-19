@@ -1,0 +1,49 @@
+<template name="popupWindows_requestEthAccount">
+    <div class="popup-windows request-account" style="background: white;">
+        <form action="#">
+            <h1 style="margin: 50px 0 20px!important; font-weight: bold;">Create ETH Account</h1>
+
+            <div class="checkmes">
+                <p><em></em><span>Important：Your password is NO longer changable once account created</span></p>
+            </div>
+
+            {{#if TemplateVar.get "creating"}}
+                {{#if TemplateVar.get "created"}}
+                    <div class="createOk">
+                        <h3>Make sure you backup your KEYFILES and PASSWORD!</h3>
+                        <p class="creatPic1"></p>
+                        <h4>Keep a copy of the "keystore" folder where you can't lose it!</h4>
+
+                        <div class="dapp-modal-buttons" style="background: white!important;width: 75px;margin: 80px auto 0;">
+                            <button style=" color: #fff; width: 75px; height: 28px; line-height: 28px; border-radius: 50px; margin-left: 15px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);" type="submit" id="close-window">DONE</button>
+                        </div>
+                    </div>
+                {{else}}
+                    <h2 style="background: #ffffff!important;">{{i18n "mist.popupWindows.requestAccount.creating"}}</h2>
+                {{/if}}
+            {{else}}
+                <div class="field-container">
+
+                    <div class="errorDiv" style="position: relative;">
+                        <input type="{{passwordInputType}}" placeholder="{{i18n 'mist.popupWindows.requestAccount.enterPassword'}}" class="password" style="background: white;">
+                        {{#if TemplateVar.get "passwordLow"}}
+                            <p class="errorP">{{i18n "mist.popupWindows.requestAccount.errors.passwordTooShort"}}</p>
+                        {{/if}}
+                        <em class="showPassIco"></em>
+                    </div>
+                    <div class="errorDiv">
+                        <input type="{{passwordInputType}}" placeholder="{{i18n 'mist.popupWindows.requestAccount.repeatPassword'}}" class='password-repeat' style="background: white;">
+                        {{#if TemplateVar.get "passwordRepat"}}
+                            <p class="errorP">{{i18n "mist.popupWindows.requestAccount.errors.passwordMismatch"}}</p>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="dapp-modal-buttons" style="background: white!important;width: 170px;margin: 50px auto 0;">
+                    <button class="cancel" type="button" style=" color: #c6cdb7; width: 75px; height: 26px; line-height: 26px; font-weight: 400; border: 1px solid #c6cdb7; border-radius: 50px; margin-right: 0;">{{i18n "buttons.cancel"}}</button>
+                    <button class="ok dapp-primary-button" style=" color: #fff; width: 75px; height: 28px; line-height: 28px; border-radius: 50px; margin-left: 15px; background-image: linear-gradient(0deg, #1a90fc 0%, #00d2ff 100%);" type="submit">{{i18n "buttons.ok"}}</button>
+                </div>
+            {{/if}}
+        </form>
+    </div>
+</template>
