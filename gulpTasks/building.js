@@ -187,11 +187,10 @@ gulp.task('build-dist', (cb) => {
             afterPack(params) {
                 return Q.try(() => {
                     let gwan_file;
-                    console.log("platform: ", params.packager.platform.name)
-                    if(params.packager.platform.name == 'linux') { gwan_file = 'gwan_linux'; console.log("linux")}
-                        else if(params.packager.platform.name == 'darwin') { gwan_file = 'gwan_mac'; console.log("darwin")} 
-                            else if(params.packager.platform.name == 'windows') { gwan_file = 'gwan.exe'; console.log("windows")} 
-                    console.log("gwan file: ", gwan_file)                                
+                    if(params.packager.platform.name === 'linux') { gwan_file = 'gwan_linux';}
+                    else if(params.packager.platform.name === 'mac') { gwan_file = 'gwan_mac';}
+                    else if(params.packager.platform.name === 'windows') { gwan_file = 'gwan.exe'; }
+
                     shell.cp(
                         [
                             path.join(__dirname, '..', 'LICENSE'),
