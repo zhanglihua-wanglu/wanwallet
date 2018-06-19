@@ -106,6 +106,26 @@ ipc.on('backendAction_windowMessageToOwner', (e, error, value) => {
     }
 });
 
+ipc.on('backendAction_createEthAccount', (e, pwd) => {
+    let params = { keyBytes: 32, ivBytes: 16 };
+    let dk = keythereum.create(params);
+    let options = {
+        kdf: "scrypt",
+        cipher: "aes-128-ctr",
+        kdfparams: {
+            n: 262144,
+            dklen: 32,
+            prf: "hmac-sha256"
+        }
+    };
+    let keyObject = keythereum.dump(pwd, dk.privateKey, dk.salt, dk.iv, options);
+    let keystorePath = Settings.getKeystoreDir('ethereum');
+
+    keythereum.exportToFile(keyObject,keystorePath, () => {
+        e.sender.send('uiAction_checkedEthAccount');
+    });
+});
+
 ipc.on('backendAction_setLanguage', (e) => {
     global.i18n.changeLanguage(Settings.language.substr(0, 5), (err) => {
         if (!err) {
@@ -244,6 +264,56 @@ ipc.on('backendAction_importWalletFile', (e, path, pw) => {
     }, 2000);
 });
 
+
+//-----start
+// check eth wallet file
+ipc.on('backendAction_checkEthWalletFile', (e, path) => {
+    fs.readFile(path, 'utf8', (event, data) => {
+        try {
+            const keyfile = JSON.parse(data);
+            const result = keyfileRecognizer(keyfile);
+            /** result
+             *  [ 'ethersale', undefined ]   Ethersale keyfile
+             *               [ 'web3', 3 ]   web3 (v3) keyfile
+             *                        null   no valid  keyfile
+             */
+
+            const type = _.first(result);
+
+            log.info(`Importing ${type} account...`);
+
+            if (type === 'ethersale') {
+                e.sender.send('uiAction_checkedEthWalletFile', null, 'presale');
+            } else if (type === 'web3') {
+                e.sender.send('uiAction_checkedEthWalletFile', null, 'web3');
+
+                let keystorePath = Settings.getKeystoreDir('ethereum');
+
+                if (!/^[0-9a-fA-F]{40}$/.test(keyfile.address)) {
+                    throw new Error('Invalid Address format.');
+                }
+
+                log.info('keystorePath :' + keystorePath);
+
+                fs.writeFile(`${keystorePath}/0x${keyfile.address}`, data, (err) => {
+                    if (err) throw new Error("Can't write file to disk");
+                });
+
+            } else {
+                throw new Error('Account import: Cannot recognize keyfile (invalid)');
+            }
+        } catch (err) {
+            e.sender.send('uiAction_checkedEthWalletFile', null, 'invalid');
+            if (/Unexpected token . in JSON at position 0/.test(err.message) === true) {
+                log.error('Account import: Cannot recognize keyfile (no JSON)');
+            } else {
+                log.error(err);
+            }
+        }
+    });
+});
+
+///----end
 
 const createAccountPopup = (e) => {
     Windows.createPopup('requestAccount', {

@@ -245,7 +245,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // }
     else if(data.action == 'listHistory'){
         let collection = wanchainCore.getCollection('crossTransDb','crossTransaction');
-        let history = collection.find({ 'from' : { '$in' : data.parameters.addrList } });
+        let history = collection.chain().find({ 'from' : { '$in' : data.parameters.addrList } }).simplesort('time', true).data();
         data.value = history;
         // console.log("listHistory:", history);
         callbackMessage('CrossChain_ETH2WETH',e,data);
