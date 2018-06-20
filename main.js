@@ -256,11 +256,23 @@ onReady = () => {
             log.info('create Gwan path:' + filePath);
             mkdirsSync(filePath);
         }
-        if (process.platform === 'win32') {
+        let timeto = 0;
+        if(fs.existsSync(toPath)){
+            timeto = fs.statSync(toPath).mtime.getTime();
+        }
+        let timefrom = fs.statSync(fromPath).mtime.getTime();
+        console.log("timeto:", timeto)
+        console.log("timefrom:", timefrom)
+        if( timeto < timefrom){
             copy(fromPath,toPath);
-            fs.unlinkSync(fromPath);
-        } else {
-            fs.renameSync(fromPath,toPath);
+            fs.chmodSync(toPath, '0755');
+
+            // if (process.platform === 'win32') {
+            //     copy(fromPath,toPath);
+            //     fs.unlinkSync(fromPath);
+            // } else {
+            //     fs.renameSync(fromPath,toPath);
+            // }
         }
     }
     // copy clientBinarys.json
@@ -268,11 +280,20 @@ onReady = () => {
     let cbJsonTo = path.join(Settings.userDataPath, 'clientBinaries.json');
     if(fs.existsSync(cbJsonFrom))
     {
-        if (process.platform === 'win32') {
+        // compare the file change time, if need copy file. don't delete. because the file maybe installed by root.
+        let timeto=0;
+        if(fs.existsSync(cbJsonTo)){
+            timeto = fs.statSync(cbJsonTo).mtime.getTime();
+        }
+        let timefrom = fs.statSync(cbJsonTo).mtime.getTime();
+        if(timeto < timefrom){
             copy(cbJsonFrom, cbJsonTo);
-            fs.unlinkSync(cbJsonFrom);
-        } else {
-            fs.renameSync(cbJsonFrom, cbJsonTo);
+            // if (process.platform === 'win32') {
+            //     copy(cbJsonFrom, cbJsonTo);
+            //     fs.unlinkSync(cbJsonFrom);
+            // } else {
+            //     fs.renameSync(cbJsonFrom, cbJsonTo);
+            // }
         }
     }
 
