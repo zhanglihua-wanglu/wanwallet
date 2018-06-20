@@ -282,7 +282,7 @@ onReady = () => {
         if(fs.existsSync(cbJsonTo)){
             timeto = fs.statSync(cbJsonTo).mtime.getTime();
         }
-        let timefrom = fs.statSync(cbJsonTo).mtime.getTime();
+        let timefrom = fs.statSync(cbJsonFrom).mtime.getTime();
         log.debug("timeto:", timeto);
         log.debug("timefrom:", timefrom);
         if(timeto < timefrom){
