@@ -26,7 +26,10 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     }
     let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
     if(sendServer.socket.connection.readyState != 1){
-        await wanchainCore.connectApiServer(config);
+        //await wanchainCore.connectApiServer(config);
+        data.error = "Failed to connect to Api Server.";
+        callbackMessage('CrossChain_ETH2WETH',e,data);
+        return;
     }
     if(data.action == 'getLockTransData'){
         let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
