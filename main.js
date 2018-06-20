@@ -246,8 +246,8 @@ onReady = () => {
 
     let fromPath = path.join(exePath,gwan);
     let toPath = path.join(filePath ,gwanto);
-    log.info('copy Gwan from :' + fromPath);
-    log.info('copy Gwan to :' + toPath);
+    log.debug('copy Gwan from :' + fromPath);
+    log.debug('copy Gwan to :' + toPath);
 
     if(fs.existsSync(fromPath))
     {
@@ -261,23 +261,20 @@ onReady = () => {
             timeto = fs.statSync(toPath).mtime.getTime();
         }
         let timefrom = fs.statSync(fromPath).mtime.getTime();
-        console.log("timeto:", timeto)
-        console.log("timefrom:", timefrom)
+        log.debug("timeto:", timeto);
+        log.debug("timefrom:", timefrom);
         if( timeto < timefrom){
             copy(fromPath,toPath);
             fs.chmodSync(toPath, '0755');
+            log.info(gwan, " copied");
 
-            // if (process.platform === 'win32') {
-            //     copy(fromPath,toPath);
-            //     fs.unlinkSync(fromPath);
-            // } else {
-            //     fs.renameSync(fromPath,toPath);
-            // }
         }
     }
     // copy clientBinarys.json
     let cbJsonFrom = path.join(exePath, 'clientBinaries.json');
     let cbJsonTo = path.join(Settings.userDataPath, 'clientBinaries.json');
+    log.debug("cbJsonTo:", cbJsonTo);
+    log.debug("cbJsonFrom:", cbJsonFrom);
     if(fs.existsSync(cbJsonFrom))
     {
         // compare the file change time, if need copy file. don't delete. because the file maybe installed by root.
@@ -286,14 +283,11 @@ onReady = () => {
             timeto = fs.statSync(cbJsonTo).mtime.getTime();
         }
         let timefrom = fs.statSync(cbJsonTo).mtime.getTime();
+        log.debug("timeto:", timeto);
+        log.debug("timefrom:", timefrom);
         if(timeto < timefrom){
             copy(cbJsonFrom, cbJsonTo);
-            // if (process.platform === 'win32') {
-            //     copy(cbJsonFrom, cbJsonTo);
-            //     fs.unlinkSync(cbJsonFrom);
-            // } else {
-            //     fs.renameSync(cbJsonFrom, cbJsonTo);
-            // }
+            log.info("clientBinaries.json copied");
         }
     }
 
