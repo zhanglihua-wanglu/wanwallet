@@ -249,12 +249,20 @@ let menuTempl = function (webviews) {
 
                             shell.showItemInFolder(userPath);
                         },
-                    }, {
+                    },
+                    {
                         label: i18n.t('mist.applicationMenu.file.backupMist'),
                         click() {
                             shell.openItem(Settings.userDataPath);
                         },
                     },
+                    {
+                        label: 'Eth Accounts',
+                        click() {
+                            let userPath = Settings.getKeystoreDir('ethereum');
+                            shell.showItemInFolder(userPath);
+                        },
+                    }
                 ],
             },
             // {
