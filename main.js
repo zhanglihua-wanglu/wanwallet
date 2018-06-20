@@ -230,6 +230,8 @@ onReady = () => {
     // Create the browser window.
     let gwan = 'gwan';
     let gwanto = 'gwan';
+
+    log.info('platform: ' + process.platform);
     if(process.platform === 'win32'){
         gwan = gwan + '.exe';
         gwanto = gwan;
@@ -244,8 +246,8 @@ onReady = () => {
 
     let fromPath = path.join(exePath,gwan);
     let toPath = path.join(filePath ,gwanto);
-    log.info('copy Gwan from :' + fromPath);
-    log.info('copy Gwan to :' + toPath);
+    log.debug('copy Gwan from :' + fromPath);
+    log.debug('copy Gwan to :' + toPath);
 
     if(fs.existsSync(fromPath))
     {
@@ -254,13 +256,41 @@ onReady = () => {
             log.info('create Gwan path:' + filePath);
             mkdirsSync(filePath);
         }
-        if (process.platform === 'win32') {
+        let timeto = 0;
+        if(fs.existsSync(toPath)){
+            timeto = fs.statSync(toPath).mtime.getTime();
+        }
+        let timefrom = fs.statSync(fromPath).mtime.getTime();
+        log.debug("timeto:", timeto);
+        log.debug("timefrom:", timefrom);
+        if( timeto < timefrom){
             copy(fromPath,toPath);
-            fs.unlinkSync(fromPath);
-        } else {
-            fs.renameSync(fromPath,toPath);
+            fs.chmodSync(toPath, '0755');
+            log.info(gwan, " copied");
+
         }
     }
+    // copy clientBinarys.json
+    let cbJsonFrom = path.join(exePath, 'clientBinaries.json');
+    let cbJsonTo = path.join(Settings.userDataPath, 'clientBinaries.json');
+    log.debug("cbJsonTo:", cbJsonTo);
+    log.debug("cbJsonFrom:", cbJsonFrom);
+    if(fs.existsSync(cbJsonFrom))
+    {
+        // compare the file change time, if need copy file. don't delete. because the file maybe installed by root.
+        let timeto=0;
+        if(fs.existsSync(cbJsonTo)){
+            timeto = fs.statSync(cbJsonTo).mtime.getTime();
+        }
+        let timefrom = fs.statSync(cbJsonFrom).mtime.getTime();
+        log.debug("timeto:", timeto);
+        log.debug("timefrom:", timefrom);
+        if(timeto < timefrom){
+            copy(cbJsonFrom, cbJsonTo);
+            log.info("clientBinaries.json copied");
+        }
+    }
+
     const defaultWindow = windowStateKeeper({
         defaultWidth: 1024 + 208,
         defaultHeight: 720

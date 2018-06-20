@@ -186,14 +186,18 @@ gulp.task('build-dist', (cb) => {
         config: {
             afterPack(params) {
                 return Q.try(() => {
+                    let gwan_file;
+                    if(params.packager.platform.name === 'linux') { gwan_file = 'gwan_linux';}
+                    else if(params.packager.platform.name === 'mac') { gwan_file = 'gwan_mac';}
+                    else if(params.packager.platform.name === 'windows') { gwan_file = 'gwan.exe'; }
+
                     shell.cp(
                         [
                             path.join(__dirname, '..', 'LICENSE'),
                             path.join(__dirname, '..', 'README.md'),
                             path.join(__dirname, '..', 'AUTHORS'),
-                            path.join(__dirname, '..', 'gwan.exe'),
-                            path.join(__dirname, '..', 'gwan_linux'),
-                            path.join(__dirname, '..', 'gwan_mac')
+                            path.join(__dirname, '..', 'clientBinaries.json'),
+                            path.join(__dirname, '..', gwan_file)
                         ],
                         params.appOutDir
                     );

@@ -195,6 +195,32 @@ let menuTempl = function (webviews) {
                     });
                 },
             },
+
+            {
+                label: 'New Eth account',
+                accelerator: 'CommandOrControl+L',
+                click() {
+                    Windows.createPopup('requestEthAccount', {
+                        ownerId : Windows.getByType('main').id,
+                        electronOptions: {
+                            width: 1120, height: 600, alwaysOnTop: true,
+                        },
+                    });
+                },
+            },
+
+            {
+                label: "Import Eth accounts",
+                accelerator: 'CommandOrControl+J',
+
+                click() {
+                    Windows.createPopup('importEthAccount', {
+                        electronOptions: {
+                            width: 600, height: 370, alwaysOnTop: true,
+                        },
+                    });
+                },
+            },
             {
                 type: 'separator',
             },

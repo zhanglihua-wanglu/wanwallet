@@ -167,9 +167,12 @@ Section Mist MIST_IDX
     # create a shortcut for the program uninstaller
     CreateShortCut "$SHORTCUTDIR\Uninstall.lnk" "$FILEDIR\uninstall.exe"
     # copy gwan.exe
-    IfFileExists $FILEDIR\gwan.exe 0 +2
-    createDirectory "$DATADIR\binaries\gwan\unpacked"
-    !insertmacro MoveFile "$FILEDIR\gwan.exe" "$DATADIR\binaries\gwan\unpacked\gwan.exe"
+    #IfFileExists $FILEDIR\gwan.exe 0 +2
+    #createDirectory "$DATADIR\binaries\gwan\unpacked"
+    #!insertmacro MoveFile "$FILEDIR\gwan.exe" "$DATADIR\binaries\gwan\unpacked\gwan.exe"
+    #AccessControl::GrantOnFile "$DATADIR\binaries\gwan\unpacked\gwan.exe" "everyone" "GenericRead + GenericWrite"
+    # copy clientBinarys.json
+    #!insertmacro MoveFile "$FILEDIR\clientBinaries.json" "$DATADIR\clientBinaries.json"
 
 
     ## Firewall - add rules
