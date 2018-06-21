@@ -48,7 +48,8 @@
     "underscore-deep-extend": "^1.1.5",
     "uuid": "^3.0.1",
     "wanchain-util": "^1.0.3",
-    "wanchainwalletcore": "file:../../wanchain/wallet/new_wallet/wanchainwalletcore",
+    "wanchain-keystore": "^0.0.1",
+    "wanchain-crosschain": "^0.0.1",
     "web3": "^0.18.4",
     "yargs": "^7.0.2"
   },

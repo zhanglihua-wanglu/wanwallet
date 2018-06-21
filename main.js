@@ -180,7 +180,11 @@ function mkdirsSync(dirname) {
 }
 
 async function startCrossChain(){
-    await startCCinit();
+    try{
+        await startCCinit();
+    }catch(error){
+        log.error("startCrossChain: ", error.toString());
+    }
     return new Q((resolve, reject) => {
         resolve(this);
     });

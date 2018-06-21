@@ -1,5 +1,6 @@
 const config = {};
 config.socketUrl = 'ws://18.236.235.133';
+//config.socketUrl = 'ws://34.219.84.192';
 
 const settings=require('../settings.js');
 const path=require('path');
