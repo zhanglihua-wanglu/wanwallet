@@ -8,7 +8,7 @@ The Mist browser is the tool of choice to browse and use Ðapps.
 
 For the Mist API see the [MISTAPI.md](MISTAPI.md).
 
-Please note that this repository is the Electron host for the Meteor based wallet dapp whose repository is located here: https://github.com/ethereum/meteor-dapp-wallet.
+Please note that this repository is the Electron host for the Meteor based wallet dapp whose repository is located here: https://github.com/wanchain/meteor-dapp-wallet.
 
 ## Help and troubleshooting
 
@@ -38,7 +38,7 @@ Once a Mist version is released the Meteor frontend part is bundled using the `m
 
 ### Dependencies
 
-To run mist in development you need:
+To run wanwallet in development you need:
 
 - [Node.js](https://nodejs.org) `v7.x` (use the prefered installation method for your OS)
 - [Meteor](https://www.meteor.com/install) javascript app framework
@@ -57,26 +57,26 @@ Install the latter ones via:
 
 Now you're ready to initialise Mist for development:
 
-    $ git clone https://github.com/ethereum/mist.git
-    $ cd mist
+    $ git clone https://github.com/wanchain/wanwallet.git
+    $ cd wanwallet
     $ yarn
 
-To update Mist in the future, run:
+To update Wanwallet in the future, run:
 
-    $ cd mist
+    $ cd wanwallet
     $ git pull
     $ yarn
 
-### Run Mist
+### Run Wanwallet
 
 For development we start the interface with a Meteor server for autoreload etc.
 *Start the interface in a separate terminal window:*
 
-    $ cd mist/interface && meteor --no-release-check
+    $ cd wanwallet/interface/client && meteor --no-release-check
 
-In the original window you can then start Mist with:
+In the original window you can then start Wanwallet with:
 
-    $ cd mist
+    $ cd wanwallet
     $ yarn dev:electron
 
 *NOTE: client-binaries (e.g. [geth](https://github.com/ethereum/go-ethereum)) specified in [clientBinaries.json](https://github.com/ethereum/mist/blob/master/clientBinaries.json) will be checked during every startup and downloaded if out-of-date, binaries are stored in the [config folder](#config-folder)*
@@ -93,9 +93,9 @@ Start the wallet app for development, *in a separate terminal window:*
 
     $ cd my/path/meteor-dapp-wallet/app && meteor --port 3050
 
-In the original window you can then start Mist using wallet mode:
+In the original window you can then start Wanwallet using wallet mode:
 
-    $ cd mist
+    $ cd wanwallet
     $ yarn dev:electron --mode wallet
 
 
@@ -138,7 +138,7 @@ See this guide to quickly set up a local private network on your computer:
 https://gist.github.com/evertonfraga/9d65a9f3ea399ac138b3e40641accf23
 
 
-### Using Mist with a privatenet
+### Using Wanwallet with a privatenet
 
 To run a private network you will need to set the IPC path, network id and data
 folder:
@@ -171,6 +171,8 @@ Furthermore cross-platform builds require additional [`electron-builder` depende
 
     // linux deps
     $ brew install gnu-tar libicns graphicsmagick xz
+    $ sudo apt-get install icnsutils graphicsmagick
+
 
 #### Generate packages
 
