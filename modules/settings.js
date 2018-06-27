@@ -383,6 +383,9 @@ class Settings {
     get nodeOptions() {
         return argv.nodeOptions;
     }
+    get loglevel() {
+        return argv.loglevel;
+    }
 
     get language() {
         return this.loadConfig('ui.i18n');

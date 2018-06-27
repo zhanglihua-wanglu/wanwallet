@@ -1,23 +1,9 @@
 const config = {};
 config.socketUrl = 'wss://apitest.wanchain.info';
-// config.socketUrl = 'ws://18.236.235.133';
 
 const settings=require('../settings.js');
-const path=require('path');
-var wanchainNet = settings.network;
+const logDebug = require('log4js');
 
-config.dataName = wanchainNet;
-if(wanchainNet.length)
-{
-    if(process.platform === 'win32')
-    {
-        wanchainNet = wanchainNet + '\\';
-    }
-    else
-    {
-        wanchainNet = wanchainNet + '/';
-    }
-}
 config.version = '1.0.0';
 config.host = '// http://localhost'; // http://localhost
 config.rpcIpcPath = settings.rpcIpcPath;
@@ -26,44 +12,10 @@ config.rpcIpcPath = settings.rpcIpcPath;
 config.keyStorePath = settings.getKeystoreDir('wanchain');
 config.ethkeyStorePath = settings.getKeystoreDir('ethereum');
 
-// config.keyStorePath = process.env.HOME;
-// if (process.platform === 'darwin') {
-//     config.keyStorePath += '/Library/wanchain/'+wanchainNet+'keystore/';
-// }
-//
-// if (process.platform === 'freebsd' ||
-//     process.platform === 'linux' ||
-//     process.platform === 'sunos') {
-//     config.keyStorePath += '/.wanchain/'+wanchainNet+'keystore/';
-// }
-//
-// if (process.platform === 'win32') {
-//     config.keyStorePath = process.env.APPDATA + '\\wanchain\\'+wanchainNet+'keystore\\';
-// }
-// config.ethkeyStorePath = process.env.HOME;
-// if (process.platform === 'darwin') {
-//     config.ethkeyStorePath += '/Library/ethereum/'+ethereumNet+'keystore/';
-// }
-//
-// if (process.platform === 'freebsd' ||
-//     process.platform === 'linux' ||
-//     process.platform === 'sunos') {
-//     config.ethkeyStorePath += '/.ethereum/'+ethereumNet+'keystore/';
-// }
-//
-// if (process.platform === 'win32') {
-//     config.ethkeyStorePath = process.env.APPDATA + '\\ethereum\\'+ethereumNet+'keystore\\';
-// }
 
-// config.port = 8545;
-// config.OTAMixNumber = 8;
-// config.StampMixNumber = 3;
 config.useLocalNode = true;
 
-// config.loglevel = 'debug';
-
-
-const logDebug = require('log4js');
+config.loglevel = settings.loglevel;
 const log4jsOptions = {
     appenders: {
         console: { type: 'console' }
