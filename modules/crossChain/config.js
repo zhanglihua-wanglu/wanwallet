@@ -1,5 +1,5 @@
 const config = {};
-config.socketUrl = 'wss://api.wanchain.info';
+config.socketUrl = 'wss://apitest.wanchain.info';
 // config.socketUrl = 'ws://18.236.235.133';
 
 const settings=require('../settings.js');
