@@ -262,9 +262,15 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         data.value = config.wethToken;
         callbackMessage('CrossChain_ETH2WETH',e,data);
     }
-    else if(data.action == 'getWan2CoinRatio'){
-            data.value = global.w2cRatio;
-            callbackMessage('CrossChain_ETH2WETH',e,data);
+    else if(data.action == 'getCoin2WanRatio'){
+        try{
+            let c2wRatio = await be.getEthC2wRatio(be.wanSender);
+            data.value = c2wRatio;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }catch(error){
+            data.error = error.error;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }
     }
     else if(sendServer.hasMessage(data.action)){
         // console.log('sendServer :', data);
