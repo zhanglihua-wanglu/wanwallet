@@ -7,6 +7,8 @@ let WanchainCore = require('wanchain-crosschain');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
 const logger = require('../utils/logger');
+const Web3 = require("web3");
+var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows');
 function toGweiString(swei){
@@ -87,6 +89,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             }
             try {
                 let sender = await be.getSenderbyChain(cfgWeb3);
+                data.parameters.tx.value = '0x'+web3.toBigNumber(web3.toWei(data.parameters.tx.value)).toString(16);
                 let txHash = await be.sendWanHash(sender, data.parameters.tx);
                 data.value = txHash;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
