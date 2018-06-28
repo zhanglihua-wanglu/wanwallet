@@ -275,6 +275,28 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             callbackMessage('CrossChain_ETH2WETH', e, data);
         }
     }
+    else if(data.action == 'getBalance'){
+        if(data.chainType == 'ETH'){
+            try{
+                let balance = await be.getEthBalance(be.ethSender, data.parameters[0]);
+                data.value = balance;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }catch(error){
+                data.error = error.error;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
+        }else{
+            try{
+                let balance = await be.getWanBalance(be.wanSender,data.parameters[0]);
+                data.value = balance;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }catch(error){
+                data.error = error.error;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
+        }
+
+    }
     else if(sendServer.hasMessage(data.action)){
         // console.log('sendServer :', data);
         let args = data.parameters;
