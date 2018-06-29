@@ -230,22 +230,7 @@ let menuTempl = function (webviews) {
                     {
                         label: i18n.t('mist.applicationMenu.file.backupKeyStore'),
                         click() {
-                            let userPath = Settings.userHomePath;
-
-                            // eth
-                            if (ethereumNode.isEth) {
-                                if (process.platform === 'win32') {
-                                    userPath = `${Settings.appDataPath}\\Web3\\keys`;
-                                } else {
-                                    userPath += '/.web3/keys';
-                                }
-
-                            // geth
-                            } else {
-
-                                userPath = ethereumNode.getDatadir(true);
-                                log.info('keyStorePath: ' + userPath);
-                            }
+                            let userPath = Settings.getKeystoreDir('wanchain');
 
                             shell.showItemInFolder(userPath);
                         },
@@ -563,12 +548,16 @@ let menuTempl = function (webviews) {
             click() {
                 //restartNode(ethereumNode.type, 'main');
                 if(!ethereumNode.isMainNetwork) {
-                    ClientBinaryManager._relaunch({args: ['--network', 'main']});
+                    if (process.platform === 'win32') {
+                        ClientBinaryManager._relaunch({args: ['--network', 'main', "--node-datadir", Settings.appDataPath]});
+                    } else {
+                        ClientBinaryManager._relaunch({args: ['--network', 'main']});
+                    }
                 }
             },
         },
         {
-            label: 'Test network',
+            label: 'test network',
             accelerator: 'CommandOrControl+Alt+2',
             checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
             enabled: ethereumNode.isOwnNode,
@@ -576,7 +565,12 @@ let menuTempl = function (webviews) {
             click() {
                 //restartNode(ethereumNode.type, 'testnet');
                 if(!ethereumNode.isTestNetwork) {
-                    ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
+                    if (process.platform === 'win32') {
+                        ClientBinaryManager._relaunch({args: ['--network', 'testnet', "--node-datadir", Settings.appDataPath]});
+                    } else {
+                        ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
+                    }
+
                 }
             },
         }

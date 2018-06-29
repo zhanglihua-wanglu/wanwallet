@@ -223,7 +223,8 @@ class Settings {
                 }
             }
         }
-        return app.getPath('appData')+'\\'+'wanchain';
+        // return app.getPath('appData')+'\\'+'wanchain';
+        return path.join(app.getPath('appData'), 'wanchain');
     }
     getAppDataPath(chain) {
         // Application Support/
@@ -244,7 +245,7 @@ class Settings {
                 }
             }
         }
-        return app.getPath('appData')+'\\'+chain;
+        return path.join(app.getPath('appData'), chain);
     }
     getKeystoreDir(chain){ //wanchain  /  ethereum
         let keystorePath = this.userHomePath;
@@ -262,7 +263,7 @@ class Settings {
             keystorePath =  path.join(keystorePath, 'testnet');
         }
         keystorePath =  path.join(keystorePath, 'keystore');
-        //console.log("keystorePath is ", keystorePath);
+        // console.log("keystorePath is ", keystorePath);
         return  keystorePath;
     }
 
