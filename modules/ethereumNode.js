@@ -451,7 +451,7 @@ class EthereumNode extends EventEmitter {
                         : ['--unsafe-transactions'];
                 }
 
-                const nodeOptions = Settings.nodeOptions;
+                const nodeOptions = Settings.nodeOptions.concat();
                 if(network === 'testnet'){
                     for(let i=0; i<nodeOptions.length; i++){
                         if(nodeOptions[i] === "--datadir"){
