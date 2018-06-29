@@ -1,5 +1,5 @@
 const config = {};
-config.socketUrl = 'wss://apitest.wanchain.info';
+config.socketUrl = 'wss://api.wanchain.info';
 
 const settings=require('../settings.js');
 const logDebug = require('log4js');
@@ -38,8 +38,22 @@ config.logDebug = logDebug;
 logDebug.configure(log4jsOptions);
 config.listOption = true;
 
-
+function mkdirsSync(dirname) {
+    if (fs.existsSync(dirname)) {
+        return true;
+    } else {
+        if (mkdirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname);
+            return true;
+        }
+    }
+}
 config.databasePath = settings.userDataPath;
+if(settings.network === 'testnet'){
+    config.socketUrl = 'wss://apitest.wanchain.info';
+    config.databasePath=path.join(config.databasePath, 'testnetDb');
+    mkdirsSync(config.databasePath);
+}
 
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
