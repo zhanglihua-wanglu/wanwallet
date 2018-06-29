@@ -3,6 +3,8 @@ config.socketUrl = 'wss://api.wanchain.info';
 
 const settings=require('../settings.js');
 const logDebug = require('log4js');
+const path = require('path');
+const fs = require('fs');
 
 config.version = '1.0.0';
 config.host = '// http://localhost'; // http://localhost
