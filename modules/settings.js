@@ -16,7 +16,6 @@ try {
     _.extend(defaultConfig, require('../config.json'));
 } catch (err) {
 }
-console.log("defaultConfig:", defaultConfig);
 
 const argv = require('yargs')
     .usage('Usage: $0 [Mist options] [Node options]')
@@ -263,7 +262,7 @@ class Settings {
             keystorePath =  path.join(keystorePath, 'testnet');
         }
         keystorePath =  path.join(keystorePath, 'keystore');
-        console.log("keystorePath is ", keystorePath);
+        //console.log("keystorePath is ", keystorePath);
         return  keystorePath;
     }
 

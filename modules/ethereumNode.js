@@ -452,6 +452,13 @@ class EthereumNode extends EventEmitter {
                 }
 
                 const nodeOptions = Settings.nodeOptions;
+                if(network === 'testnet'){
+                    for(let i=0; i<nodeOptions.length; i++){
+                        if(nodeOptions[i] === "--datadir"){
+                            nodeOptions[i+1] = path.join(nodeOptions[i+1], network);
+                        }
+                    }
+                }
 
                 if (nodeOptions && nodeOptions.length) {
                     log.debug('Custom node options', nodeOptions);
