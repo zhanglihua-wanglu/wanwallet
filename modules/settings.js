@@ -303,7 +303,7 @@ class Settings {
         return defaultConfig.production;
     }
     get internal() {
-        return defaultConfig.internal ? defaultConfig.internal : false;
+		return (argv.internal || defaultConfig.internal) ? true : false;
     }
     get inAutoTestMode() {
         return !!process.env.TEST_MODE;
