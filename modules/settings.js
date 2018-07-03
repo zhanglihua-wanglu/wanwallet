@@ -97,6 +97,14 @@ const argv = require('yargs')
             type: 'boolean',
             group: 'Mist options:',
         },
+        internal: {
+            demand: false,
+            describe: 'internal dev mode',
+            requiresArg: false,
+            nargs: 0,
+            type: 'boolean',
+            group: 'Mist options:',
+        },
         logfile: {
             demand: false,
             describe: 'Logs will be written to this file in addition to the console.',
