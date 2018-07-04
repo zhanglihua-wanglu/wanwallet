@@ -59,8 +59,6 @@ class Manager extends EventEmitter {
         let binariesDownloaded = false;
         let nodeInfo;
 
-        let latestConfigDone;
-
         log.info(`Checking for new client binaries config from: ${BINARY_URL}`);
 
         this._emit('loadConfig', 'Fetching remote client config');
@@ -162,11 +160,10 @@ class Manager extends EventEmitter {
                             // update
                             if (update === 'update') {
                                 // this._writeLocalConfig(latestConfig);
-                                latestConfigDone = latestConfig;
                                 resolve(latestConfig);
 
-                                // skip
-                                } else if (update === 'skip') {
+                            // skip
+                            } else if (update === 'skip') {
                                 fs.writeFileSync(
                                     path.join(Settings.userDataPath, 'skippedNodeVersion.json'),
                                     nodeVersion
@@ -188,6 +185,7 @@ class Manager extends EventEmitter {
                 return localConfig;
             })
             .then((localConfig) => {
+
                 if (!localConfig) {
                     log.info('No config for the ClientBinaryManager could be loaded, using local clientBinaries.json.');
 
@@ -196,7 +194,8 @@ class Manager extends EventEmitter {
                 }
 
                 // scan for node
-                const mgr = new ClientBinaryManager(localConfig);
+                let mgr = new ClientBinaryManager(localConfig);
+
                 mgr.logger = log;
 
                 this._emit('scanning', 'Scanning for binaries');
@@ -208,7 +207,7 @@ class Manager extends EventEmitter {
                     ],
                 })
                     .then(() => {
-                        const clients = mgr.clients;
+                        let clients = mgr.clients;
                         this._availableClients = {};
                         const available = _.filter(clients, c => !!c.state.available);
 
@@ -221,7 +220,6 @@ class Manager extends EventEmitter {
 
                             return Q.map(_.values(clients), (c) => {
                                 binariesDownloaded = true;
-
                                 return mgr.download(c.id, {
                                     downloadFolder: path.join(Settings.userDataPath, 'binaries'),
                                     urlRegex: ALLOWED_DOWNLOAD_URLS_REGEX,
@@ -243,9 +241,12 @@ class Manager extends EventEmitter {
                             }
                         });
 
+                        log.debug('restart: ', restart);
+                        log.debug('binariesDownloaded: ', binariesDownloaded);
+
                         // restart if it downloaded while running
                         if (restart && binariesDownloaded) {
-                            this._writeLocalConfig(latestConfig);
+                            this._writeLocalConfig(localConfig);
 
                             log.info('Restarting app ...');
                             app.relaunch();

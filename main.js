@@ -279,17 +279,34 @@ onReady = () => {
     let cbJsonTo = path.join(Settings.userDataPath, 'clientBinaries.json');
     log.debug("cbJsonTo:", cbJsonTo);
     log.debug("cbJsonFrom:", cbJsonFrom);
+
     if(fs.existsSync(cbJsonFrom))
     {
         // compare the file change time, if need copy file. don't delete. because the file maybe installed by root.
         let timeto=0;
+        let timefrom;
+
+        let configTo;
+        let configToVersion;
+        let configFrom;
+        let configFromVersion;
+
         if(fs.existsSync(cbJsonTo)){
             timeto = fs.statSync(cbJsonTo).mtime.getTime();
+            configTo = JSON.parse(fs.readFileSync(cbJsonTo));
+            configToVersion = parseInt(configTo.clients.Gwan.version.replace(/\./g,""));
         }
-        let timefrom = fs.statSync(cbJsonFrom).mtime.getTime();
+
+        timefrom = fs.statSync(cbJsonFrom).mtime.getTime();
+        configFrom = JSON.parse(fs.readFileSync(cbJsonFrom));
+        configFromVersion = parseInt(configFrom.clients.Gwan.version.replace(/\./g,""));
+
+        log.debug("configToVersion:", configToVersion);
+        log.debug("configFromVersion:", configFromVersion);
+
         log.debug("timeto:", timeto);
         log.debug("timefrom:", timefrom);
-        if(timeto < timefrom){
+        if((timeto < timefrom) || (configToVersion < configFromVersion)){
             copy(cbJsonFrom, cbJsonTo);
             log.info("clientBinaries.json copied");
         }
