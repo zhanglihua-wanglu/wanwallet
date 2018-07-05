@@ -97,6 +97,14 @@ const argv = require('yargs')
             type: 'boolean',
             group: 'Mist options:',
         },
+        internal: {
+            demand: false,
+            describe: 'internal dev mode',
+            requiresArg: false,
+            nargs: 0,
+            type: 'boolean',
+            group: 'Mist options:',
+        },
         logfile: {
             demand: false,
             describe: 'Logs will be written to this file in addition to the console.',
@@ -295,7 +303,7 @@ class Settings {
         return defaultConfig.production;
     }
     get internal() {
-        return defaultConfig.internal ? defaultConfig.internal : false;
+		return (argv.internal || defaultConfig.internal) ? true : false;
     }
     get inAutoTestMode() {
         return !!process.env.TEST_MODE;
