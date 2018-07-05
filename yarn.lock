@@ -3712,7 +3712,7 @@ keccakjs@^0.2.0, keccakjs@^0.2.1:
     browserify-sha3 "^0.0.1"
     sha3 "^1.1.0"
 
-keythereum@^1.0.3:
+keythereum@^1.0.2, keythereum@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/keythereum/-/keythereum-1.0.4.tgz#e3ac3e41569efab8e5129a12286c6a60dc02ee39"
   dependencies:
@@ -6483,9 +6483,9 @@ walkdir@^0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/walkdir/-/walkdir-0.0.11.tgz#a16d025eb931bd03b52f308caed0f40fcebe9532"
 
-wanchain-crosschain@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/wanchain-crosschain/-/wanchain-crosschain-0.0.6.tgz#ab672f026d464673ce89b7621da7b8edfb62470c"
+wanchain-crosschain@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/wanchain-crosschain/-/wanchain-crosschain-0.0.8.tgz#2fb117549c55eb84ca3433ec7751f5d604030a35"
   dependencies:
     log4js "^2.5.3"
     wanchain-keystore "^0.0.1"
