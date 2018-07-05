@@ -89,7 +89,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             }
             try {
                 let sender = await be.getSenderbyChain(cfgWeb3);
-                data.parameters.tx.value = '0x'+web3.toBigNumber(web3.toWei(data.parameters.tx.value)).toString(16);
+                data.parameters.tx.value = '0x'+web3.toWei(web3.toBigNumber(data.parameters.tx.value)).trunc().toString(16);
                 let txHash = await be.sendWanHash(sender, data.parameters.tx);
                 data.value = txHash;
                 callbackMessage('CrossChain_ETH2WETH',e,data);
