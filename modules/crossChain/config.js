@@ -2,7 +2,7 @@ const config = {};
 config.socketUrl = 'wss://api.wanchain.info';
 
 const settings=require('../settings.js');
-const logDebug = require('log4js');
+const Logger = require('./logger.js');
 const path = require('path');
 const fs = require('fs');
 
@@ -18,26 +18,7 @@ config.ethkeyStorePath = settings.getKeystoreDir('ethereum');
 config.useLocalNode = true;
 
 config.loglevel = settings.loglevel;
-const log4jsOptions = {
-    appenders: {
-        console: { type: 'console' }
-    },
-    categories: {
-        default: { appenders: ['console'], level: (config.loglevel || 'info').toUpperCase()}
-    }
-};
 
-if (config.logfile) {
-    log4jsOptions.appenders.filelog = {
-        type: 'file',
-        filename: config.logfile,
-        maxLogSize: 10 * 1000 * 1000,
-        alwaysIncludePattern: true
-    };
-
-}
-config.logDebug = logDebug;
-logDebug.configure(log4jsOptions);
 config.listOption = true;
 
 function mkdirsSync(dirname) {
@@ -51,12 +32,19 @@ function mkdirsSync(dirname) {
     }
 }
 config.databasePath = settings.userDataPath;
+config.ccLog = path.join(settings.userDataPath, 'crossChainLog.log');
+config.ccErr = path.join(settings.userDataPath, 'crossChainErr.log');
 if(settings.network === 'testnet'){
+    config.ccLog = path.join(settings.userDataPath, 'testnet', 'crossChainLog.log');
+    config.ccErr = path.join(settings.userDataPath, 'testnet', 'crossChainErr.log');
     config.socketUrl = 'wss://apitest.wanchain.info';
     config.databasePath=path.join(config.databasePath, 'testnetDb');
     mkdirsSync(config.databasePath);
 }
-
+config.logger = new Logger('CrossChain',config.ccLog, config.ccErr,config.loglevel);
+config.getLogger = function(name){
+    return new Logger(name,config.ccLog, config.ccErr,config.loglevel);
+}
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
 
