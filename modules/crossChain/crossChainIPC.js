@@ -6,7 +6,7 @@ const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let WanchainCore = require('wanchain-crosschain');
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
-const logger = require('../utils/logger');
+//const logger = require('../utils/logger');
 const Web3 = require("web3");
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
@@ -19,7 +19,7 @@ function toGweiString(swei){
 }
 let wanchainCore;
 let be;
-const log = logger.create('main');
+const log = config.getLogger('crossChain');
 
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
