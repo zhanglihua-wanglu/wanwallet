@@ -21,7 +21,8 @@ if (Settings.internal) {
     BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/main/clientBinaries.json';
 }
 
-const ALLOWED_DOWNLOAD_URLS_REGEX = /.+/;
+//const ALLOWED_DOWNLOAD_URLS_REGEX = /.+/;
+const ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
 
 class Manager extends EventEmitter {
     constructor() {
