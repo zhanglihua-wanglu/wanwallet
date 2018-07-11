@@ -11,19 +11,18 @@ const EventEmitter = require('events').EventEmitter;
 
 const log = require('./utils/logger').create('ClientBinaryManager');
 
-
-// should be       'https://raw.githubusercontent.com/ethereum/mist/master/clientBinaries.json'
-// const BINARY_URL = 'http://47.104.60.142:/clientBinaries.json';
 let BINARY_URL;
+let ALLOWED_DOWNLOAD_URLS_REGEX;
+
 if (Settings.internal) {
     BINARY_URL = 'http://47.104.60.142:/clientBinaries.json';
+    ALLOWED_DOWNLOAD_URLS_REGEX =  /.+/;
 } else {
     BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/cc/clientBinaries.json';
     // BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/main/clientBinaries.json';
-}
 
-const ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
-// /^https:\/\/(?:(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)?ethereum\.org\/|gethstore\.blob\.core\.windows\.net\/|bintray\.com\/artifact\/download\/karalabe\/ethereum\/)(?:.+)/
+    ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
+}
 
 class Manager extends EventEmitter {
     constructor() {

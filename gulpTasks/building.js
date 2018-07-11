@@ -186,10 +186,17 @@ gulp.task('build-dist', (cb) => {
         config: {
             afterPack(params) {
                 return Q.try(() => {
+
                     let gwan_file;
-                    if(params.packager.platform.name === 'linux') { gwan_file = 'gwan_linux';}
-                    else if(params.packager.platform.name === 'mac') { gwan_file = 'gwan_mac';}
-                    else if(params.packager.platform.name === 'windows') { gwan_file = 'gwan.exe'; }
+
+                    if(params.packager.platform.name === 'linux') {
+                        gwan_file = 'gwan_linux';
+                    } else if(params.packager.platform.name === 'mac') {
+                        gwan_file = 'gwan_mac';
+                        params.appOutDir = path.join(params.appOutDir, 'WanWalletGui.app/Contents/MacOS/');
+                    } else if(params.packager.platform.name === 'windows') {
+                        gwan_file = 'gwan.exe';
+                    }
 
                     shell.cp(
                         [
@@ -199,7 +206,7 @@ gulp.task('build-dist', (cb) => {
                             path.join(__dirname, '..', 'clientBinaries.json'),
                             path.join(__dirname, '..', gwan_file)
                         ],
-                        params.appOutDir
+                        params.appOutDir,
                     );
                 });
             }
