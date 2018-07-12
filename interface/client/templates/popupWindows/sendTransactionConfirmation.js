@@ -1,8 +1,8 @@
 /**
-Template Controllers
+ Template Controllers
 
-@module Templates
-*/
+ @module Templates
+ */
 
 var setWindowSize = function (template) {
     Tracker.afterFlush(function () {
@@ -14,19 +14,19 @@ var setWindowSize = function (template) {
 var defaultEstimateGas = 50000000;
 
 /**
-The sendTransaction confirmation popup window template
+ The sendTransaction confirmation popup window template
 
-@class [template] popupWindows_sendTransactionConfirmation
-@constructor
-*/
+ @class [template] popupWindows_sendTransactionConfirmation
+ @constructor
+ */
 
 
 /**
-Takes a 4-byte function signature and does a best-effort conversion to a
-human readable text signature.
+ Takes a 4-byte function signature and does a best-effort conversion to a
+ human readable text signature.
 
-@method (lookupFunctionSignature)
-*/
+ @method (lookupFunctionSignature)
+ */
 var lookupFunctionSignature = function (data, remoteLookup) {
     return new Q(function (resolve, reject) {
         if (data && data.length > 8) {
@@ -55,10 +55,10 @@ var lookupFunctionSignature = function (data, remoteLookup) {
                     reject(bytesSignature);
                 });
             } else if (_.first(window.SIGNATURES[bytesSignature])) {
-                    resolve(_.first(window.SIGNATURES[bytesSignature]));
-                } else {
-                    reject(bytesSignature);
-                }
+                resolve(_.first(window.SIGNATURES[bytesSignature]));
+            } else {
+                reject(bytesSignature);
+            }
         } else {
             reject(undefined);
         }
@@ -185,7 +185,7 @@ Template['popupWindows_sendTransactionConfirmation'].onCreated(function () {
                 console.log('Estimated gas: ', res, e);
                 if (!e && res) {
 
-                        // set the gas to the estimation, if not provided or lower
+                    // set the gas to the estimation, if not provided or lower
                     Tracker.nonreactive(function () {
                         var gas = Number(TemplateVar.get(template, 'providedGas'));
 
@@ -217,10 +217,10 @@ Template['popupWindows_sendTransactionConfirmation'].onRendered(function () {
 
 Template['popupWindows_sendTransactionConfirmation'].helpers({
     /**
-    Returns the total amount
+     Returns the total amount
 
-    @method (totalAmount)
-    */
+     @method (totalAmount)
+     */
     'totalAmount': function () {
         var amount = EthTools.formatBalance(this.value, '0,0.00[0000000000000000]', 'ether');
         var dotPos = (~amount.indexOf('.')) ? amount.indexOf('.') + 3 : amount.indexOf(',') + 3;
@@ -230,6 +230,13 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
 
     'isInputPassword': function() {
         if (this.isWaddress === '0x00') {
+            TemplateVar.set('hardwareAccount', 'Hardware');
+            return false
+        } else if (this.isWaddress === '0x11') {
+            TemplateVar.set('hardwareAccount', 'Ledger');
+            return false
+        } else if (this.isWaddress === '0x12') {
+            TemplateVar.set('hardwareAccount', 'Trezor');
             return false
         }
 
@@ -237,10 +244,10 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
     },
 
     /**
-    Calculates the fee used for this transaction in ether
+     Calculates the fee used for this transaction in ether
 
-    @method (estimatedFee)
-    */
+     @method (estimatedFee)
+     */
     'estimatedFee': function () {
         var gas = TemplateVar.get('estimatedGas');
         if (gas && this.gasPrice) {
@@ -252,10 +259,10 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
         }
     },
     /**
-    Calculates the provided gas amount in ether
+     Calculates the provided gas amount in ether
 
-    @method (providedGas)
-    */
+     @method (providedGas)
+     */
     'providedGas': function () {
         var gas = TemplateVar.get('providedGas');
         if (gas && this.gasPrice) {
@@ -263,20 +270,20 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
         }
     },
     /**
-    Shortens the address to 0xffff...ffff
+     Shortens the address to 0xffff...ffff
 
-    @method (shortenAddress)
-    */
+     @method (shortenAddress)
+     */
     'shortenAddress': function (address) {
         if (_.isString(address)) {
             return address.substr(0, 6) + '...' + address.substr(-4);
         }
     },
     /**
-    Formats the data so that all zeros are wrapped in span.zero
+     Formats the data so that all zeros are wrapped in span.zero
 
-    @method (formattedData)
-    */
+     @method (formattedData)
+     */
     'formattedData': function () {
         return (TemplateVar.get('toIsContract'))
             ? this.data.replace(/([0]{2,})/g, '<span class="zero">$1</span>').replace(/(0x[a-f0-9]{8})/i, '<span class="function">$1</span>')
@@ -287,65 +294,60 @@ Template['popupWindows_sendTransactionConfirmation'].helpers({
         return TemplateVar.get('params');
     },
     /**
-    Formats parameters
+     Formats parameters
 
-    @method (showFormattedParams)
-    */
+     @method (showFormattedParams)
+     */
     'showFormattedParams': function () {
         return TemplateVar.get('params') && TemplateVar.get('displayDecodedParams');
     },
     /**
-    Checks if transaction will be invalid
+     Checks if transaction will be invalid
 
-    @method (transactionInvalid)
-    */
+     @method (transactionInvalid)
+     */
     'transactionInvalid': function () {
         return TemplateVar.get('estimatedGas') === 'invalid'
-                || TemplateVar.get('estimatedGas') === 0
-                || typeof TemplateVar.get('estimatedGas') === 'undefined';
+            || TemplateVar.get('estimatedGas') === 0
+            || typeof TemplateVar.get('estimatedGas') === 'undefined';
     }
 });
 
 Template['popupWindows_sendTransactionConfirmation'].events({
     /**
-    Gets the new provided gas in ether amount and calculates the resulting providedGas
+     Gets the new provided gas in ether amount and calculates the resulting providedGas
 
-    @event change .provided-gas, input .provided-gas
-    */
+     @event change .provided-gas, input .provided-gas
+     */
     'change .provided-gas, input .provided-gas': function (e, template) {
         var gas = template.$('.provided-gas').text().replace(/[, ]+/g, '');// template.$('.provided-gas').text();
 
         TemplateVar.set('providedGas', gas);
     },
     /**
-    Increase the estimated gas
+     Increase the estimated gas
 
-    @event click .not-enough-gas
-    */
+     @event click .not-enough-gas
+     */
     'click .not-enough-gas': function () {
         var gas = Number(TemplateVar.get('estimatedGas')) + 100000;
         TemplateVar.set('initialProvidedGas', gas);
         TemplateVar.set('providedGas', gas);
     },
     /**
-    Cancel the transaction confirmation and close the popup
+     Cancel the transaction confirmation and close the popup
 
-    @event click .cancel
-    */
+     @event click .cancel
+     */
     'click .cancel': function () {
-        console.log('this.isWaddress', this.isWaddress);
-        if (this.isWaddress === '0x00') {
-            ipc.send('backendAction_unlockedAccountAndSentTransaction', 'Transaction not confirmed. Please DO NOT process your transaction on ledger');
-        } else {
-            ipc.send('backendAction_unlockedAccountAndSentTransaction', 'Transaction not confirmed');
-        }
+        ipc.send('backendAction_unlockedAccountAndSentTransaction', 'Transaction not confirmed');
         ipc.send('backendAction_closePopupWindow');
     },
     /**
-    Confirm the transaction
+     Confirm the transaction
 
-    @event submit form
-    */
+     @event submit form
+     */
     'submit form': function (e, template) {
         e.preventDefault();
 
@@ -408,12 +410,8 @@ Template['popupWindows_sendTransactionConfirmation'].events({
                         duration: 5
                     });
                 } else {
-                    var message = e.message;
-                    if (e.message === 'reply lacks signature' && ! TemplateVar.get(template, 'isInputPassword')) {
-                        message = 'Transaction Cancelled on Ledger';
-                    }
                     GlobalNotification.warning({
-                        content: message,
+                        content: e.message,
                         duration: 5
                     });
                 }

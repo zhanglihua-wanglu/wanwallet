@@ -112,6 +112,10 @@ class EthereumNode extends EventEmitter {
         return this._type === 'gwan';
     }
 
+    get isGwan() {
+        return this._type === 'gwan';
+    }
+
     get isMainNetwork() {
         return this.network === 'main';
     }

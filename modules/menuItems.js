@@ -478,35 +478,18 @@ let menuTempl = function (webviews) {
     // add node switch
     if (process.platform === 'darwin' || process.platform === 'win32') {
         const nodeSubmenu = [];
+        const gwanClient = ClientBinaryManager.getClient('gwan');
 
-        const ethClient = ClientBinaryManager.getClient('eth');
-        const gethClient = ClientBinaryManager.getClient('geth');
-
-        if (gethClient) {
+        if (gwanClient) {
             nodeSubmenu.push({
-                label: `Geth ${gethClient.version}`,
-                checked: ethereumNode.isOwnNode && ethereumNode.isGeth,
+                label: `Gwan ${gwanClient.version}`,
+                checked: ethereumNode.isOwnNode && ethereumNode.isGwan,
                 enabled: ethereumNode.isOwnNode,
                 type: 'checkbox',
                 click() {
-                    restartNode('geth', null, 'fast', webviews);
+                    restartNode('gwan', null, 'fast', webviews);
                 },
             });
-        }
-
-        if (ethClient) {
-            nodeSubmenu.push(
-                {
-                    label: `Eth ${ethClient.version} (C++)`,
-                    checked: ethereumNode.isOwnNode && ethereumNode.isEth,
-                    enabled: ethereumNode.isOwnNode,
-                    // enabled: false,
-                    type: 'checkbox',
-                    click() {
-                        restartNode('eth');
-                    },
-                }
-            );
         }
 
         devToolsMenu.push({
