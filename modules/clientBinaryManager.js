@@ -19,7 +19,6 @@ if (Settings.internal) {
     ALLOWED_DOWNLOAD_URLS_REGEX =  /.+/;
 } else {
     BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/cc/clientBinaries.json';
-    // BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/main/clientBinaries.json';
 
     ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
 }
