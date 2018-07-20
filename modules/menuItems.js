@@ -502,7 +502,7 @@ let menuTempl = function (webviews) {
         if (gwanClient) {
             nodeSubmenu.push({
                 label: `Gwan ${gwanClient.version}`,
-                checked: ethereumNode.isOwnNode && ethereumNode.isGwan,
+                checked: false, // ethereumNode.isOwnNode && ethereumNode.isGwan,
                 enabled: ethereumNode.isOwnNode,
                 type: 'checkbox',
                 click() {
