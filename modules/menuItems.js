@@ -575,20 +575,20 @@ let menuTempl = function (webviews) {
     // }
 
     // Enables mining menu: only in Solo mode and Ropsten network (testnet)
-    if (ethereumNode.isOwnNode && (ethereumNode.isTestNetwork || ethereumNode.isDevNetwork)) {
-        devToolsMenu.push({
-            label: (global.mining) ? i18n.t('mist.applicationMenu.develop.stopMining') : i18n.t('mist.applicationMenu.develop.startMining'),
-            accelerator: 'CommandOrControl+Shift+M',
-            enabled: true,
-            click() {
-                if (global.mining) {
-                    stopMining(webviews);
-                } else {
-                    startMining(webviews);
-                }
-            }
-        });
-    }
+    // if (ethereumNode.isOwnNode && (ethereumNode.isTestNetwork || ethereumNode.isDevNetwork)) {
+    //     devToolsMenu.push({
+    //         label: (global.mining) ? i18n.t('mist.applicationMenu.develop.stopMining') : i18n.t('mist.applicationMenu.develop.startMining'),
+    //         accelerator: 'CommandOrControl+Shift+M',
+    //         enabled: true,
+    //         click() {
+    //             if (global.mining) {
+    //                 stopMining(webviews);
+    //             } else {
+    //                 startMining(webviews);
+    //             }
+    //         }
+    //     });
+    // }
 
     menu.push({
         label: ((global.mining) ? '⛏ ' : '') + i18n.t('mist.applicationMenu.develop.label'),
