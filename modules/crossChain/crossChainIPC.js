@@ -225,6 +225,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if(data.action == 'getGasPrice'){
         let result = {};
         if(data.chainType == 'ETH'){
+            result.ethNormalGas = config.ethNormalGas;
             result.LockGas = config.ethLockGas;
             result.RefundGas = config.ethRefundGas;
             result.RevokeGas = config.ethRevokeGas;
