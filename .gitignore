@@ -15,3 +15,4 @@ yarn.lock
 gwan.exe
 gwan_linux
 gwan_mac
+.vscode/

@@ -41,7 +41,7 @@ const argv = require('yargs')
         },
         network: {
             demand: false,
-            default: 'main',
+            default: null, //'main',
             describe: 'Network to connect to: main, testnet',
             requiresArg: true,
             nargs: 1,
@@ -382,7 +382,7 @@ class Settings {
         if(argv.network){
             return argv.network;
         }else{
-            return 'main'
+            return this.loadUserData('network') || 'main';
         }
     }
 
@@ -450,7 +450,7 @@ class Settings {
     loadUserData(path2) {
         const fullPath = this.constructUserDataPath(path2);
 
-        this._log.trace('Load user data', fullPath);
+        if(this._log) {this._log.trace('Load user data', fullPath);}
 
       // check if the file exists
         try {
@@ -462,10 +462,10 @@ class Settings {
       // try to read it
         try {
             const data = fs.readFileSync(fullPath, { encoding: 'utf8' });
-            this._log.debug(`Reading "${data}" from ${fullPath}`);
+            if(this._log) {this._log.debug(`Reading "${data}" from ${fullPath}`);}
             return data;
         } catch (err) {
-            this._log.warn(`File not readable: ${fullPath}`, err);
+            if(this._log) {this._log.warn(`File not readable: ${fullPath}`, err);}
         }
 
         return null;
