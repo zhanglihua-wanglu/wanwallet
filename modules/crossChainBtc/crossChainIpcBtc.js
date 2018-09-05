@@ -262,6 +262,16 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         }
     }
+    else if(data.action === 'lockBtc') {
+        try {
+
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        } catch (error) {
+            log.error("Failed to lockBtc:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
     else if(sendServer.hasMessage(data.action)){
         // console.log('sendServer :', data);
         let args = data.parameters;

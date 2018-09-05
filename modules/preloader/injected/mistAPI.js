@@ -332,6 +332,11 @@
             if(mist.ETH2WETH()) {
                 mist.ETH2WETH().invokeCallback(data.message);
             }
+        }else if (data.type === 'Callback_CrossChain_BTC2WBTC'){
+            // console.log('mist api: ', data);
+            if(mist.BTC2WBTC()) {
+                mist.BTC2WBTC().invokeCallback(data.message);
+            }
         }else if (data.type === 'uiAction_windowMessage') {
             var params = data.message;
 
