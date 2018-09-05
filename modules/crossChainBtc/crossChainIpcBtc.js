@@ -13,6 +13,8 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows.js');
 
+let btcScripts = require('./btcScripts');
+
 let wanchainCore;
 let be;
 
@@ -20,8 +22,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     log.debug('data:', JSON.stringify(data, null, 4));
     let tokenAddress;
-    let sendServer = (data.chainType == 'BTC') ? wanchainCore.btcSend : wanchainCore.wanSend;
-    if(data.chainType == 'BTC'){
+    let sendServer = (data.chainType === 'BTC') ? wanchainCore.btcSend : wanchainCore.wanSend;
+    if(data.chainType === 'BTC'){
         tokenAddress = config.originalChainHtlc;
     }else {
         tokenAddress = config.wanchainHtlcAddr;
@@ -34,18 +36,18 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             log.error("Failed to connect to apiserver:", error.toString());
             data.error = error.toString();
             callbackMessage('CrossChain_BTC2WBTC',e,data);
-            return
+            return;
         }
     }
 
-    if(data.action == 'createBtcAddress'){
+    if(data.action === 'createBtcAddress'){
         log.debug('CrossChain_BTC2WBTC->>>>>>>>>createBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         wanchainCore.btcUtil.createAddress(data.parameters).then((newAddress)=>{
             data.value = newAddress;
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         });
     }
-    else if(data.action == 'listBtcAddress') {
+    else if(data.action === 'listBtcAddress') {
         try{
             log.debug('CrossChain_BTC2WBTC->>>>>>>>>listBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
             wanchainCore.btcUtil.getAddressList().then((addressList)=>{
@@ -61,7 +63,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         }
     }
-    else if(data.action == 'getBtcBalance') {
+    else if(data.action === 'getBtcBalance') {
         try {
             log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
             let addressList = await wanchainCore.btcUtil.getAddressList();
@@ -80,8 +82,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
                 array.push(addressList[i].address)
             }
 
-            let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
-            let result = await ccUtil.getUTXOSBalance(utxos);
+            let utxos = await wanchainCore.ccUtil.getBtcUtxo(wanchainCore.ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+            let result = await wanchainCore.ccUtil.getUTXOSBalance(utxos);
 
             let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
 
@@ -92,6 +94,76 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (e) {
             log.error("Failed to getBtcBalance:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
+    else if(data.action === 'sendBtcToAddress') {
+        log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        try {
+            if(!data.parameters) {
+                throw new Error('parameters is null.');
+            }
+
+            if(data.parameters.length !== 3) {
+                throw new Error('parameters count error.');
+            }
+
+            let amount = data.parameters[0];
+            let to = data.parameters[1];
+            let passwd = data.parameters[2];
+
+            if (! btcScripts.checkBalance(amount, null) ||
+                ! to.length > 0 ||
+                ! btcScripts.checkPasswd(passwd)) {
+
+                throw new Error('parameters infomation error.');
+            }
+
+            let btcBalance = 0;
+            let addressList;
+            let utxos;
+            // btc balance
+
+            addressList = await wanchainCore.btcUtil.getAddressList();
+            let array = [];
+            for (let i = 0; i < addressList.length; i++) {
+                array.push(addressList[i].address)
+            }
+
+            utxos = await wanchainCore.ccUtil.getBtcUtxo(wanchainCore.ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+
+            let result = await wanchainCore.ccUtil.getUTXOSBalance(utxos);
+
+            btcBalance = web3.toBigNumber(result).div(100000000);
+
+            if (! btcScripts.checkBalance(amount, btcBalance) ) {
+
+                throw new Error('Balance not enough.')
+            }
+
+            let keyPairArray = [];
+
+            keyPairArray = await wanchainCore.btcUtil.getECPairs(passwd);
+
+            if (keyPairArray.length === 0) {
+                throw new Error('no bitcoin keyPairs!');
+            }
+
+            let target = {
+                address: to,
+                value: web3.toBigNumber(amount).mul(100000000)
+            };
+
+            const { rawTx, fee } = await wanchainCore.ccUtil.btcBuildTransaction(utxos, keyPairArray, target, config.feeRate);
+            if (!rawTx) {
+                throw new Error('btcBuildTransaction error.');
+            }
+
+            let result = await wanchainCore.ccUtil.sendRawTransaction(wanchainCore.ccUtil.btcSender, rawTx);
+            log.debug('hash: ', result);
+        } catch (error) {
+            log.error("Failed to sendBtcToAddress:", e.toString());
             data.error = e.toString();
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         }
