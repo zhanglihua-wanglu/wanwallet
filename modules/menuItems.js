@@ -222,6 +222,18 @@ let menuTempl = function (webviews) {
                 },
             },
             {
+                label: 'New BTC account',
+                accelerator: 'CommandOrControl+K',
+                click() {
+                    Windows.createPopup('requestBtcAccount', {
+                        ownerId : Windows.getByType('main').id,
+                        electronOptions: {
+                            width: 1120, height: 600, alwaysOnTop: true,
+                        },
+                    });
+                },
+            },
+            {
                 type: 'separator',
             },
             {

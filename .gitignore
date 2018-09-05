@@ -18,3 +18,4 @@ gwan_mac
 .vscode/
 crossTransDb
 yarn.lock
+yarn-error.log
