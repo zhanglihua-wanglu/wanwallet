@@ -160,8 +160,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
                 throw new Error('btcBuildTransaction error.');
             }
 
-            let result = await wanchainCore.ccUtil.sendRawTransaction(wanchainCore.ccUtil.btcSender, rawTx);
-            log.debug('hash: ', result);
+            let result2 = await wanchainCore.ccUtil.sendRawTransaction(wanchainCore.ccUtil.btcSender, rawTx);
+            log.debug('hash: ', result2);
             data.value = 'success';
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (error) {
