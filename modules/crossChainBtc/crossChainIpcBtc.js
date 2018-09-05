@@ -17,6 +17,7 @@ let btcScripts = require('./btcScripts');
 
 let wanchainCore;
 let be;
+let ccUtil;
 
 ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
@@ -295,6 +296,8 @@ function callbackMessage(message,e,data){
 async function init(){
     wanchainCore = new WanchainCoreBTC(config);
     be = wanchainCore.be;
+    wanchainCore.ccUtil = wanchainCore.be;
+    ccUtil = wanchainCore.be;
     await wanchainCore.init(config);
 }
 exports.init = init;
