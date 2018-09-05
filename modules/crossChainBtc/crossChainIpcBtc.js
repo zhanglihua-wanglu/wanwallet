@@ -162,6 +162,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
             let result = await wanchainCore.ccUtil.sendRawTransaction(wanchainCore.ccUtil.btcSender, rawTx);
             log.debug('hash: ', result);
+            data.value = 'success';
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (error) {
             log.error("Failed to sendBtcToAddress:", e.toString());
             data.error = e.toString();
