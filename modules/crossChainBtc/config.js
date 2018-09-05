@@ -43,6 +43,11 @@ config.getLogger = function(name){
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
 
+config.MAX_CONFIRM_BLKS = 100000000;
+config.MIN_CONFIRM_BLKS = 0;
+config.listOption = true;
+config.feeRate = 3000;
+
 config.ethGasPrice = 60;
 config.wanGasPrice = 200;
 config.ethNormalGas = 21000;
