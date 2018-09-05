@@ -5,7 +5,7 @@ const path = require('path');
 const settings=require('../settings.js');
 config.ccLog = path.join(settings.userDataPath, 'testnet', 'crossChainBtcLog.log');
 config.ccErr = path.join(settings.userDataPath, 'testnet', 'crossChainBtcErr.log');
-config.socketUrl = 'wss://18.237.186.227';//'wss://34.210.104.235';//'wss://apitest.wanchain.info';
+config.socketUrl = 'wss://34.210.104.235';//'wss://apitest.wanchain.info';
 config.databasePath = settings.userDataPath;
 config.databasePath=path.join(config.databasePath, 'testnetDbBtc');
 
