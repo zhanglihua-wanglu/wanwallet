@@ -1,5 +1,5 @@
 "use strict";
-const config = require('./configBtc.js');
+const config = require('./config.js');
 
 const log = config.getLogger('crossChain-BTC');
 log.debug('>>>>>>>>>>>>>>>>>>>>>>>>>>crossChainIpcBtc entered<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
@@ -39,10 +39,62 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
 
     if(data.action == 'createBtcAddress'){
+        log.debug('CrossChain_BTC2WBTC->>>>>>>>>createBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         wanchainCore.btcUtil.createAddress(data.parameters).then((newAddress)=>{
             data.value = newAddress;
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         });
+    }
+    else if(data.action == 'listBtcAddress') {
+        try{
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>listBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+            wanchainCore.btcUtil.getAddressList().then((addressList)=>{
+                addressList.forEach(function(Array, index){
+                    log.debug(config.consoleColor.COLOR_FgYellow, (index +1) + ': ' + Array.address, '\x1b[0m');
+                });
+                data.value = addressList;
+                callbackMessage('CrossChain_BTC2WBTC', e, data);
+            });
+        } catch (e) {
+            log.error("Failed to listBtcAddress:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
+    else if(data.action == 'getBtcBalance') {
+        try {
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+            let addressList = await wanchainCore.btcUtil.getAddressList();
+            let array = [];
+
+            if (addressList.length === 0) {
+                log.debug('address list lenght === 0');
+
+                data.value = null;
+
+                callbackMessage('CrossChain_BTC2WBTC', e, data);
+                return;
+            }
+
+            for (let i = 0; i < addressList.length; i++) {
+                array.push(addressList[i].address)
+            }
+
+            let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+            let result = await ccUtil.getUTXOSBalance(utxos);
+
+            let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
+
+            log.debug(print);
+
+            data.value = web3.toBigNumber(result).div(100000000).toString();
+
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        } catch (e) {
+            log.error("Failed to getBtcBalance:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
     }
     else if(sendServer.hasMessage(data.action)){
         // console.log('sendServer :', data);
