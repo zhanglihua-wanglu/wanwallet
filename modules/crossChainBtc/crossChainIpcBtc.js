@@ -98,6 +98,48 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         }
     }
+    else if(data.action === 'getBtcMultiBalances') {
+        try {
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+            let addressList = await wanchainCore.btcUtil.getAddressList();
+
+
+            if (addressList.length === 0) {
+                log.debug('address list lenght === 0');
+
+                data.value = null;
+
+                callbackMessage('CrossChain_BTC2WBTC', e, data);
+                return;
+            }
+
+            data.value = {};
+
+            for (let i = 0; i < addressList.length; i++) {
+                let array = [];
+
+                array.push(addressList[i].address)
+
+                let utxos = await wanchainCore.ccUtil.getBtcUtxo(wanchainCore.ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+                let result = await wanchainCore.ccUtil.getUTXOSBalance(utxos);
+
+                let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
+
+                log.debug(print);
+
+                data.value[addressList[i].address] = web3.toBigNumber(result).div(100000000).toString();
+
+                array.pop();
+            }
+
+
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        } catch (e) {
+            log.error("Failed to getBtcBalance:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
     else if(data.action === 'sendBtcToAddress') {
         log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         try {
@@ -166,6 +208,56 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (error) {
             log.error("Failed to sendBtcToAddress:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
+    else if (data.action === 'listWbtcBalance') {
+        log.debug('CrossChain_BTC2WBTC->>>>>>>>>listWbtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        try {
+            let wanAddressList = [];
+            let wethBalance;
+            data.value = {};
+
+            wanAddressList = await wanchainCore.ccUtil.getWanAccountsInfo(wanchainCore.ccUtil.wanSender);
+            log.debug(sprintf("%20s %58s", "WAN address", "WBTC balance"));
+
+            wanAddressList.forEach(function(wanAddress, index){
+                wethBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000);
+                data.value[wanAddress.address] = wethBalance;
+            });
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        } catch (error) {
+            log.error("Failed to listWbtcBalance:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
+    else if(data.action === 'listStoremanGroups') {
+        log.debug('CrossChain_BTC2WBTC->>>>>>>>>listStoremanGroups>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        try {
+            let smgs = await wanchainCore.ccUtil.getBtcSmgList(wanchainCore.ccUtil.btcSender);
+            data.value = smgs;
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        } catch (error) {
+            log.error("Failed to listStoremanGroups:", e.toString());
+            data.error = e.toString();
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        }
+    }
+    else if(data.action === 'listTransactions') {
+        log.debug('CrossChain_BTC2WBTC->>>>>>>>>listTransactions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        try {
+            let records = ccUtil.getBtcWanTxHistory({});
+
+            records = records.filter((value)=>{
+                retrun (value.crossAdress !== '');
+            });
+
+            data.value = records;
+            callbackMessage('CrossChain_BTC2WBTC', e, data);
+        } catch (error) {
+            log.error("Failed to listTransactions:", e.toString());
             data.error = e.toString();
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         }
