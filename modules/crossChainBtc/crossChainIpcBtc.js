@@ -101,7 +101,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
     else if(data.action === 'getBtcMultiBalances') {
         try {
-            log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcMultiBalances>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
             let addressList = await wanchainCore.btcUtil.getAddressList();
 
 
@@ -133,6 +133,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
                 array.pop();
             }
 
+            log.debug('getBtcMultiBalances finish, data:');
+            log.debug(JSON.stringify(data, null, 4));
 
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (e) {
