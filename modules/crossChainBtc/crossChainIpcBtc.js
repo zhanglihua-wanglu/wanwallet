@@ -116,23 +116,24 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             }
 
             data.value = {};
+            data.value.address = [];
+            data.value.balance = "";
 
             for (let i = 0; i < addressList.length; i++) {
-                let array = [];
-
-                array.push(addressList[i].address)
-
-                let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
-                let result = await ccUtil.getUTXOSBalance(utxos);
-
-                let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
-
-                log.debug(print);
-
-                data.value[addressList[i].address] = web3.toBigNumber(result).div(100000000).toString();
-
-                array.pop();
+                data.value.address.push(addressList[i].address)
             }
+
+            let array = [];
+            for (let i = 0; i < addressList.length; i++) {
+                array.push(addressList[i].address)
+            }
+
+            let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+            let result = await ccUtil.getUTXOSBalance(utxos);
+
+            let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
+
+            data.value.balance = web3.toBigNumber(result).div(100000000).toString();
 
             log.debug('getBtcMultiBalances finish, data:');
             log.debug(JSON.stringify(data, null, 4));
@@ -155,7 +156,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
                 throw new Error('parameters error.');
             }
 
-            let amount = data.parameters.amount;
+            let amount = Number(data.parameters.amount);
             let to = data.parameters.toAddress;
             let passwd = data.parameters.password;
 
@@ -268,6 +269,67 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
     else if(data.action === 'lockBtc') {
         try {
+            if(!data.parameters) {
+                throw new Error('parameters can not be null');
+            }
+
+            if(!data.parameters.storeman) {
+                throw new Error('parameters.storeman can not be null');
+            }
+
+            if(!data.parameters.wanAddress) {
+                throw new Error('parameters.wanAddress can not be null');
+            }
+
+            if(!data.parameters.amount) {
+                throw new Error('parameters.amount can not be null');
+            }
+
+            if(!data.parameters.wanPassword) {
+                throw new Error('parameters.wanPassword can not be null');
+            }
+
+            if(!data.parameters.btcPassword) {
+                throw new Error('parameters.btcPassword can not be null');
+            }
+
+            let storeman = data.parameters.storeman;
+            let wanAddress = data.parameters.wanAddress;
+            let amount = data.parameters.amount;
+            let wanPassword = data.parameters.wanPassword;
+            let btcPassword = data.parameters.btcPassword;
+
+            //check passwd
+            let keyPairArray;
+            try{
+                keyPairArray = await btcUtil.getECPairs(btcPassword);
+                if(keyPairArray.length === 0) {
+                    throw new Error('Password Error');
+                }
+            }catch(err){
+                throw new Error("lockBtc getECPairs error.");
+            }
+
+            //check balance
+            let addressList = await btcUtil.getAddressList();
+
+            let aliceAddr = [];
+            for (let i = 0; i < addressList.length; i++) {
+                aliceAddr.push(addressList[i].address)
+            }
+
+            let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, 0, 1000, aliceAddr);
+            let result = await ccUtil.getUTXOSBalance(utxos);
+
+            let btcBalance = web3.toBigNumber(result).div(100000000);
+
+            if (!btcScripts.checkBalance(amount, btcBalance)) {
+                throw new Error('Balance is not enough.');
+            }
+
+            let amountValue = Number(web3.toBigNumber(amount).mul(100000000));
+
+
 
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (error) {
