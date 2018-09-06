@@ -1,19 +1,14 @@
 "use strict";
 const config = require('./config.js');
-
 const log = config.getLogger('crossChain-BTC');
-log.debug('>>>>>>>>>>>>>>>>>>>>>>>>>>crossChainIpcBtc entered<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
-//require('stepcell');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
 let WanchainCoreBTC = require('wanchain-crosschain-btc');
-
-//const logger = require('../utils/logger');
 const Web3 = require("web3");
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-
 const Windows = require('../windows.js');
-
 let btcScripts = require('./btcScripts');
+const bitcoin = require('bitcoinjs-lib');
+const settings = require('../settings.js');
 
 let wanchainCore;
 let be;
@@ -47,8 +42,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
     }
-  }
-  else if (data.action === 'listBtcAddress') {
+  } else if (data.action === 'listBtcAddress') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>listBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       btcUtil.getAddressList().then((addressList) => {
@@ -63,8 +57,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'getBtcBalance') {
+  } else if (data.action === 'getBtcBalance') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       let addressList = await btcUtil.getAddressList();
@@ -98,8 +91,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'getBtcMultiBalances') {
+  } else if (data.action === 'getBtcMultiBalances') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcMultiBalances>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       let addressList = await btcUtil.getAddressList();
@@ -143,8 +135,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'sendBtcToAddress') {
+  } else if (data.action === 'sendBtcToAddress') {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       if (!data.parameters) {
@@ -225,8 +216,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'listWbtcBalance') {
+  } else if (data.action === 'listWbtcBalance') {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listWbtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let wanAddressList = [];
@@ -246,8 +236,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'listStoremanGroups') {
+  } else if (data.action === 'listStoremanGroups') {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listStoremanGroups>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let smgs = await ccUtil.getBtcSmgList(ccUtil.btcSender);
@@ -258,8 +247,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'listTransactions') {
+  } else if (data.action === 'listTransactions') {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listTransactions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let records = ccUtil.getBtcWanTxHistory({});
@@ -275,33 +263,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (data.action === 'lockBtc') {
+  } else if (data.action === 'lockBtc') {
     try {
-      if (!data.parameters) {
-        throw new Error('parameters can not be null');
-      }
-
-      if (!data.parameters.storeman) {
-        throw new Error('parameters.storeman can not be null');
-      }
-
-      if (!data.parameters.wanAddress) {
-        throw new Error('parameters.wanAddress can not be null');
-      }
-
-      if (!data.parameters.amount) {
-        throw new Error('parameters.amount can not be null');
-      }
-
-      if (!data.parameters.wanPassword) {
-        throw new Error('parameters.wanPassword can not be null');
-      }
-
-      if (!data.parameters.btcPassword) {
-        throw new Error('parameters.btcPassword can not be null');
-      }
-
       let storeman = data.parameters.storeman;
       let wanAddress = data.parameters.wanAddress;
       let amount = data.parameters.amount;
@@ -329,7 +292,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, 0, 1000, aliceAddr);
       let result = await ccUtil.getUTXOSBalance(utxos);
-
       let btcBalance = web3.toBigNumber(result).div(100000000);
 
       if (!btcScripts.checkBalance(amount, btcBalance)) {
@@ -337,7 +299,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       }
 
       let value = Number(web3.toBigNumber(amount).mul(100000000));
-
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
 
       // notice wan.
@@ -369,8 +330,108 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
-  }
-  else if (sendServer.hasMessage(data.action)) {
+  } else if (data.action === 'redeemBtc') {
+    try {
+      let crossAddress = data.parameters.crossAddress;
+      let x = data.parameters.x;
+      let wanPassword = data.parameters.wanPassword;
+
+      let redeemHash = await ccUtil.sendDepositX(ccUtil.wanSender, crossAddress,
+        config.gasLimit, config.gasPrice, x, wanPassword);
+
+      if (!redeemHash) {
+        throw new Error('redeemBtc failed.');
+      }
+
+      data.value = redeemHash;
+
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      log.error("Failed to redeemBtc:", error.toString());
+      data.error = error.toString();
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
+  } else if (data.action === 'revokeBtc') {
+    try {
+      let HashX = data.parameters.HashX;
+      let from = data.parameters.from;
+      let btcPassword = data.parameters.btcPassword;
+
+      let alice = await btcUtil.getECPairsbyAddr(btcPassword, from);
+      await ccUtil.revokeWithHashX(HashX, alice);
+
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      log.error("Failed to revokeBtc:", error.toString());
+      data.error = error.toString();
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
+  } else if (data.action === 'lockWbtc') {
+    try {
+      let storeman = data.parameters.storeman;
+      let wanAddress = data.parameters.wanAddress;
+      let btcAddress = data.parameters.btcAddress;
+      let wanPassword = data.parameters.wanPassword;
+      let amount = data.parameters.amount;
+
+      let wdTx = {};
+      wdTx.gas = config.gasLimit;
+      wdTx.gasPrice = config.gasPrice;
+      wdTx.passwd = wanPassword;
+      let btcAddr = btcAddress;
+      wdTx.cross = '0x' + btcUtil.addressToHash160(btcAddr, 'pubkeyhash', settings.network);
+      wdTx.from = wanAddress;
+      wdTx.amount = Number(web3.toBigNumber(amount).mul(100000000));
+      wdTx.storemanGroup = storeman.wanAddress;
+      wdTx.value = ccUtil.calculateLocWanFee(wdTx.amount, ccUtil.c2wRatio, storeman.txFeeRatio);
+      let x = btcUtil.generatePrivateKey().slice(2);
+      wdTx.x = x;
+
+      log.debug('Ready to send wdTx...');
+      let wdHash = await ccUtil.sendWanHash(ccUtil.wanSender, wdTx);
+      data.value = wdHash;
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      log.error("Failed to lockWbtc:", error.toString());
+      data.error = error.toString();
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
+  } else if (data.action === 'redeemWbtc') {
+    try {
+      let crossAddress = data.parameters.crossAddress;
+      let HashX = data.parameters.HashX;
+      let btcPassword = data.parameters.btcPassword;
+
+      let aliceAddr = btcUtil.hash160ToAddress(crossAddress, 'pubkeyhash', settings.network);
+      let alice = await btcUtil.getECPairsbyAddr(btcPassword, aliceAddr);
+      let walletRedeem = await ccUtil.redeemWithHashX(HashX, alice);
+      log.debug('redeemWbtc walletRedeem: ', walletRedeem);
+
+      data.value = walletRedeem;
+
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      log.error("Failed to redeemWbtc:", error.toString());
+      data.error = error.toString();
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
+  } else if (data.action === 'revokeWbtc') {
+    try {
+      let from = data.parameters.from;
+      let HashX = data.parameters.HashX;
+      let wanPassword = data.parameters.wanPassword;
+
+      let revokeWbtcHash = await ccUtil.sendWanCancel(ccUtil.wanSender, from,
+        config.gasLimit, config.gasPrice, HashX, wanPassword);
+
+      data.value = revokeWbtcHash;
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      log.error("Failed to revokeWbtc:", error.toString());
+      data.error = error.toString();
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
+  } else if (sendServer.hasMessage(data.action)) {
     // console.log('sendServer :', data);
     let args = data.parameters;
     // console.log(args);
