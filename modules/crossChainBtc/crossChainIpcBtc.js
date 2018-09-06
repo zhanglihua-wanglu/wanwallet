@@ -171,7 +171,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             let addressList;
             let utxos;
             // btc balance
-
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>GetBalance');
             addressList = await btcUtil.getAddressList();
             let array = [];
             for (let i = 0; i < addressList.length; i++) {
@@ -189,6 +189,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
                 throw new Error('Balance not enough.')
             }
 
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>GetBalance:' + result);
+
             let keyPairArray = [];
 
             keyPairArray = await btcUtil.getECPairs(passwd);
@@ -196,6 +198,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
             if (keyPairArray.length === 0) {
                 throw new Error('no bitcoin keyPairs!');
             }
+
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>getECPairs success!');
 
             let target = {
                 address: to,
@@ -207,13 +211,19 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
                 throw new Error('btcBuildTransaction error.');
             }
 
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>btcBuildTransaction success!');
+
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>sendRawTransaction rawTx:' + rawTx);
+
             let result2 = await ccUtil.sendRawTransaction(ccUtil.btcSender, rawTx);
             log.debug('hash: ', result2);
             data.value = 'success';
+
+            log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>sendRawTransaction success!');
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         } catch (error) {
-            log.error("Failed to sendBtcToAddress:", e.toString());
-            data.error = e.toString();
+            log.error("Failed to sendBtcToAddress:", error.toString());
+            data.error = error.toString();
             callbackMessage('CrossChain_BTC2WBTC', e, data);
         }
     }
