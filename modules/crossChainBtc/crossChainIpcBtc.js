@@ -111,12 +111,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value.balance = "";
 
       for (let i = 0; i < addressList.length; i++) {
-        data.value.address.push(addressList[i].address)
+        data.value.address.push(addressList[i].address);
       }
 
       let array = [];
       for (let i = 0; i < addressList.length; i++) {
-        array.push(addressList[i].address)
+        array.push(addressList[i].address);
       }
 
       let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
@@ -155,7 +155,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       addressList = await btcUtil.getAddressList();
       let array = [];
       for (let i = 0; i < addressList.length; i++) {
-        array.push(addressList[i].address)
+        array.push(addressList[i].address);
       }
 
       utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
@@ -163,7 +163,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       btcBalance = web3.toBigNumber(result).div(100000000);
 
       if (!btcScripts.checkBalance(amount, btcBalance)) {
-        throw new Error('Balance not enough.')
+        throw new Error('Balance not enough.');
       }
 
       //Check password
@@ -286,8 +286,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       tx.storeman = storeman.wanAddress;
       tx.from = wanAddress;
       tx.userH160 = '0x' + bitcoin.crypto.hash160(keyPairArray[0].publicKey).toString('hex');
-      tx.hashx = '0x' + record.hashx;
-      tx.txHash = '0x' + record.txhash;
+      tx.hashx = (record.hashx.startsWith('0x')) ? record.hashx : '0x' + record.hashx;
+      tx.txHash = (record.txhash.startsWith('0x')) ? record.txhash : '0x' + record.txhash;
       tx.lockedTimestamp = record.redeemLockTimeStamp;
       tx.gas = config.gasLimit;
       tx.gasPrice = config.gasPrice;
@@ -312,8 +312,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'redeemBtc') {
     try {
-      let crossAddress = data.parameters.crossAddress;
-      let x = data.parameters.x;
+      let crossAddress = data.parameters.crossAddress.startsWith('0x') ? data.parameters.crossAddress : '0x' + data.parameters.crossAddress;
+      let x = (data.parameters.x.startsWith('0x') ? data.parameters.x : '0x' + data.parameters.x);
       let wanPassword = data.parameters.wanPassword;
 
       let redeemHash = await ccUtil.sendDepositX(ccUtil.wanSender, crossAddress,
@@ -359,17 +359,17 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       let wbtcEnough;
       wanAddressList.forEach(function (wanAddr) {
-        if(wanAddress === wanAddr.address) {
+        if (wanAddress === wanAddr.address) {
           let wbtcBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000);
-          wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance)
+          wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance);
         }
       });
 
-      if(wbtcEnough === false) {
+      if (wbtcEnough === false) {
         throw new Error('The wbtc balance is not enough.');
       }
 
-      if(wbtcEnough === undefined) {
+      if (wbtcEnough === undefined) {
         throw new Error('The wan address is invalid. input:' + wanAddress + ', list: ' + JSON.stringify(wanAddressList, null, 4));
       }
 
@@ -418,7 +418,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'revokeWbtc') {
     try {
       let from = data.parameters.from;
-      let HashX = data.parameters.HashX;
+      let HashX = data.parameters.HashX.startsWith('0x') ? data.parameters.HashX : '0x' + data.parameters.HashX;
       let wanPassword = data.parameters.wanPassword;
 
       let revokeWbtcHash = await ccUtil.sendWanCancel(ccUtil.wanSender, from,
@@ -452,6 +452,7 @@ function callbackMessage(message, e, data) {
 }
 
 async function init() {
+  log.debug(config.socketUrl);
   wanchainCore = new WanchainCoreBTC(config);
   ccUtil = wanchainCore.be;
   btcUtil = wanchainCore.btcUtil;

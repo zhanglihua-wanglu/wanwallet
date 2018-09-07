@@ -182,17 +182,22 @@ function mkdirsSync(dirname) {
 }
 
 async function startCrossChain(){
+
+    log.debug('startCCinit...');
     try{
         await startCCinit();
     }catch(error){
         log.error("startCrossChain: ", error.toString());
     }
+    log.debug('startCCinit...finish!');
 
+    log.debug('startCCinitBtc...');
     try{
         await startCCinitBtc();
     }catch(error){
         log.error("startCrossChainBtc: ", error.toString());
     }
+    log.debug('startCCinitBtc...finish!');
 
     return new Q((resolve, reject) => {
         resolve(this);
