@@ -16,7 +16,7 @@ let ccUtil;
 let btcUtil;
 
 ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
-  log.debug('CrossChain_BTC2WBTC->>>>>>>>Message Received!');
+  log.debug('CrossChain_BTC2WBTC->Message Received!->' + data.action);
   let sendServer = (data.chainType === 'BTC') ? wanchainCore.btcSend : wanchainCore.wanSend;
 
   if (sendServer.socket.connection.readyState != 1) {
@@ -136,16 +136,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'sendBtcToAddress') {
-    log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
-      if (!data.parameters) {
-        throw new Error('parameters is null.');
-      }
-
-      if (!data.parameters.amount || !data.parameters.toAddress || !data.parameters.password) {
-        throw new Error('parameters error.');
-      }
-
       let amount = Number(data.parameters.amount);
       let to = data.parameters.toAddress;
       let passwd = data.parameters.password;
@@ -160,8 +151,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let btcBalance = 0;
       let addressList;
       let utxos;
-      // btc balance
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>GetBalance');
+      // Check whether the btc balance is enough.
       addressList = await btcUtil.getAddressList();
       let array = [];
       for (let i = 0; i < addressList.length; i++) {
@@ -169,28 +159,21 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       }
 
       utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
-
       let result = await ccUtil.getUTXOSBalance(utxos);
-
       btcBalance = web3.toBigNumber(result).div(100000000);
 
       if (!btcScripts.checkBalance(amount, btcBalance)) {
-
         throw new Error('Balance not enough.')
       }
 
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>GetBalance:' + result);
-
+      //Check password
       let keyPairArray = [];
-
       keyPairArray = await btcUtil.getECPairs(passwd);
-
       if (keyPairArray.length === 0) {
         throw new Error('Password is wrong!');
       }
 
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>getECPairs success!');
-
+      //Build transaction
       let target = {
         address: to,
         value: web3.toBigNumber(amount).mul(100000000)
@@ -201,15 +184,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('btcBuildTransaction error.');
       }
 
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>btcBuildTransaction success!');
-
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>sendRawTransaction rawTx:' + rawTx);
-
+      //Send transaction
       let result2 = await ccUtil.sendRawTransaction(ccUtil.btcSender, rawTx);
       log.debug('hash: ', result2);
       data.value = 'success';
 
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>sendBtcToAddress>>>>>>>>>>>sendRawTransaction success!');
+      log.debug('CrossChain_BTC2WBTC->sendBtcToAddress->sendRawTransaction success!');
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to sendBtcToAddress:", error.toString());
@@ -374,6 +354,26 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wanPassword = data.parameters.wanPassword;
       let amount = data.parameters.amount;
 
+      //Check whether the wbtc balance is enought.
+      wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
+
+      let wbtcEnough;
+      wanAddressList.forEach(function (wanAddr) {
+        if(wanAddress === wanAddr.address) {
+          let wbtcBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000);
+          wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance)
+        }
+      });
+
+      if(wbtcEnough === false) {
+        throw new Error('The wbtc balance is not enough.');
+      }
+
+      if(wbtcEnough === undefined) {
+        throw new Error('The wan address is invalid. input:' + wanAddress + ', list: ' + JSON.stringify(wanAddressList, null, 4));
+      }
+
+      //Make the wdTx
       let wdTx = {};
       wdTx.gas = config.gasLimit;
       wdTx.gasPrice = config.gasPrice;
