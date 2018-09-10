@@ -33,10 +33,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   if (data.action === 'createBtcAddress') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>createBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      btcUtil.createAddress(data.parameters).then((newAddress) => {
-        data.value = newAddress;
-        callbackMessage('CrossChain_BTC2WBTC', e, data);
-      });
+      //log.debug(JSON.stringify(data, null, 4));
+      let newAddress = await btcUtil.createAddress(data.parameters);
+      log.debug('newAddress:', newAddress);
+      await ccUtil.btcImportAddress(ccUtil.btcSender, newAddress.address);
+      data.value = newAddress.address;
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
