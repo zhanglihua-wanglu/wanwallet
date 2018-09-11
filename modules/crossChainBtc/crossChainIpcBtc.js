@@ -30,6 +30,13 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   }
 
+  let wanSender;
+  if(config.useLocalNode) {
+    wanSender = ccUtil.getSenderbyChain('web3');
+  } else {
+    wanSender = ccUtil.getSenderbyChain('WAN');
+  }
+
   if (data.action === 'createBtcAddress') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>createBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
@@ -205,7 +212,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wethBalance;
       data.value = {};
 
-      wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
+      wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
       log.debug(sprintf("%20s %58s", "WAN address", "WBTC balance"));
 
       wanAddressList.forEach(function (wanAddress, index) {
@@ -297,8 +304,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       let txHash;
       try {
-        txHash = await ccUtil.sendWanNotice(ccUtil.wanSender, tx);
-
+        txHash = await ccUtil.sendWanNotice(wanSender, tx);
         log.info("sendWanNotice txHash:", txHash);
       } catch (e) {
         throw new Error("get sendWanNotice error: " + e.message);
@@ -318,7 +324,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let x = (data.parameters.x.startsWith('0x') ? data.parameters.x : '0x' + data.parameters.x);
       let wanPassword = data.parameters.wanPassword;
 
-      let redeemHash = await ccUtil.sendDepositX(ccUtil.wanSender, crossAddress,
+      let redeemHash = await ccUtil.sendDepositX(wanSender, crossAddress,
         config.gasLimit, config.gasPrice, x, wanPassword);
 
       if (!redeemHash) {
@@ -357,7 +363,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let amount = data.parameters.amount;
 
       //Check whether the wbtc balance is enought.
-      wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
+      wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
 
       let wbtcEnough;
       wanAddressList.forEach(function (wanAddr) {
@@ -390,7 +396,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       wdTx.x = x;
 
       log.debug('Ready to send wdTx...');
-      let wdHash = await ccUtil.sendWanHash(ccUtil.wanSender, wdTx);
+
+      let wdHash = await ccUtil.sendWanHash(wanSender, wdTx);
       data.value = wdHash;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -423,7 +430,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let HashX = data.parameters.HashX.startsWith('0x') ? data.parameters.HashX : '0x' + data.parameters.HashX;
       let wanPassword = data.parameters.wanPassword;
 
-      let revokeWbtcHash = await ccUtil.sendWanCancel(ccUtil.wanSender, from,
+      let revokeWbtcHash = await ccUtil.sendWanCancel(wanSender, from,
         config.gasLimit, config.gasPrice, HashX, wanPassword);
 
       data.value = revokeWbtcHash;
@@ -457,8 +464,11 @@ async function init() {
   log.debug(config.socketUrl);
   wanchainCore = new WanchainCoreBTC(config);
   ccUtil = wanchainCore.be;
+
   btcUtil = wanchainCore.btcUtil;
-  await wanchainCore.init(config);
+  await wanchainCore.init();
+
+  log.debug('crossChainIpcBtc->sdk->useLocalNode:' + ccUtil.config.useLocalNode);
 }
 exports.init = init;
 
