@@ -242,7 +242,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let records = ccUtil.getBtcWanTxHistory({});
 
       records = records.filter((value) => {
-        retrun(value.crossAdress !== '');
+        return (value.crossAdress !== '');
       });
 
       data.value = records;
