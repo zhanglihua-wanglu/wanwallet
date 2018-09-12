@@ -245,6 +245,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         return (value.crossAdress !== '');
       });
 
+      log.debug(JSON.stringify(records, null, 4));
       data.value = records;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -255,7 +256,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'lockBtc') {
     try {
 
-      log.debug('data.parameters:' + JSON.stringify(data.parameters, null, 2));
+      //log.debug('data.parameters:' + JSON.stringify(data.parameters, null, 2));
       let storeman = data.parameters.storeman;
       let wanAddress = data.parameters.wanAddress;
       let amount = data.parameters.amount;
@@ -312,6 +313,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       tx.gasPrice = config.gasPrice;
       tx.passwd = wanPassword;
 
+      log.info('notice wan tx:' + JSON.stringify(tx, null, 4));
       let txHash;
       try {
         txHash = await ccUtil.sendWanNotice(ccUtil.wanSender, tx);
