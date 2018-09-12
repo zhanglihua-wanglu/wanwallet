@@ -286,7 +286,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       log.debug('checkBalance...');
 
-      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, 0, 1000, aliceAddr);
+      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, aliceAddr);
       let result = await ccUtil.getUTXOSBalance(utxos);
       let btcBalance = web3.toBigNumber(result).div(100000000);
 
