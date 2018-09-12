@@ -212,7 +212,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wethBalance;
       data.value = {};
 
-      wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
+      wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
       log.debug(sprintf("%20s %58s", "WAN address", "WBTC balance"));
 
       wanAddressList.forEach(function (wanAddress, index) {
@@ -254,12 +254,15 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'lockBtc') {
     try {
+
+      log.debug('data.parameters:' + JSON.stringify(data.parameters, null, 2));
       let storeman = data.parameters.storeman;
       let wanAddress = data.parameters.wanAddress;
       let amount = data.parameters.amount;
       let wanPassword = data.parameters.wanPassword;
       let btcPassword = data.parameters.btcPassword;
 
+      log.debug('getECPairs...');
       //check passwd
       let keyPairArray;
       try {
@@ -271,6 +274,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error("lockBtc getECPairs error.");
       }
 
+      log.debug('getAddressList...');
+
       //check balance
       let addressList = await btcUtil.getAddressList();
 
@@ -279,17 +284,22 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         aliceAddr.push(addressList[i].address)
       }
 
+      log.debug('checkBalance...');
+
       let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, 0, 1000, aliceAddr);
       let result = await ccUtil.getUTXOSBalance(utxos);
       let btcBalance = web3.toBigNumber(result).div(100000000);
 
+      log.debug('current balance:' + btcBalance);
       if (!btcScripts.checkBalance(amount, btcBalance)) {
         throw new Error('Balance is not enough.');
       }
 
+      log.debug('fund...');
       let value = Number(web3.toBigNumber(amount).mul(100000000));
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
 
+      log.debug('sendWanNotice...');
       // notice wan.
       const tx = {};
       tx.storeman = storeman.wanAddress;
@@ -304,7 +314,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       let txHash;
       try {
-        txHash = await ccUtil.sendWanNotice(wanSender, tx);
+        txHash = await ccUtil.sendWanNotice(ccUtil.wanSender, tx);
         log.info("sendWanNotice txHash:", txHash);
       } catch (e) {
         throw new Error("get sendWanNotice error: " + e.message);
@@ -324,7 +334,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let x = (data.parameters.x.startsWith('0x') ? data.parameters.x : '0x' + data.parameters.x);
       let wanPassword = data.parameters.wanPassword;
 
-      let redeemHash = await ccUtil.sendDepositX(wanSender, crossAddress,
+      let redeemHash = await ccUtil.sendDepositX(ccUtil.wanSender, crossAddress,
         config.gasLimit, config.gasPrice, x, wanPassword);
 
       if (!redeemHash) {
@@ -363,7 +373,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let amount = data.parameters.amount;
 
       //Check whether the wbtc balance is enought.
-      wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
+      wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
 
       let wbtcEnough;
       wanAddressList.forEach(function (wanAddr) {
@@ -397,7 +407,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       log.debug('Ready to send wdTx...');
 
-      let wdHash = await ccUtil.sendWanHash(wanSender, wdTx);
+      let wdHash = await ccUtil.sendWanHash(ccUtil.wanSender, wdTx);
       data.value = wdHash;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -430,7 +440,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let HashX = data.parameters.HashX.startsWith('0x') ? data.parameters.HashX : '0x' + data.parameters.HashX;
       let wanPassword = data.parameters.wanPassword;
 
-      let revokeWbtcHash = await ccUtil.sendWanCancel(wanSender, from,
+      let revokeWbtcHash = await ccUtil.sendWanCancel(ccUtil.wanSender, from,
         config.gasLimit, config.gasPrice, HashX, wanPassword);
 
       data.value = revokeWbtcHash;
