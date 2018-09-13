@@ -9,8 +9,8 @@ config.socketUrl = 'wss://34.210.104.235';//'wss://apitest.wanchain.info';//'wss
 config.databasePath = settings.userDataPath;
 config.databasePath=path.join(config.databasePath, 'testnetDbBtc');
 
-config.originalChainHtlc = "0x358b18d9dfa4cce042f2926d014643d4b3742b31";
-config.wanchainHtlcAddr = "0xfbaffb655906424d501144eefe35e28753dea037";
+// config.originalChainHtlc = "0x358b18d9dfa4cce042f2926d014643d4b3742b31";
+// config.wanchainHtlcAddr = "0xfbaffb655906424d501144eefe35e28753dea037";
 
 config.confirmBlocks = 2;
 

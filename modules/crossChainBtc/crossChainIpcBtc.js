@@ -263,6 +263,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wanPassword = data.parameters.wanPassword;
       let btcPassword = data.parameters.btcPassword;
 
+      log.info('lockBtc--->');
+
+      log.info('input data.parameters:');
+      log.info(JSON.stringify(data.parameters, null, 4));
+
       log.debug('getECPairs...');
       //check passwd
       let keyPairArray;
@@ -300,20 +305,29 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let value = Number(web3.toBigNumber(amount).mul(100000000));
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
 
+      console.log('fun record:');
+      console.log(JSON.stringify(record, null, 4));
+
+      log.info('fund parameters:');
+      log.info(JSON.stringify(keyPairArray, null, 4));
+      log.info(storeman.ethAddress);
+      log.info(value);
+
       log.debug('sendWanNotice...');
       // notice wan.
       const tx = {};
       tx.storeman = storeman.wanAddress;
       tx.from = wanAddress;
       tx.userH160 = '0x' + bitcoin.crypto.hash160(keyPairArray[0].publicKey).toString('hex');
-      tx.hashx = (record.hashx.startsWith('0x')) ? record.hashx : '0x' + record.hashx;
-      tx.txHash = (record.txhash.startsWith('0x')) ? record.txhash : '0x' + record.txhash;
+      tx.hashx = '0x'+record.hashx;
+      tx.txHash = '0x'+record.txhash;
       tx.lockedTimestamp = record.redeemLockTimeStamp;
       tx.gas = config.gasLimit;
       tx.gasPrice = config.gasPrice;
       tx.passwd = wanPassword;
 
       log.info('notice wan tx:' + JSON.stringify(tx, null, 4));
+      console.log('wanSender:', ccUtil.wanSender);
       let txHash;
       try {
         txHash = await ccUtil.sendWanNotice(ccUtil.wanSender, tx);
@@ -473,7 +487,7 @@ function callbackMessage(message, e, data) {
 }
 
 async function init() {
-  log.debug(config.socketUrl);
+  log.info(config.socketUrl);
   wanchainCore = new WanchainCoreBTC(config);
   ccUtil = wanchainCore.be;
 
