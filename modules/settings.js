@@ -359,21 +359,31 @@ class Settings {
 
         ipcPath = this.userHomePath;
 
-        let network = this.network;
+        // let network = this.network;
 
-        if (process.platform === 'win32') {
-            network = network + '\\';
-        }
-        else {
-            network = network + '/';
-        }
+        // if (process.platform === 'win32') {
+        //     network = network + '\\';
+        // }
+        // else {
+        //     network = network + '/';
+        // }
+
+        // if (process.platform === 'darwin') {
+        //     ipcPath += '/Library/Wanchain/'+network+'gwan.ipc';
+        // } else if (process.platform === 'freebsd' ||
+        //     process.platform === 'linux' ||
+        //     process.platform === 'sunos') {
+        //     ipcPath += '/.wanchain/'+network+'gwan.ipc';
+        // } else if (process.platform === 'win32') {
+        //     ipcPath = '\\\\.\\pipe\\gwan.ipc';
+        // }
 
         if (process.platform === 'darwin') {
-            ipcPath += '/Library/Wanchain/'+network+'gwan.ipc';
+            ipcPath += '/Library/Wanchain/' + 'gwan.ipc';
         } else if (process.platform === 'freebsd' ||
             process.platform === 'linux' ||
             process.platform === 'sunos') {
-            ipcPath += '/.wanchain/'+network+'gwan.ipc';
+            ipcPath += '/.wanchain/' + 'gwan.ipc';
         } else if (process.platform === 'win32') {
             ipcPath = '\\\\.\\pipe\\gwan.ipc';
         }
