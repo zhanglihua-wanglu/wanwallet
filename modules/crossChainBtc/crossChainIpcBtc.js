@@ -263,11 +263,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wanPassword = data.parameters.wanPassword;
       let btcPassword = data.parameters.btcPassword;
 
-      log.info('lockBtc--->');
-
-      log.info('input data.parameters:');
-      log.info(JSON.stringify(data.parameters, null, 4));
-
       log.debug('getECPairs...');
       //check passwd
       let keyPairArray;
@@ -305,14 +300,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let value = Number(web3.toBigNumber(amount).mul(100000000));
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
 
-      console.log('fun record:');
-      console.log(JSON.stringify(record, null, 4));
-
-      log.info('fund parameters:');
-      log.info(JSON.stringify(keyPairArray, null, 4));
-      log.info(storeman.ethAddress);
-      log.info(value);
-
       log.debug('sendWanNotice...');
       // notice wan.
       const tx = {};
@@ -327,7 +314,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       tx.passwd = wanPassword;
 
       log.info('notice wan tx:' + JSON.stringify(tx, null, 4));
-      console.log('wanSender:', ccUtil.wanSender);
       let txHash;
       try {
         txHash = await ccUtil.sendWanNotice(ccUtil.wanSender, tx);
