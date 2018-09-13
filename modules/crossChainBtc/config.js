@@ -50,33 +50,33 @@ config.feeRate = 3000;
 config.gasLimit = 1000000;
 config.gasPrice = 200000000000;
 
-config.ethGasPrice = 60;
-config.wanGasPrice = 200;
-config.ethNormalGas = 21000;
-config.ethLockGas = 300000; //171866;
-config.ethRefundGas = 120000;  // 91663;
-config.ethRevokeGas = 100000; // 40323;
+// config.ethGasPrice = 60;
+// config.wanGasPrice = 200;
+// config.ethNormalGas = 21000;
+// config.ethLockGas = 300000; //171866;
+// config.ethRefundGas = 120000;  // 91663;
+// config.ethRevokeGas = 100000; // 40323;
 
-config.wanLockGas = 300000; // 232665;
-config.wanRefundGas = 120000; // 34881;
-config.wanRevokeGas = 100000; // 49917;
+// config.wanLockGas = 300000; // 232665;
+// config.wanRefundGas = 120000; // 34881;
+// config.wanRevokeGas = 100000; // 49917;
 
-config.depositOriginLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256,address)';
-config.depositCrossLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
+// config.depositOriginLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256,address)';
+// config.depositCrossLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
 
-config.withdrawOriginLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256,address,uint256)';
-config.withdrawCrossLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256)';
-
-
-config.depositOriginRefundEvent = 'ETH2WETHRefund(address,address,bytes32,bytes32)';
-config.withdrawOriginRefundEvent = 'WETH2ETHRefund(address,address,bytes32,bytes32)';
-
-config.depositOriginRevokeEvent = 'ETH2WETHRevoke(address,bytes32)';
-config.withdrawOriginRevokeEvent = 'WETH2ETHRevoke(address,bytes32)';
+// config.withdrawOriginLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256,address,uint256)';
+// config.withdrawCrossLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256)';
 
 
-config.crossDbname = 'crossTransDb';
-config.crossCollection = 'crossTransaction';
+// config.depositOriginRefundEvent = 'ETH2WETHRefund(address,address,bytes32,bytes32)';
+// config.withdrawOriginRefundEvent = 'WETH2ETHRefund(address,address,bytes32,bytes32)';
+
+// config.depositOriginRevokeEvent = 'ETH2WETHRevoke(address,bytes32)';
+// config.withdrawOriginRevokeEvent = 'WETH2ETHRevoke(address,bytes32)';
+
+
+// config.crossDbname = 'crossTransDb';
+// config.crossCollection = 'crossTransaction';
 
 config.consoleColor = {
 	'COLOR_FgRed': '\x1b[31m',
