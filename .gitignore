@@ -20,3 +20,4 @@ crossTransDb
 yarn.lock
 yarn-error.log
 crossTransDbBtc
+.DS_Store
