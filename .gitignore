@@ -19,3 +19,4 @@ gwan_mac
 crossTransDb
 yarn.lock
 yarn-error.log
+.DS_Store

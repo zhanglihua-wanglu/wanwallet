@@ -8273,7 +8273,7 @@ walkdir@^0.0.11:
 
 "wanchain-crosschain-btc@git://github.com/wanchain/wanchain-crosschain.git#wanchain30_beta":
   version "0.1.4"
-  resolved "git://github.com/wanchain/wanchain-crosschain.git#d837b55eace372b3540f31d364228799fae38d68"
+  resolved "git://github.com/wanchain/wanchain-crosschain.git#7822262bd304e020101560e1089abd999badfee3"
   dependencies:
     bignumber.js "^4.0.2"
     binstring "*"

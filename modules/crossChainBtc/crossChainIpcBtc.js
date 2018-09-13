@@ -51,6 +51,9 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
     }
+  } else if(data.action === 'getWbtcToken'){
+      data.value = config.wbtcToken;
+      callbackMessage('CrossChain_BTC2WBTC',e,data);
   } else if (data.action === 'listBtcAddress') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>listBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
