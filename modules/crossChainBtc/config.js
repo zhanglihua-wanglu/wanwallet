@@ -19,7 +19,7 @@ config.keyStorePath = settings.getKeystoreDir('wanchain');
 config.ethkeyStorePath = settings.getKeystoreDir('ethereum');
 
 
-config.useLocalNode = true;
+config.useLocalNode = false;
 
 config.loglevel = settings.loglevel;
 
