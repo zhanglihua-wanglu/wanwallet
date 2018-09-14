@@ -224,7 +224,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
 
       wanAddressList.forEach(function (wanAddress, index) {
-        wethBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000);
+        wethBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000).toString();
         data.value[wanAddress.address] = wethBalance;
       });
       callbackMessage('CrossChain_BTC2WBTC', e, data);
