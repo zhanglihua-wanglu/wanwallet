@@ -24,6 +24,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       await wanchainCore.reinit(config);
     } catch (error) {
       log.error("Failed to connect to apiserver:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
@@ -47,6 +48,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = newAddress.address;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
@@ -66,6 +68,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       });
     } catch (error) {
       log.error("Failed to listBtcAddress:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -100,6 +103,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to getBtcBalance:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -144,6 +148,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to getBtcBalance:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -205,6 +210,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to sendBtcToAddress:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -216,7 +222,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = {};
 
       wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
-      log.debug(sprintf("%20s %58s", "WAN address", "WBTC balance"));
 
       wanAddressList.forEach(function (wanAddress, index) {
         wethBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000);
@@ -225,6 +230,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to listWbtcBalance:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -236,6 +242,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to listStoremanGroups:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -253,6 +260,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to listTransactions:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -316,7 +324,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       tx.gasPrice = config.gasPrice;
       tx.passwd = wanPassword;
 
-      log.info('notice wan tx:' + JSON.stringify(tx, null, 4));
+      //log.info('notice wan tx:' + JSON.stringify(tx, null, 4));
       let txHash;
       try {
         txHash = await ccUtil.sendWanNotice(wanSender, tx);
@@ -327,9 +335,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       data.value = 'txHash';
 
+      log.info('notice wan finish. txHash:' + data.value);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to lockBtc:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -351,6 +361,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to redeemBtc:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -366,6 +377,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to revokeBtc:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -417,6 +429,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to lockWbtc:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -436,6 +449,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to redeemWbtc:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
@@ -452,6 +466,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to revokeWbtc:", error.toString());
+      log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
