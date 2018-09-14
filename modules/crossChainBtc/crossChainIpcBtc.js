@@ -391,17 +391,20 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let amount = data.parameters.amount;
 
       //Check whether the wbtc balance is enought.
-      wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
+      let wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
 
       let wbtcEnough;
       wanAddressList.forEach(function (wanAddr) {
         if (wanAddress === wanAddr.address) {
-          let wbtcBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000);
+          let wbtcBalance = web3.toBigNumber(wanAddr.wethBalance).div(100000000);
           wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance);
+          log.info(`amount:${Number(amount)}, wbtcBalance:${Number(wbtcBalance.toString())}`);
         }
       });
 
       if (wbtcEnough === false) {
+        log.error(JSON.stringify(wanAddressList, null, 4));
+        log.error(wanAddress);
         throw new Error('The wbtc balance is not enough.');
       }
 
