@@ -439,7 +439,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'redeemWbtc') {
     try {
-      let crossAddress = data.parameters.crossAddress;
+      let crossAddress = data.parameters.crossAdress;
       let HashX = data.parameters.HashX;
       let btcPassword = data.parameters.btcPassword;
 
