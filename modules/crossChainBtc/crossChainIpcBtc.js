@@ -253,7 +253,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let records = ccUtil.getBtcWanTxHistory({});
 
       records = records.filter((value) => {
-        return (value.crossAdress !== '');
+        return (value.crossAddress !== '');
       });
 
       log.debug(JSON.stringify(records, null, 4));
@@ -439,7 +439,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'redeemWbtc') {
     try {
-      let crossAddress = data.parameters.crossAdress;
+      let crossAddress = data.parameters.crossAddress;
       let HashX = data.parameters.HashX;
       let btcPassword = data.parameters.btcPassword;
 

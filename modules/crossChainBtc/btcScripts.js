@@ -69,7 +69,7 @@ let checkTransaction = (records, web3, hash160ToAddress) => {
     let showArray = [];
 
     records.forEach(function (array) {
-        if (array.crossAdress === '') {
+        if (array.crossAddress === '') {
             return;
         }
 
@@ -83,10 +83,10 @@ let checkTransaction = (records, web3, hash160ToAddress) => {
 
         if (Array.chain.toLowerCase() === 'btc') {
             Array.valueStr = web3.toBigNumber(Array.value).div(100000000) + ' BTC';
-            Array.destAddr = '0x' + Array.crossAdress;
+            Array.destAddr = '0x' + Array.crossAddress;
         }else{
 	        Array.valueStr = web3.toBigNumber(Array.value).div(100000000) + ' WBTC';
-            Array.destAddr = hash160ToAddress(Array.crossAdress, 'pubkeyhash','testnet');
+            Array.destAddr = hash160ToAddress(Array.crossAddress, 'pubkeyhash','testnet');
         }
 
 
