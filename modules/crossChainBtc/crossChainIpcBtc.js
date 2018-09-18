@@ -257,6 +257,15 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         return (value.crossAddress !== '');
       });
 
+      records = records.map((value)=>{
+        console.log(value);
+        console.log(settings.network);
+        if((value.chain === 'WAN') && value.crossAddress.startsWith('0x')) {
+          value.crossAddress = btcUtil.hash160ToAddress(value.crossAddress, null, settings.network);
+        }
+        return value;
+      });
+
       log.debug(JSON.stringify(records, null, 4));
       data.value = records;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
@@ -444,7 +453,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let HashX = data.parameters.HashX;
       let btcPassword = data.parameters.btcPassword;
 
-      let aliceAddr = btcUtil.hash160ToAddress(crossAddress, 'pubkeyhash', settings.network);
+      let aliceAddr
+      if(crossAddress.startsWith('0x')) {
+        aliceAddr = btcUtil.hash160ToAddress(crossAddress, 'pubkeyhash', settings.network);
+      }
+
       let alice = await btcUtil.getECPairsbyAddr(btcPassword, aliceAddr);
       let walletRedeem = await ccUtil.redeemWithHashX(HashX, alice);
       log.debug('redeemWbtc walletRedeem: ', walletRedeem);
