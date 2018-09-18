@@ -500,6 +500,8 @@ async function init() {
 
   config.crossDbname = path.join(config.databasePath, config.crossDbname);
   config.btcWallet = path.join(config.databasePath, config.btcWallet);
+  log.info(config.crossDbname);
+  log.info(config.btcWallet);
 
   wanchainCore = new WanchainCoreBTC(config);
   ccUtil = wanchainCore.be;
