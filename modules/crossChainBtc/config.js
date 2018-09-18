@@ -75,8 +75,9 @@ config.gasPrice = 200000000000;
 // config.withdrawOriginRevokeEvent = 'WETH2ETHRevoke(address,bytes32)';
 
 
-// config.crossDbname = 'crossTransDb';
-// config.crossCollection = 'crossTransaction';
+config.crossDbname = 'crossTransDbBtc';
+config.crossCollection = 'btcCrossTransaction';
+config.btcWallet = 'btcWallet.db';
 
 config.consoleColor = {
 	'COLOR_FgRed': '\x1b[31m',

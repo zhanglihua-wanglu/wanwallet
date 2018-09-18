@@ -7,7 +7,7 @@ config.ccLog = path.join(settings.userDataPath, 'testnet', 'crossChainBtcLog.log
 config.ccErr = path.join(settings.userDataPath, 'testnet', 'crossChainBtcErr.log');
 config.socketUrl = 'wss://34.210.104.235';//'wss://apitest.wanchain.info';//'wss://18.237.186.227';//
 config.databasePath = settings.userDataPath;
-config.databasePath=path.join(config.databasePath, 'testnetDbBtc');
+config.databasePath=path.join(config.databasePath, 'testnetDb');
 
 // config.originalChainHtlc = "0x358b18d9dfa4cce042f2926d014643d4b3742b31";
 // config.wanchainHtlcAddr = "0xfbaffb655906424d501144eefe35e28753dea037";

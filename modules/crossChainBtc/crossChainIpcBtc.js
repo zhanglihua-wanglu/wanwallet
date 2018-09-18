@@ -9,6 +9,7 @@ const Windows = require('../windows.js');
 let btcScripts = require('./btcScripts');
 const bitcoin = require('bitcoinjs-lib');
 const settings = require('../settings.js');
+const path = require('path');
 
 let wanchainCore;
 let be;
@@ -496,6 +497,10 @@ function callbackMessage(message, e, data) {
 
 async function init() {
   log.info(config.socketUrl);
+
+  config.crossDbname = path.join(config.databasePath, config.crossDbname);
+  config.btcWallet = path.join(config.databasePath, config.btcWallet);
+
   wanchainCore = new WanchainCoreBTC(config);
   ccUtil = wanchainCore.be;
 
