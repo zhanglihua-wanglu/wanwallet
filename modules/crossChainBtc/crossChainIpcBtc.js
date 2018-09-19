@@ -144,8 +144,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       data.value.balance = web3.toBigNumber(result).div(100000000).toString();
 
-      log.debug('getBtcMultiBalances finish, data:');
-      log.debug(JSON.stringify(data, null, 4));
+      // log.debug('getBtcMultiBalances finish, data:');
+      // log.debug(JSON.stringify(data, null, 4));
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -258,15 +258,15 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       });
 
       records = records.map((value)=>{
-        console.log(value);
-        console.log(settings.network);
+        //console.log(value);
+        //console.log(settings.network);
         if((value.chain === 'WAN') && value.crossAddress.startsWith('0x')) {
           value.crossAddress = btcUtil.hash160ToAddress(value.crossAddress, null, settings.network);
         }
         return value;
       });
 
-      log.debug(JSON.stringify(records, null, 4));
+      // log.debug(JSON.stringify(records, null, 4));
       data.value = records;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -456,9 +456,16 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let aliceAddr
       if(crossAddress.startsWith('0x')) {
         aliceAddr = btcUtil.hash160ToAddress(crossAddress, 'pubkeyhash', settings.network);
+      } else {
+        aliceAddr = crossAddress;
       }
 
       let alice = await btcUtil.getECPairsbyAddr(btcPassword, aliceAddr);
+
+      if(!alice) {
+        throw new Error('Password of btc is wrong!');
+      }
+      
       let walletRedeem = await ccUtil.redeemWithHashX(HashX, alice);
       log.debug('redeemWbtc walletRedeem: ', walletRedeem);
 
