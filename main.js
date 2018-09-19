@@ -50,6 +50,7 @@ const db = global.db = require('./modules/db');
 
 require('./modules/ipcCommunicator.js');
 let startCCinit = require('./modules/crossChain/crossChainIPC.js').init;
+let startCCinitErc20 = require('./modules/crossChainErc20/crossChainIPC.js').init
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
 const ethereumNode = require('./modules/ethereumNode.js');
@@ -180,11 +181,23 @@ function mkdirsSync(dirname) {
 }
 
 async function startCrossChain(){
+
+    log.debug('startCCinit...');
     try{
         await startCCinit();
     }catch(error){
         log.error("startCrossChain: ", error.toString());
     }
+    log.debug('startCCinit...finish!');
+
+    log.debug('startCCinitErc20...');
+        try{
+            await startCCinitErc20();
+        }catch(error){
+            log.error("startCrossChainErc20: ", error.toString());
+        }
+    log.debug('startCCinitErc20...finish!');
+
     return new Q((resolve, reject) => {
         resolve(this);
     });
@@ -198,7 +211,7 @@ function copy(src, dst) {
 protocol.registerStandardSchemes(['bzz']);
 
 onReady = () => {
-    global.config = db.getCollection('SYS_config');
+    global.sysconfig = db.getCollection('SYS_config');
 
     // setup DB sync to backend
     dbSync.backendSyncInit();
@@ -225,7 +238,7 @@ onReady = () => {
     // instantiate custom protocols
     // require('./customProtocols.js');
 
-    // change to user language now that global.config object is ready
+    // change to user language now that global.sysconfig object is ready
     i18n.changeLanguage(Settings.language);
 
     // add menu already here, so we have copy and past functionality
