@@ -2,8 +2,12 @@
 
 //require('stepcell');
 const config = require('./config.js');
-const { app, ipcMain: ipc, shell, webContents } = require('electron');
-let WanchainCore = require('wanchain-crosschain');
+const {app, ipcMain: ipc, shell, webContents} = require('electron');
+let WanchainCore = require('wanchain-js-sdk').walletCore;
+let {CrossChainEthLock, CrossChainEthRefund, CrossChainEthRevoke} = require('wanchain-js-sdk').CrossChain;
+
+let ccUtil = require('wanchain-js-sdk').ccUtil;
+
 const pu = require('promisefy-util');
 const BigNumber = require('bignumber.js');
 //const logger = require('../utils/logger');
@@ -11,220 +15,59 @@ const Web3 = require("web3");
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows');
-function toGweiString(swei){
+
+function toGweiString(swei) {
     let exp = new BigNumber(10);
     let wei = new BigNumber(swei);
     let gwei = wei.dividedBy(exp.pow(9));
-    return  gwei.toString(10);
+    return gwei.toString(10);
 }
+
 let wanchainCore;
-let be;
+
 const log = config.getLogger('crossChain');
+
 
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
+
     let tokenAddress;
-    let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
-    if(data.chainType == 'ETH'){
-        tokenAddress = config.originalChainHtlc;
-    }else {
-        tokenAddress = config.wanchainHtlcAddr;
+    let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
+    if (data.chainType == 'ETH') {
+        tokenAddress = config.ethHtlcAddr;
+    } else {
+        tokenAddress = config.wanHtlcAddr;
     }
-    if(sendServer.socket.connection.readyState != 1){
+    if (sendServer.webSocket.readyState != 1) {
         try {
-            await wanchainCore.reinit(config);
-        }catch(error){
+            await wanchainCore.init();
+        } catch (error) {
             log.error("Failed to connect to apiserver:", error.toString());
             data.error = error.toString();
-            callbackMessage('CrossChain_ETH2WETH',e,data);
-            return
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+            return;
         }
     }
-    if(data.action == 'getLockTransData'){
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.trans.setLockData();
-        let lockDataResult = {};
-        lockDataResult.lockTransData = sendTransaction.trans.trans.data;
-        lockDataResult.secretX = sendTransaction.trans.Contract.key;
-        data.value = lockDataResult;
-        callbackMessage('CrossChain_ETH2WETH',e,data);
-    }
-    else if(data.action == 'getRefundTransData'){
-        let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-        sendTransaction.createRefundFromLockTransaction(data.parameters.tx.lockTxHash,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-            data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-        sendTransaction.trans.setRefundData();
-        let refundDataResult = {};
-        refundDataResult.refundTransData = sendTransaction.trans.trans.data;
-        refundDataResult.secretX = sendTransaction.trans.Contract.key;
-        data.value = refundDataResult;
-        callbackMessage('CrossChain_ETH2WETH',e,data);
-    }
-    else if(data.action == 'getRevokeTransData') {
-        let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
 
-        let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-        sendTransaction.createTransaction(data.parameters.tx.from, tokenAddress, null, null,
-            null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-        sendTransaction.trans.setKey(data.parameters.tx.X);
-        sendTransaction.trans.setRevokeData();
-
-        let revokeDataResult = {};
-        revokeDataResult.revokeTransData = sendTransaction.trans.trans.data;
-        revokeDataResult.secretX = sendTransaction.trans.Contract.key;
-        data.value = revokeDataResult;
-        callbackMessage('CrossChain_ETH2WETH',e,data);
-    }
-    else if(data.action == 'sendLockTrans'){
-        data.parameters.tx.passwd = data.parameters.password;
-        if(data.chainType == 'WAN'){
-            // withdraw transaction.
-            let cfgWeb3 = 'WAN';
-            if(config.useLocalNode){
-                cfgWeb3 = 'web3'
-            }
-            try {
-                let sender = await be.getSenderbyChain(cfgWeb3);
-                data.parameters.tx.value = '0x'+web3.toWei(web3.toBigNumber(data.parameters.tx.value)).trunc().toString(16);
-                let txHash = await be.sendWanHash(sender, data.parameters.tx);
-                data.value = txHash;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }catch(error){
-                log.error("sendLockTrans WAN: ", error);
-                data.error = error.toString();
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }
-        }else {
-            try {
-                let sender = await be.getSenderbyChain("ETH");
-                let txHash = await be.sendEthHash(sender, data.parameters.tx);
-                data.value = txHash;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }catch(error){
-                log.error("sendDeposit: ", error);
-                data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }
+    if (data.action === 'getAddressList') {
+        if (data.chainType === 'ETH') {
+            data.value = ccUtil.getEthAccounts();
         }
-    }
-    else if(data.action == 'sendRefundTrans'){
-        let tx = data.parameters.tx;
-        if(data.chainType == 'WAN'){
-            let cfgWeb3 = 'WAN';
-            if(config.useLocalNode){
-                cfgWeb3 = 'web3'
-            }
-            try {
-                let sender = await be.getSenderbyChain(cfgWeb3);
-                let txHash = await be.sendDepositX(sender, tx.cross,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
-                data.value = txHash;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }catch(error){
-                log.error("sendDepositX: ", error);
-                data.error = error.toString();
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }
-        }else {
-            try {
-                let sender = await be.getSenderbyChain("ETH");
-                let txHash = await be.sendWanX(sender, tx.cross,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
-                data.value = txHash;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }catch(error){
-                log.error("sendWithdrawX: ", error);
-                data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }
+        else {
+            data.value = ccUtil.getWanAccounts();
         }
+        callbackMessage('CrossChain_ETH2WETH', e, data);
+    }
+    else if (data.action === 'listHistory') {
 
+        let collection = global.wanDb.getCollection(config.crossCollection);
 
+        data.value = collection;
+        callbackMessage('CrossChain_ETH2WETH', e, data);
     }
-    else if(data.action == 'sendRevokeTrans') {
-        let tx = data.parameters.tx;
-        if(data.chainType == 'WAN') {
-            // withdraw transaction.
-            let cfgWeb3 = 'WAN';
-            if (config.useLocalNode) {
-                cfgWeb3 = 'web3'
-            }
-            try {
-                let sender = await be.getSenderbyChain(cfgWeb3);
-                let txHash = await be.sendWanCancel(sender, tx.from,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
-                data.value = txHash;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }catch(error){
-                log.error("sendWithdrawCancel: ", error);
-                data.error = error.toString();
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }
-        }else{
-            try {
-                let sender = await be.getSenderbyChain("ETH");
-                let txHash = await be.sendEthCancel(sender, tx.from,tx.gas, tx.gasPrice, tx.X, data.parameters.password);
-                data.value = txHash;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }catch(error){
-                log.error("sendDepositCancel: ", error);
-                data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH',e,data);
-            }
-        }
-    }
-    // else if(data.action == 'signLockTrans'){
-    //     let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-    //     let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-    //     sendTransaction.createTransaction(data.parameters.tx.from,tokenAddress,data.parameters.tx.amount,data.parameters.tx.storemanGroup,
-    //         data.parameters.tx.cross,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-    //     sendTransaction.trans.setKey(data.parameters.secretX);
-    //     sendTransaction.trans.setLockData();
-    //
-    //     sendTransaction.getNonce(function () {
-    //         // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
-    //         data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-    //         // console.log('signed trans : ',data.value);
-    //         callbackMessage('CrossChain_ETH2WETH',e,data);
-    //     });
-    // }
-    // else if(data.action == 'signRefundTrans'){
-    //     let crossType = (data.chainType == 'ETH') ? 'WETH2ETH' : 'ETH2WETH';
-    //     let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-    //     sendTransaction.createTransaction(data.parameters.tx.lockTxHash,tokenAddress,null,null,
-    //         null,data.parameters.tx.gas,toGweiString(data.parameters.tx.gasPrice),crossType);
-    //     sendTransaction.trans.setUnlockData();
-    //     sendTransaction.getNonce(function () {
-    //         // console.log('sendTransaction.trans : ',sendTransaction.trans.trans);
-    //         data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-    //         // console.log('signed trans : ',data.value);
-    //         callbackMessage('CrossChain_ETH2WETH',e,data);
-    //     });
-    // }
-    // else if(data.action == 'signRevokeTrans') {
-    //     let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-    //     let crossType = (data.chainType == 'ETH') ? 'ETH2WETH' : 'WETH2ETH';
-    //     sendTransaction.createTransaction(data.parameters.tx.lockTxHash, tokenAddress, null, null,
-    //         null, data.parameters.tx.gas, toGweiString(data.parameters.tx.gasPrice), crossType);
-    //     sendTransaction.trans.setRefundData();
-    //     sendTransaction.getNonce(function () {
-    //         // console.log('sendTransaction.trans : ', sendTransaction.trans.trans);
-    //         data.value = sendTransaction.trans.signFromKeystore(data.parameters.password);
-    //         // console.log('signed trans : ', data.value);
-    //         callbackMessage('CrossChain_ETH2WETH', e, data);
-    //     });
-    // }
-    else if(data.action == 'listHistory'){
-        let collection = wanchainCore.getCollection('crossTransDb','crossTransaction');
-        let history = collection.chain().find({ 'from' : { '$in' : data.parameters.addrList } }).simplesort('time', true).data();
-        data.value = history;
-        // console.log("listHistory:", history);
-        callbackMessage('CrossChain_ETH2WETH',e,data);
-    }
-    else if(data.action == 'getGasPrice'){
+    else if (data.action === 'getGasPrice') {
         let result = {};
-        if(data.chainType == 'ETH'){
+        if (data.chainType === 'ETH') {
             result.ethNormalGas = config.ethNormalGas;
             result.LockGas = config.ethLockGas;
             result.RefundGas = config.ethRefundGas;
@@ -236,110 +79,293 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             result.RevokeGas = config.wanRevokeGas;
             data.value = result;
         }
-        sendServer.sendMessage('getGasPrice',function(err, r){
-            if(err){
+        sendServer.sendMessage('getGasPrice', data.chainType, function (err, r) {
+            if (err) {
                 data.err = err;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
-            }else{
-                result.gasPrice = r;
+            } else {
+                result.gasPrice = Number(r) > 10000000000 ? r : 10000000000;
                 data.value = result;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }
         });
     }
-    else if(data.action == 'getAddressList'){
-        if(data.chainType == 'ETH'){
-            data.value = Object.keys(wanchainCore.EthKeyStoreDir.getAccounts());
+    else if (data.action === 'getBalance') {
+        if (data.chainType === 'ETH') {
+            try {
+                let balance = await ccUtil.getEthBalance(data.parameters[0]);
+                data.value = balance;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            } catch (error) {
+                data.error = error.error;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
+        } else {
+            try {
+                let balance = await ccUtil.getWanBalance(data.parameters[0]);
+                data.value = balance;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            } catch (error) {
+                data.error = error.error;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
         }
-        else {
-            data.value = Object.keys(wanchainCore.WanKeyStoreDir.getAccounts());
-        }
+
+    }
+    else if (data.action == 'getLockTransData') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+
+
+        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
+        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+        let crossChainInstanceLock = new CrossChainEthLock(data.parameters.tx, crossInvokerConfig);
+
+        crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
+
+        crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
+
+        let lockDataResult = {};
+        lockDataResult.lockTransData = crossChainInstanceLock.contractData;
+
+        data.value = lockDataResult;
+
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
-    else if(data.action == 'sendRawTrans'){
-        sendRawTransactions('CrossChain_ETH2WETH',e,data);
+    else if (data.action == 'getRefundTransData') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+
+        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
+        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+
+        let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
+
+        crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
+
+        crossChainInstanceRefund.contractData = crossChainInstanceRefund.txDataCreator.createContractData().result;
+
+        let refundDataResult = {};
+        refundDataResult.refundTransData = crossChainInstanceRefund.contractData;
+
+        data.value = refundDataResult;
+        callbackMessage('CrossChain_ETH2WETH', e, data);
     }
-    else if(data.action == 'sendNormalTransaction'){
-        sendNormalTransaction('CrossChain_ETH2WETH',e,data);
+    else if (data.action == 'getRevokeTransData') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+
+        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
+        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+
+        let crossChainInstanceRevoke = new CrossChainEthRevoke(data.parameters.tx, crossInvokerConfig);
+
+        crossChainInstanceRevoke.txDataCreator = crossChainInstanceRevoke.createDataCreator().result;
+
+        crossChainInstanceRevoke.contractData = crossChainInstanceRevoke.txDataCreator.createContractData().result;
+
+        let revokeDataResult = {};
+        revokeDataResult.revokeTransData = crossChainInstanceRevoke.contractData;
+
+        data.value = revokeDataResult;
+        callbackMessage('CrossChain_ETH2WETH', e, data);
     }
-    else if(data.action == 'getWethToken'){
+    else if (data.action == 'sendLockTrans') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+
+        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
+        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+
+        let crossChainInstanceLock = new CrossChainEthLock(data.parameters.tx, crossInvokerConfig);
+
+        crossChainInstanceLock.trans = crossChainInstanceLock.createTrans().result;
+        crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
+
+        crossChainInstanceLock.dataSign = crossChainInstanceLock.createDataSign().result;
+        crossChainInstanceLock.commonData = (await crossChainInstanceLock.txDataCreator.createCommonData()).result;
+        crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
+
+        crossChainInstanceLock.trans.setCommonData(crossChainInstanceLock.commonData);
+        crossChainInstanceLock.trans.setContractData(crossChainInstanceLock.contractData);
+
+        crossChainInstanceLock.input.password = data.parameters.password;
+
+        try {
+            let signedData = crossChainInstanceLock.dataSign.sign(crossChainInstanceLock.trans).result;
+
+            crossChainInstanceLock.preSendTrans(signedData);
+
+            let txHash = await crossChainInstanceLock.sendTrans(signedData);
+
+            crossChainInstanceLock.postSendTrans(txHash);
+
+            data.value = txHash;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        } catch (error) {
+            log.error("sendLockTrans : ", error);
+            data.error = error.toString();
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }
+    }
+    else if (data.action == 'sendRefundTrans') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+
+        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
+        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+
+        let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
+
+        crossChainInstanceRefund.trans = crossChainInstanceRefund.createTrans().result;
+        crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
+
+        crossChainInstanceRefund.dataSign = crossChainInstanceRefund.createDataSign().result;
+        crossChainInstanceRefund.commonData = (await crossChainInstanceRefund.txDataCreator.createCommonData()).result;
+        crossChainInstanceRefund.contractData = crossChainInstanceRefund.txDataCreator.createContractData().result;
+
+        crossChainInstanceRefund.trans.setCommonData(crossChainInstanceRefund.commonData);
+        crossChainInstanceRefund.trans.setContractData(crossChainInstanceRefund.contractData);
+
+        crossChainInstanceRefund.input.password = data.parameters.password;
+
+        try {
+            let signedData = crossChainInstanceRefund.dataSign.sign(crossChainInstanceRefund.trans).result;
+
+            crossChainInstanceRefund.preSendTrans(signedData);
+
+            let txHash = await crossChainInstanceRefund.sendTrans(signedData);
+
+            crossChainInstanceRefund.postSendTrans(txHash);
+
+            data.value = txHash;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        } catch (error) {
+            log.error("sendDepositX: ", error);
+            data.error = error.toString();
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }
+
+    }
+    else if (data.action == 'sendRevokeTrans') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+
+        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
+        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+
+        let crossChainInstanceRevoke = new CrossChainEthRevoke(data.parameters.tx, crossInvokerConfig);
+
+        crossChainInstanceRevoke.trans = crossChainInstanceRevoke.createTrans().result;
+        crossChainInstanceRevoke.txDataCreator = crossChainInstanceRevoke.createDataCreator().result;
+
+        crossChainInstanceRevoke.dataSign = crossChainInstanceRevoke.createDataSign().result;
+        crossChainInstanceRevoke.commonData = (await crossChainInstanceRevoke.txDataCreator.createCommonData()).result;
+        crossChainInstanceRevoke.contractData = crossChainInstanceRevoke.txDataCreator.createContractData().result;
+
+        crossChainInstanceRevoke.trans.setCommonData(crossChainInstanceRevoke.commonData);
+        crossChainInstanceRevoke.trans.setContractData(crossChainInstanceRevoke.contractData);
+
+        crossChainInstanceRevoke.input.password = data.parameters.password;
+
+        try {
+            let signedData = crossChainInstanceRevoke.dataSign.sign(crossChainInstanceRevoke.trans).result;
+
+            crossChainInstanceRevoke.preSendTrans(signedData);
+
+            let txHash = await crossChainInstanceRevoke.sendTrans(signedData);
+
+            crossChainInstanceRevoke.postSendTrans(txHash);
+
+            data.value = txHash;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        } catch (error) {
+            log.error("sendWithdrawCancel: ", error);
+            data.error = error.toString();
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }
+
+    } else if (data.action == 'getMultiTokenBalance') {
+
+        let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters[0], config.ethTokenAddressOnWan, "WAN");
+        data.value = balanceList;
+        callbackMessage('CrossChain_ETH2WETH', e, data);
+    }
+    else if (data.action == 'getWethToken') {
         data.value = config.wethToken;
-        callbackMessage('CrossChain_ETH2WETH',e,data);
+        callbackMessage('CrossChain_ETH2WETH', e, data);
     }
-    else if(data.action == 'getCoin2WanRatio'){
-        try{
-            let c2wRatio = await be.getEthC2wRatio(be.wanSender);
+    else if (data.action == 'getCoin2WanRatio') {
+        try {
+            let c2wRatio = await ccUtil.getEthC2wRatio();
             data.value = c2wRatio;
             callbackMessage('CrossChain_ETH2WETH', e, data);
-        }catch(error){
+        } catch (error) {
             data.error = error.error;
             callbackMessage('CrossChain_ETH2WETH', e, data);
         }
     }
-    else if(data.action == 'getBalance'){
-        if(data.chainType == 'ETH'){
-            try{
-                let balance = await be.getEthBalance(be.ethSender, data.parameters[0]);
-                data.value = balance;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
-            }catch(error){
-                data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
-            }
-        }else{
-            try{
-                let balance = await be.getWanBalance(be.wanSender,data.parameters[0]);
-                data.value = balance;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
-            }catch(error){
-                data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
-            }
-        }
 
-    }
-    else if(sendServer.hasMessage(data.action)){
+    // else if (data.action == 'sendRawTrans') {
+    //     sendRawTransactions('CrossChain_ETH2WETH', e, data);
+    // }
+    // else if (data.action == 'sendNormalTransaction') {
+    //     sendNormalTransaction('CrossChain_ETH2WETH', e, data);
+    // }
+
+    else if (sendServer.hasMessage(data.action)) {
         // console.log('sendServer :', data);
         let args = data.parameters;
+        args.push(data.chainType);
         // console.log(args);
-        args.push(function (err,result) {
+        args.push(function (err, result) {
             data.error = err;
             data.value = result;
             // console.log(err,result);
-            callbackMessage('CrossChain_ETH2WETH',e,data);
+            callbackMessage('CrossChain_ETH2WETH', e, data);
         });
-        sendServer.sendMessage(data.action , ...args);
+        console.log("data.action:", data.action);
+        console.log("param:", data.parameters);
+        sendServer.sendMessage(data.action, ...args);
     }
 });
 
-function callbackMessage(message,e,data){
+function callbackMessage(message, e, data) {
     const windowId = e.sender.id;
     const senderWindow = Windows.getById(windowId);
-    senderWindow.send('Callback_'+message, data);
+    senderWindow.send('Callback_' + message, data);
 }
 
-function sendRawTransactions(message,e,data) {
-    let sendServer = (data.chainType == 'ETH') ? wanchainCore.ethSend : wanchainCore.wanSend;
-    sendServer.sendRawTrans(data.parameters.tx,function (err,result) {
-            data.error = err;
-            data.value = result;
-            callbackMessage(message,e,data);
-        });
-}
-async function sendNormalTransaction(message,e,data) {
-    let tx = data.parameters.tx;
-    let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-    sendTransaction.createNormalTransaction(tx.from,tx.to, tx.value,tx.gas,toGweiString(tx.gasPrice),tx.nonce);
-    sendTransaction.sendNormalTrans(data.parameters.passwd, function(err,result){
+function sendRawTransactions(message, e, data) {
+    let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
+    sendServer.sendRawTrans(data.parameters.tx, function (err, result) {
         data.error = err;
         data.value = result;
-        callbackMessage('CrossChain_ETH2WETH',e,data);
+        callbackMessage(message, e, data);
     });
 }
-async function init(){
+
+async function sendNormalTransaction(message, e, data) {
+    let tx = data.parameters.tx;
+    let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
+    sendTransaction.createNormalTransaction(tx.from, tx.to, tx.value, tx.gas, toGweiString(tx.gasPrice), tx.nonce);
+    sendTransaction.sendNormalTrans(data.parameters.passwd, function (err, result) {
+        data.error = err;
+        data.value = result;
+        callbackMessage('CrossChain_ETH2WETH', e, data);
+    });
+}
+
+async function init() {
     wanchainCore = new WanchainCore(config);
-    be = wanchainCore.be;
     await wanchainCore.init(config);
 }
+
 exports.init = init;
 
