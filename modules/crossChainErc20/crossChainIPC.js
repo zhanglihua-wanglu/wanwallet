@@ -4,7 +4,7 @@
 const config = require('./config.js');
 const {app, ipcMain: ipc, shell, webContents} = require('electron');
 let WanchainCore = require('wanchain-js-sdk').walletCore;
-let {CrossChainEthLock, CrossChainEthRefund, CrossChainEthRevoke} = require('wanchain-js-sdk').CrossChain;
+let {CrossChainE20Lock, CrossChainE20Refund, CrossChainE20Revoke} = require('wanchain-js-sdk').CrossChain;
 
 let ccUtil = require('wanchain-js-sdk').ccUtil;
 
@@ -28,23 +28,18 @@ let wanchainCore;
 const log = config.getLogger('crossChain');
 
 
-ipc.on('CrossChain_ETH2WETH', async (e, data) => {
+ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
 
-    let tokenAddress;
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
-    // if (data.chainType == 'ETH') {
-    //     tokenAddress = config.ethHtlcAddr;
-    // } else {
-    //     tokenAddress = config.wanHtlcAddr;
-    // }
+
     if (sendServer.webSocket.readyState != 1) {
         try {
             await wanchainCore.init();
         } catch (error) {
             log.error("Failed to connect to apiserver:", error.toString());
             data.error = error.toString();
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
             return;
         }
     }
@@ -56,14 +51,14 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         else {
             data.value = ccUtil.getWanAccounts();
         }
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action === 'listHistory') {
 
         let collection = global.wanDb.getCollection(config.crossCollection);
 
         data.value = collection;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action === 'getGasPrice') {
         let result = {};
@@ -82,11 +77,11 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         sendServer.sendMessage('getGasPrice', data.chainType, function (err, r) {
             if (err) {
                 data.err = err;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
             } else {
                 result.gasPrice = Number(r) > 10000000000 ? r : 10000000000;
                 data.value = result;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
             }
         });
     }
@@ -95,19 +90,19 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             try {
                 let balance = await ccUtil.getEthBalance(data.parameters[0]);
                 data.value = balance;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
             } catch (error) {
                 data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
             }
         } else {
             try {
                 let balance = await ccUtil.getWanBalance(data.parameters[0]);
                 data.value = balance;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
             } catch (error) {
                 data.error = error.error;
-                callbackMessage('CrossChain_ETH2WETH', e, data);
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
             }
         }
 
@@ -120,7 +115,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
-        let crossChainInstanceLock = new CrossChainEthLock(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
 
@@ -131,7 +126,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         data.value = lockDataResult;
 
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action == 'getRefundTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
@@ -141,7 +136,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRefund = new CrossChainE20Refund(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
 
@@ -151,7 +146,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         refundDataResult.refundTransData = crossChainInstanceRefund.contractData;
 
         data.value = refundDataResult;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action == 'getRevokeTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
@@ -161,7 +156,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRevoke = new CrossChainEthRevoke(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRevoke = new CrossChainE20Revoke(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRevoke.txDataCreator = crossChainInstanceRevoke.createDataCreator().result;
 
@@ -171,7 +166,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         revokeDataResult.revokeTransData = crossChainInstanceRevoke.contractData;
 
         data.value = revokeDataResult;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action == 'sendLockTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
@@ -181,7 +176,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceLock = new CrossChainEthLock(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceLock.trans = crossChainInstanceLock.createTrans().result;
         crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
@@ -205,11 +200,11 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             crossChainInstanceLock.postSendTrans(txHash);
 
             data.value = txHash;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
             log.error("sendLockTrans : ", error);
             data.error = error.toString();
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
     }
     else if (data.action == 'sendRefundTrans') {
@@ -220,7 +215,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRefund = new CrossChainE20Refund(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRefund.trans = crossChainInstanceRefund.createTrans().result;
         crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
@@ -244,11 +239,11 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             crossChainInstanceRefund.postSendTrans(txHash);
 
             data.value = txHash;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
             log.error("sendDepositX: ", error);
             data.error = error.toString();
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
 
     }
@@ -260,7 +255,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRevoke = new CrossChainEthRevoke(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRevoke = new CrossChainE20Revoke(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRevoke.trans = crossChainInstanceRevoke.createTrans().result;
         crossChainInstanceRevoke.txDataCreator = crossChainInstanceRevoke.createDataCreator().result;
@@ -284,39 +279,41 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             crossChainInstanceRevoke.postSendTrans(txHash);
 
             data.value = txHash;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
             log.error("sendWithdrawCancel: ", error);
             data.error = error.toString();
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
 
     } else if (data.action == 'getMultiTokenBalance') {
 
+
         let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters[0], config.ethTokenAddressOnWan, "WAN");
         data.value = balanceList;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
-    else if (data.action == 'getWethToken') {
+    else if (data.action == 'getWerc20Token') {
+        //************************//
         data.value = config.wethToken;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action == 'getCoin2WanRatio') {
         try {
             let c2wRatio = await ccUtil.getEthC2wRatio();
             data.value = c2wRatio;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
             data.error = error.error;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
     }
 
     // else if (data.action == 'sendRawTrans') {
-    //     sendRawTransactions('CrossChain_ETH2WETH', e, data);
+    //     sendRawTransactions('CrossChain_ERC202WERC20', e, data);
     // }
     // else if (data.action == 'sendNormalTransaction') {
-    //     sendNormalTransaction('CrossChain_ETH2WETH', e, data);
+    //     sendNormalTransaction('CrossChain_ERC202WERC20', e, data);
     // }
 
     else if (sendServer.hasMessage(data.action)) {
@@ -328,7 +325,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             data.error = err;
             data.value = result;
             // console.log(err,result);
-            callbackMessage('CrossChain_ETH2WETH', e, data);
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
         });
         console.log("data.action:", data.action);
         console.log("param:", data.parameters);
@@ -358,7 +355,7 @@ async function sendNormalTransaction(message, e, data) {
     sendTransaction.sendNormalTrans(data.parameters.passwd, function (err, result) {
         data.error = err;
         data.value = result;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
     });
 }
 

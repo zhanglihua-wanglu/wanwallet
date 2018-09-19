@@ -332,6 +332,11 @@
             if(mist.ETH2WETH()) {
                 mist.ETH2WETH().invokeCallback(data.message);
             }
+        } else if (data.type === 'Callback_CrossChain_ERC202WERC20'){
+            // console.log('mist api: ', data);
+            if(mist.ERC202WERC20()) {
+                mist.ERC202WERC20().invokeCallback(data.message);
+            }
         }else if (data.type === 'uiAction_windowMessage') {
             var params = data.message;
 
