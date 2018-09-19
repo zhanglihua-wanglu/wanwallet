@@ -18,7 +18,7 @@ let btcUtil;
 
 ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   log.info('CrossChain_BTC2WBTC->Message Received!->' + data.action);
-  log.info('parameters:' + JSON.stringify(data.parameters, null, 4));
+  //log.info('parameters:' + JSON.stringify(data.parameters, null, 4));
   let sendServer = (data.chainType === 'BTC') ? wanchainCore.btcSend : wanchainCore.wanSend;
 
   if (sendServer.socket.connection.readyState != 1) {
