@@ -266,6 +266,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         return value;
       });
 
+      records = records.sort((a, b)=>{
+        return Number(b.time) - Number(a.time);
+      });
+
       // log.debug(JSON.stringify(records, null, 4));
       data.value = records;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
