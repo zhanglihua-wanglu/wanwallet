@@ -410,7 +410,7 @@ class Settings {
     }
 
     initConfig() {
-        global.config.insert({
+        global.sysconfig.insert({
             ui: {
                 i18n: i18n.getBestMatchedLangCode('en') // app.getLocale()
             }
@@ -418,24 +418,24 @@ class Settings {
     }
 
     saveConfig(key, value) {
-        let obj = global.config.get(1);
+        let obj = global.sysconfig.get(1);
 
         if (!obj) {
             this.initConfig();
-            obj = global.config.get(1);
+            obj = global.sysconfig.get(1);
         }
 
         if (lodash.get(obj, key) !== value) {
             lodash.set(obj, key, value);
-            global.config.update(obj);
+            global.sysconfig.update(obj);
 
             this._log.debug(`Settings: saveConfig('${key}', '${value}')`);
-            this._log.trace(global.config.data);
+            this._log.trace(global.sysconfig.data);
         }
     }
 
     loadConfig(key) {
-        const obj = global.config.get(1);
+        const obj = global.sysconfig.get(1);
 
         if (!obj) {
             this.initConfig();
