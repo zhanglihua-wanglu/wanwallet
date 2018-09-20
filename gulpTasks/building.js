@@ -247,9 +247,9 @@ gulp.task('release-dist', (done) => {
                 `${applicationName}-${version}-win.zip`, `${appNameHypen}-win64-${versionDashed}.zip`);
             break;
         case 'mac':
-            cp(
-                path.join('mac', `${applicationName}-${version}.dmg`),
-                `${appNameHypen}-macosx-${versionDashed}.dmg`);
+            // cp(
+            //     path.join('mac', `${applicationName}-${version}.dmg`),
+            //     `${appNameHypen}-macosx-${versionDashed}.dmg`);
             // break;
 
             cp(
