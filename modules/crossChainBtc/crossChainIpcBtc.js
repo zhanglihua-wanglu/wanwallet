@@ -25,8 +25,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     try {
       await wanchainCore.reinit(config);
     } catch (error) {
-      log.error("Failed to connect to apiserver:", error.toString());
-      log.error(error.stack);
+      log.error("Failed to connect to apiserver. please check the network.", error.toString());
+      //log.error(error.stack);
       data.error = error.toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
