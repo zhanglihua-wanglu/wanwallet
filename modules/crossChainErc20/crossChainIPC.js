@@ -29,7 +29,7 @@ const log = config.getLogger('crossChain');
 
 
 ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
-    // console.log('CrossChainIPC : ',data);
+    console.log('CrossChainIPC : ',data);
 
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
 
@@ -44,7 +44,18 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         }
     }
 
-    if (data.action === 'getAddressList') {
+    if (data.action === 'getRegErc20Tokens') {
+        console.log("<<<<<<<<<<<<<<<<<< ccUtil.getRegErc20Tokens  >>>>>>>>>>>>>>>>>>");
+        data.value = await ccUtil.getRegErc20Tokens();
+        console.log("<<<<<<<<<<<<<<<<<< ccUtil.getRegErc20Tokens end  >>>>>>>>>>>>>>>>>>");
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
+    else if (data.action === 'getErc20SymbolInfo') {
+
+        data.value = await ccUtil.getErc20SymbolInfo(data.parameters.tokenAddr);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
+    else if (data.action === 'getAddressList') {
         if (data.chainType === 'ETH') {
             data.value = ccUtil.getEthAccounts();
         }
@@ -287,9 +298,9 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         }
 
     } else if (data.action == 'getMultiTokenBalance') {
+        // chainType ETH WAN
 
-
-        let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters[0], config.ethTokenAddressOnWan, "WAN");
+        let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters.addressList, data.parameters.tokenAddress, data.parameters.chainType);
         data.value = balanceList;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
