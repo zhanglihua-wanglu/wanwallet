@@ -76,7 +76,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'getBtcBalance') {
     try {
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       let addressList = await btcUtil.getAddressList();
       let array = [];
 
@@ -96,10 +95,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
       let result = await ccUtil.getUTXOSBalance(utxos);
 
-      let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
-
-      log.debug(print);
-
       data.value = web3.toBigNumber(result).div(100000000).toString();
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
@@ -111,19 +106,13 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'getBtcMultiBalances') {
     try {
-      log.debug('CrossChain_BTC2WBTC->>>>>>>>>getBtcMultiBalances>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       let addressList = await btcUtil.getAddressList();
-
-
       if (addressList.length === 0) {
         log.debug('address list lenght === 0');
-
         data.value = null;
-
         callbackMessage('CrossChain_BTC2WBTC', e, data);
         return;
       }
-
       data.value = {};
       data.value.address = [];
       data.value.balance = "";
@@ -131,22 +120,14 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       for (let i = 0; i < addressList.length; i++) {
         data.value.address.push(addressList[i].address);
       }
-
       let array = [];
       for (let i = 0; i < addressList.length; i++) {
         array.push(addressList[i].address);
       }
-
       let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
       let result = await ccUtil.getUTXOSBalance(utxos);
 
-      let print = 'btcBalance: ' + web3.toBigNumber(result).div(100000000).toString();
-
       data.value.balance = web3.toBigNumber(result).div(100000000).toString();
-
-      // log.debug('getBtcMultiBalances finish, data:');
-      // log.debug(JSON.stringify(data, null, 4));
-
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       log.error("Failed to getBtcBalance:", error.toString());
@@ -206,6 +187,17 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       //Send transaction
       let result2 = await ccUtil.sendRawTransaction(ccUtil.btcSender, rawTx);
       log.debug('hash: ', result2);
+
+      let txInfo = {
+        from: "local btc account",
+        to: target.address,
+        value: target.value,
+        txHash: result2,
+        crossType: 'BTC2WAN'
+      };
+
+      ccUtil.saveNormalBtcTransactionInfo(txInfo);
+
       data.value = 'success';
 
       log.debug('CrossChain_BTC2WBTC->sendBtcToAddress->sendRawTransaction success!');
@@ -252,10 +244,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listTransactions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let records = ccUtil.getBtcWanTxHistory({});
-
-      records = records.filter((value) => {
-        return (value.crossAddress !== '');
-      });
 
       records = records.map((value)=>{
         //console.log(value);
@@ -469,7 +457,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       if(!alice) {
         throw new Error('Password of btc is wrong!');
       }
-      
+
       let walletRedeem = await ccUtil.redeemWithHashX(HashX, alice);
       log.debug('redeemWbtc walletRedeem: ', walletRedeem);
 
