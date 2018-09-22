@@ -4,7 +4,7 @@
 const config = require('./config.js');
 const {app, ipcMain: ipc, shell, webContents} = require('electron');
 let WanchainCore = require('wanchain-js-sdk').walletCore;
-let {CrossChainE20Lock, CrossChainE20Refund, CrossChainE20Revoke} = require('wanchain-js-sdk').CrossChain;
+let {CrossChainE20Approve, CrossChainE20Lock, CrossChainE20Refund, CrossChainE20Revoke} = require('wanchain-js-sdk').CrossChain;
 
 let ccUtil = require('wanchain-js-sdk').ccUtil;
 
@@ -45,14 +45,17 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
 
     if (data.action === 'getRegErc20Tokens') {
-        console.log("<<<<<<<<<<<<<<<<<< ccUtil.getRegErc20Tokens  >>>>>>>>>>>>>>>>>>");
         data.value = await ccUtil.getRegErc20Tokens();
-        console.log("<<<<<<<<<<<<<<<<<< ccUtil.getRegErc20Tokens end  >>>>>>>>>>>>>>>>>>");
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action === 'getErc20SymbolInfo') {
 
         data.value = await ccUtil.getErc20SymbolInfo(data.parameters.tokenAddr);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
+    else if (data.action === 'syncErc20StoremanGroups') {
+
+        data.value = await ccUtil.syncErc20StoremanGroups(data.parameters.tokenAddr);
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action === 'getAddressList') {
@@ -118,12 +121,37 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         }
 
     }
+    else if (data.action == 'getApproveTransData') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
+
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
+
+        let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+        let crossChainE20Approve = new CrossChainE20Approve(data.parameters.tx, crossInvokerConfig);
+
+        crossChainE20Approve.txDataCreator = crossChainE20Approve.createDataCreator().result;
+
+        crossChainE20Approve.contractData = crossChainE20Approve.txDataCreator.createContractData().result;
+
+        let approveDataResult = {};
+        approveDataResult.approveTransData = crossChainE20Approve.contractData;
+
+        data.value = approveDataResult;
+
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
     else if (data.action == 'getLockTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
 
-
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
         let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
@@ -141,9 +169,12 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'getRefundTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
@@ -161,9 +192,12 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'getRevokeTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
@@ -181,35 +215,41 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'sendLockTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+        console.log("crossInvokerConfig: ",JSON.stringify(crossInvokerConfig));
 
+        data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceLock.trans = crossChainInstanceLock.createTrans().result;
-        crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
-
-        crossChainInstanceLock.dataSign = crossChainInstanceLock.createDataSign().result;
-        crossChainInstanceLock.commonData = (await crossChainInstanceLock.txDataCreator.createCommonData()).result;
-        crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
-
-        crossChainInstanceLock.trans.setCommonData(crossChainInstanceLock.commonData);
-        crossChainInstanceLock.trans.setContractData(crossChainInstanceLock.contractData);
-
-        crossChainInstanceLock.input.password = data.parameters.password;
+        // crossChainInstanceLock.trans = crossChainInstanceLock.createTrans().result;
+        // crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
+        //
+        // crossChainInstanceLock.dataSign = crossChainInstanceLock.createDataSign().result;
+        // crossChainInstanceLock.commonData = (await crossChainInstanceLock.txDataCreator.createCommonData()).result;
+        // crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
+        //
+        // crossChainInstanceLock.trans.setCommonData(crossChainInstanceLock.commonData);
+        // crossChainInstanceLock.trans.setContractData(crossChainInstanceLock.contractData);
+        //
+        // crossChainInstanceLock.input.password = data.parameters.password;
 
         try {
-            let signedData = crossChainInstanceLock.dataSign.sign(crossChainInstanceLock.trans).result;
+            // let signedData = crossChainInstanceLock.dataSign.sign(crossChainInstanceLock.trans).result;
+            //
+            // crossChainInstanceLock.preSendTrans(signedData);
+            //
+            // let txHash = await crossChainInstanceLock.sendTrans(signedData);
+            //
+            // crossChainInstanceLock.postSendTrans(txHash);
 
-            crossChainInstanceLock.preSendTrans(signedData);
-
-            let txHash = await crossChainInstanceLock.sendTrans(signedData);
-
-            crossChainInstanceLock.postSendTrans(txHash);
-
+            let txHash = (await crossChainInstanceLock.run()).result;
             data.value = txHash;
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
@@ -220,9 +260,12 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'sendRefundTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
@@ -260,9 +303,12 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'sendRevokeTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let tokenOrigAddr = data.parameters.tokenOrigAddr;
+        let tokenChainType = data.parameters.tokenChainType;
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ERC20
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType);
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
@@ -297,10 +343,9 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
 
-    } else if (data.action == 'getMultiTokenBalance') {
+    } else if (data.action === 'getMultiTokenBalance') {
         // chainType ETH WAN
-
-        let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters.addressList, data.parameters.tokenAddress, data.parameters.chainType);
+        let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters.addressList, data.parameters.tokenAddress, data.chainType);
         data.value = balanceList;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
@@ -335,7 +380,8 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         args.push(function (err, result) {
             data.error = err;
             data.value = result;
-            // console.log(err,result);
+            // console.log(err,resul
+            // t);
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         });
         console.log("data.action:", data.action);

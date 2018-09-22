@@ -29,7 +29,7 @@ const log = config.getLogger('crossChain');
 
 
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
-    // console.log('CrossChainIPC : ',data);
+    console.log('CrossChainIPC : ',data);
 
     let tokenAddress;
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
@@ -115,9 +115,9 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if (data.action == 'getLockTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
 
-
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ETH
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr("ETH","ETH");
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
         let crossChainInstanceLock = new CrossChainEthLock(data.parameters.tx, crossInvokerConfig);
@@ -136,11 +136,14 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if (data.action == 'getRefundTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN? WAN => ETH
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr("ETH","ETH");
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
+        console.log("srcChain:",srcChain);
+        console.log("dstChain:",dstChain);
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
-
+        console.log("^^^^^^^^^^^^^^^^^^crossInvokerConfig:",JSON.stringify(crossInvokerConfig));
         let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
@@ -156,8 +159,9 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if (data.action == 'getRevokeTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ETH
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr("ETH","ETH");
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
@@ -176,8 +180,9 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if (data.action == 'sendLockTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ETH
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr("ETH","ETH");
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
@@ -215,11 +220,12 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if (data.action == 'sendRefundTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ETH
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr("ETH","ETH");
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
-
+        console.log("||||||||||||||||||||||||||||||crossInvokerConfig:",JSON.stringify(crossInvokerConfig));
         let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRefund.trans = crossChainInstanceRefund.createTrans().result;
@@ -255,8 +261,9 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     else if (data.action == 'sendRevokeTrans') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
 
-        let srcChain = (data.chainType === 'ETH') ? ccUtil.getSrcChainNameByContractAddr("ETH") : null;
-        let dstChain = (data.chainType === 'ETH') ? null : ccUtil.getSrcChainNameByContractAddr("ETH");
+        //data.chainType = WAN?  WAN=> ETH
+        let srcChain = data.chainType==='WAN'? null:ccUtil.getSrcChainNameByContractAddr("ETH","ETH");
+        let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 

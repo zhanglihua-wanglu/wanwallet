@@ -46,13 +46,13 @@ config.ethKeyStorePath = config.ethkeyStorePath;
 config.ethGasPrice = 60;
 config.wanGasPrice = 200;
 config.ethNormalGas = 21000;
-config.ethLockGas = 200000; //171866;
-config.ethRefundGas = 120000;  // 91663;
-config.ethRevokeGas = 100000; // 40323;
+config.ethLockGas = 300000; //200850;
+config.ethRefundGas = 200000;  // 91663;
+config.ethRevokeGas = 200000; // 40323;
 
 config.wanLockGas = 300000; // 232665;
-config.wanRefundGas = 120000; // 34881;
-config.wanRevokeGas = 100000; // 49917;
+config.wanRefundGas = 200000; // 34881;
+config.wanRevokeGas = 200000; // 49917;
 
 // config.depositOriginLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256,address)';
 // config.depositCrossLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
