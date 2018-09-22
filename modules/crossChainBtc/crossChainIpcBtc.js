@@ -10,7 +10,7 @@ let btcScripts = require('./btcScripts');
 const bitcoin = require('bitcoinjs-lib');
 const settings = require('../settings.js');
 const path = require('path');
-const keyUtils = require('../keyUtils.js');
+
 
 let wanchainCore;
 let be;
@@ -326,7 +326,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('wrong password of btc.');
       }
 
-      if(!keyUtils.checkWanPassword(wanAddress, wanPassword)) {
+      if(!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
         throw new Error('wrong password of wan.');
       }
 
@@ -448,7 +448,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wanPassword = data.parameters.wanPassword;
       let amount = data.parameters.amount;
 
-      if(!keyUtils.checkWanPassword(wanAddress, wanPassword)) {
+      if(!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
         throw new Error('wrong password of wan.');
       }
       //Check whether the wbtc balance is enought.
@@ -545,7 +545,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let HashX = data.parameters.HashX.startsWith('0x') ? data.parameters.HashX : '0x' + data.parameters.HashX;
       let wanPassword = data.parameters.wanPassword;
 
-      if(!keyUtils.checkWanPassword(from, wanPassword)) {
+      if(!ccUtil.checkWanPassword(from, wanPassword)) {
         throw new Error('wrong password of wan.');
       }
 
