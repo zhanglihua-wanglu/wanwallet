@@ -10,7 +10,7 @@ let btcScripts = require('./btcScripts');
 const bitcoin = require('bitcoinjs-lib');
 const settings = require('../settings.js');
 const path = require('path');
-
+var bs58check = require('bs58check');
 
 let wanchainCore;
 let be;
@@ -162,6 +162,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let amount = Number(data.parameters.amount);
       let to = data.parameters.toAddress;
       let passwd = data.parameters.password;
+
+      try {
+        bs58check.decode(to);
+      } catch (error) {
+        throw new Error('BTC address is invalid.');
+      }
 
       if (!btcScripts.checkBalance(amount, null) ||
         !to.length > 0 ||
@@ -322,17 +328,22 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       log.debug('getECPairs...');
       //check passwd
+      console.time('getECPairs');
       let keyPairArray = await btcUtil.getECPairs(btcPassword);
+      console.timeEnd('getECPairs');
       if (keyPairArray.length === 0) {
         throw new Error('wrong password of btc.');
       }
 
+      console.time('checkWanPassword');
       if(!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
         throw new Error('wrong password of wan.');
       }
+      console.timeEnd('checkWanPassword');
 
       log.debug('getAddressList...');
 
+      console.time('check btc balance');
       //check balance
       let addressList = await btcUtil.getAddressList();
 
@@ -352,10 +363,16 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('Balance is not enough.');
       }
 
+      console.timeEnd('check btc balance');
+
+      console.time('fund');
       log.debug('fund...');
       let value = Number(web3.toBigNumber(amount).mul(100000000));
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
 
+      console.timeEnd('fund');
+
+      console.time('sendWanNotice');
       log.debug('sendWanNotice...');
       // notice wan.
       const tx = {};
@@ -373,6 +390,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let txHash = await ccUtil.sendWanNotice(wanSender, tx);
       log.info("sendWanNotice txHash:", txHash);
 
+      console.timeEnd('sendWanNotice');
       data.value = 'txHash';
 
       log.info('notice wan finish. txHash:' + data.value);
@@ -448,6 +466,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let btcAddress = data.parameters.btcAddress;
       let wanPassword = data.parameters.wanPassword;
       let amount = data.parameters.amount;
+
+      try {
+        bs58check.decode(btcAddress);
+      } catch (error) {
+        throw new Error('BTC address is invalid.');
+      }
 
       if(!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
         throw new Error('wrong password of wan.');
