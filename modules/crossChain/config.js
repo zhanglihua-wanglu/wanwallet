@@ -1,13 +1,13 @@
 "use strict";
 
-const settings=require('../settings.js');
+const settings = require('../settings.js');
 const Logger = require('./logger.js');
 const path = require('path');
 const fs = require('fs');
 let config;
-if(settings.network === 'testnet'){
+if (settings.network === 'testnet') {
     config = require('./config_testnet.js');
-}else {
+} else {
     config = require('./config_main.js');
 }
 config.version = '1.0.0';
@@ -35,10 +35,11 @@ function mkdirsSync(dirname) {
         }
     }
 }
+
 mkdirsSync(config.databasePath);
-config.logger = new Logger('CrossChain',config.ccLog, config.ccErr,config.loglevel);
-config.getLogger = function(name){
-    return new Logger(name,config.ccLog, config.ccErr,config.loglevel);
+config.logger = new Logger('CrossChain', config.ccLog, config.ccErr, config.loglevel);
+config.getLogger = function (name) {
+    return new Logger(name, config.ccLog, config.ccErr, config.loglevel);
 }
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
@@ -54,46 +55,28 @@ config.wanLockGas = 300000; // 232665;
 config.wanRefundGas = 120000; // 34881;
 config.wanRevokeGas = 100000; // 49917;
 
-// config.depositOriginLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256,address)';
-// config.depositCrossLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
-//
-// config.withdrawOriginLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256,address,uint256)';
-// config.withdrawCrossLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256)';
-//
-//
-// config.depositOriginRefundEvent = 'ETH2WETHRefund(address,address,bytes32,bytes32)';
-// config.withdrawOriginRefundEvent = 'WETH2ETHRefund(address,address,bytes32,bytes32)';
-//
-// config.depositOriginRevokeEvent = 'ETH2WETHRevoke(address,bytes32)';
-// config.withdrawOriginRevokeEvent = 'WETH2ETHRevoke(address,bytes32)';
-
-
 // inbound storemengroup lock event  ETH->WAN
-config.inStgLockEvent       = 'ETH2WETHLock(address,address,bytes32,uint256)';
+config.inStgLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
 // outbound storemengroup lock event  WAN->ETH
-config.outStgLockEvent      = 'WETH2ETHLock(address,address,bytes32,uint256)';
+config.outStgLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256)';
 
 // inbound storemengroup lock event  E20->WAN
 //storemanGroup,wanAddr,xHash,value,tokenOrigAddr
-config.inStgLockEventE20    = 'InboundLockLogger(address,address,bytes32,uint256,address)';
+config.inStgLockEventE20 = 'InboundLockLogger(address,address,bytes32,uint256,address)';
 // outbound storemengroup lock event  WAN->E20
 //storemanGroup,user,xHash,value,tokenOrigAddr
-config.outStgLockEventE20   = 'OutboundLockLogger(address,address,bytes32,uint256,address)';
+config.outStgLockEventE20 = 'OutboundLockLogger(address,address,bytes32,uint256,address)';
 
 
-// config.crossDbname = 'crossTransDb';
-// config.crossCollection = 'crossTransaction';
-
-config.crossDbname              = 'crossTransDb2.1';
-config.crossCollection          = 'crossTrans';             // E20 & ETH
-config.crossCollectionBtc       = 'crossTransBtc';
-
+config.crossDbname = 'crossTransDb2.1';
+config.crossCollection = 'crossTrans';             // E20 & ETH
+config.crossCollectionBtc = 'crossTransBtc';
 
 
 config.consoleColor = {
-	'COLOR_FgRed': '\x1b[31m',
-	'COLOR_FgYellow': '\x1b[33m',
-	'COLOR_FgGreen': "\x1b[32m"
+    'COLOR_FgRed': '\x1b[31m',
+    'COLOR_FgYellow': '\x1b[33m',
+    'COLOR_FgGreen': "\x1b[32m"
 };
 
 module.exports = config;

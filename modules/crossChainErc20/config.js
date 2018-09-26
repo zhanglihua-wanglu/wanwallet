@@ -54,20 +54,6 @@ config.wanLockGas = 300000; // 232665;
 config.wanRefundGas = 200000; // 34881;
 config.wanRevokeGas = 200000; // 49917;
 
-// config.depositOriginLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256,address)';
-// config.depositCrossLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
-//
-// config.withdrawOriginLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256,address,uint256)';
-// config.withdrawCrossLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256)';
-//
-//
-// config.depositOriginRefundEvent = 'ETH2WETHRefund(address,address,bytes32,bytes32)';
-// config.withdrawOriginRefundEvent = 'WETH2ETHRefund(address,address,bytes32,bytes32)';
-//
-// config.depositOriginRevokeEvent = 'ETH2WETHRevoke(address,bytes32)';
-// config.withdrawOriginRevokeEvent = 'WETH2ETHRevoke(address,bytes32)';
-
-
 // inbound storemengroup lock event  ETH->WAN
 config.inStgLockEvent       = 'ETH2WETHLock(address,address,bytes32,uint256)';
 // outbound storemengroup lock event  WAN->ETH
@@ -80,9 +66,6 @@ config.inStgLockEventE20    = 'InboundLockLogger(address,address,bytes32,uint256
 //storemanGroup,user,xHash,value,tokenOrigAddr
 config.outStgLockEventE20   = 'OutboundLockLogger(address,address,bytes32,uint256,address)';
 
-
-// config.crossDbname = 'crossTransDb';
-// config.crossCollection = 'crossTransaction';
 
 config.crossDbname              = 'crossTransDb2.1';
 config.crossCollection          = 'crossTrans';             // E20 & ETH

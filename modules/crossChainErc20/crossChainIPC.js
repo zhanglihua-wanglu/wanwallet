@@ -223,7 +223,6 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
-        console.log("crossInvokerConfig: ",JSON.stringify(crossInvokerConfig));
 
         data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
@@ -349,9 +348,15 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         data.value = balanceList;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
-    else if (data.action == 'getWerc20Token') {
-        //************************//
-        data.value = config.wethToken;
+    else if (data.action == 'getWerc20TokenAddressList') {
+
+        let tokenInstanceList = await ccUtil.getRegErc20Tokens();
+
+        let werc20TokenList = [];
+        for(let tokenInstance of tokenInstanceList){
+            werc20TokenList.push(tokenInstance.tokenWanAddr);
+        }
+        data.value = werc20TokenList;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action == 'getCoin2WanRatio') {
@@ -373,19 +378,17 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     // }
 
     else if (sendServer.hasMessage(data.action)) {
-        // console.log('sendServer :', data);
+
         let args = data.parameters;
         args.push(data.chainType);
-        // console.log(args);
+
         args.push(function (err, result) {
             data.error = err;
             data.value = result;
-            // console.log(err,resul
-            // t);
+
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         });
-        console.log("data.action:", data.action);
-        console.log("param:", data.parameters);
+
         sendServer.sendMessage(data.action, ...args);
     }
 });
