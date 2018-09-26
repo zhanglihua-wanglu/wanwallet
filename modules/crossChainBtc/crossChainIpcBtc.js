@@ -242,7 +242,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wethBalance;
       data.value = {};
 
-      wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
+      //This method can not use local node, must use remote node.
+      wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
 
       wanAddressList.forEach(function (wanAddress, index) {
         wethBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000).toString();
@@ -452,7 +453,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('wrong password of wan.');
       }
       //Check whether the wbtc balance is enought.
-      let wanAddressList = await ccUtil.getWanAccountsInfo(wanSender);
+      //This method can not use local node, must use remote node.
+      let wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
 
       let wbtcEnough;
       wanAddressList.forEach(function (wanAddr) {
@@ -599,7 +601,7 @@ async function init() {
   btcUtil = wanchainCore.btcUtil;
   await wanchainCore.init();
 
-  log.debug('crossChainIpcBtc->sdk->useLocalNode:' + ccUtil.config.useLocalNode);
+  log.info('crossChainIpcBtc->sdk->useLocalNode:' + ccUtil.config.useLocalNode);
 }
 exports.init = init;
 
