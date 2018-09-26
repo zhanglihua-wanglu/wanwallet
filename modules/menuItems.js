@@ -259,6 +259,14 @@ let menuTempl = function (webviews) {
                             let userPath = Settings.getKeystoreDir('ethereum');
                             shell.showItemInFolder(userPath);
                         },
+                    },
+                    {
+                        label: 'Btc Accounts',
+                        click() {
+                            let userPath = Settings.userDataPath;
+                            userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
+                            shell.showItemInFolder(userPath);
+                        },
                     }
                 ],
             },
