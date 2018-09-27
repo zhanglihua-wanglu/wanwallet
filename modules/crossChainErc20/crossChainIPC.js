@@ -29,7 +29,7 @@ const log = config.getLogger('crossChain');
 
 
 ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
-    console.log('CrossChainIPC : ',data);
+    // console.log('CrossChainIPC : ',data);
 
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
 

@@ -96,7 +96,7 @@ gulp.task('bundling-interface', (cb) => {
             bundle(`&& cd ../../meteor-dapp-wallet/app \
                 && meteor-build-client ../../wanwallet/dist_${type}/app/interface/wallet -p ""`);
         } else {
-            if(!options.walletSource){options.walletSource = 'cc'}
+            if(!options.walletSource){options.walletSource = 'wanchain2.1_beta'}
             console.log(`Pulling https://github.com/wanchain/meteor-dapp-wallet/tree/${options.walletSource} "${options.walletSource}" branch...`);
             bundle(`&& cd ../dist_${type} \
                 && git clone https://github.com/wanchain/meteor-dapp-wallet.git \
