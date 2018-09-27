@@ -445,7 +445,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('Password of btc is wrong!');
       }
 
-      await ccUtil.revokeWithHashX(HashX, alice);
+      let txhash = await ccUtil.revokeWithHashX(HashX, alice);
+
+      log.info('revokeBtc finish, txhash:' + txhash);
+      data.value = txhash;
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
