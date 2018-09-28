@@ -31,13 +31,8 @@ const log = config.getLogger('crossChain');
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     // console.log('CrossChainIPC : ',data);
 
-    let tokenAddress;
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
-    // if (data.chainType == 'ETH') {
-    //     tokenAddress = config.ethHtlcAddr;
-    // } else {
-    //     tokenAddress = config.wanHtlcAddr;
-    // }
+
     if (sendServer.webSocket.readyState != 1) {
         try {
             await wanchainCore.init();
@@ -84,7 +79,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 data.err = err;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             } else {
-                result.gasPrice = Number(r) > 10000000000 ? r : 10000000000;
+                result.gasPrice = Number(r) > 1000000000 ? r : 1000000000;
                 data.value = result;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }
