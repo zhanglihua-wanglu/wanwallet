@@ -46,7 +46,6 @@ config.ethKeyStorePath = config.ethkeyStorePath;
 config.MAX_CONFIRM_BLKS = 100000000;
 config.MIN_CONFIRM_BLKS = 0;
 config.listOption = true;
-config.feeRate = 3000;
 config.gasLimit = 1000000;
 config.gasPrice = 200000000000;
 
