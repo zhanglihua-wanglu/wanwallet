@@ -48,6 +48,7 @@ config.MIN_CONFIRM_BLKS = 0;
 config.listOption = true;
 config.gasLimit = 1000000;
 config.gasPrice = 200000000000;
+config.feeRate = 300;
 
 // config.ethGasPrice = 60;
 // config.wanGasPrice = 200;
