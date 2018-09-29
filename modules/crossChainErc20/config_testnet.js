@@ -3,14 +3,17 @@
 const config = {};
 const path = require('path');
 const settings = require('../settings.js');
-config.ccLog = path.join(settings.userDataPath, 'testnet', 'crossChainLog.log');
-config.ccErr = path.join(settings.userDataPath, 'testnet', 'crossChainErr.log');
+config.network = "testnet";
+config.ccLog = path.join(settings.userDataPath,'log',config.network, 'crossChainLog.log');
+config.ccErr = path.join(settings.userDataPath,'log',config.network, 'crossChainErr.log');
+config.mrLog = path.join(settings.userDataPath,'log',config.network, 'ccMonitorLog.log');
+config.mrErr = path.join(settings.userDataPath,'log',config.network, 'ccMonitorErr.log');
+
 // config.socketUrl = 'wss://apitest.wanchain.info';
 config.socketUrl = 'wss://18.236.235.133';
 
-config.network = "testnet";
 config.databasePath = settings.userDataPath;
-config.databasePath = path.join(config.databasePath, 'testnetDb');
+config.databasePath = path.join(config.databasePath, 'Db',`${config.network}DB`);
 
 // for E20 new contract
 {

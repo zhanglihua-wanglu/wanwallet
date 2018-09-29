@@ -3,14 +3,17 @@
 const config = {};
 const path = require('path');
 const settings=require('../settings.js');
-config.ccLog = path.join(settings.userDataPath, 'crossChainLog.log');
-config.ccErr = path.join(settings.userDataPath, 'crossChainErr.log');
+
+config.network = "main";
+config.ccLog = path.join(settings.userDataPath,'log',config.network, 'crossChainLog.log');
+config.ccErr = path.join(settings.userDataPath,'log',config.network, 'crossChainErr.log');
+config.mrLog        = path.join(settings.userDataPath, "log",config.network, 'ccMonitorLog.log');
+config.mrErr        = path.join(settings.userDataPath, "log",config.network, 'ccMonitorErr.log');
 // config.socketUrl = 'wss://apitest.wanchain.info';
 config.socketUrl = 'wss://18.236.235.133';
 
-config.network = "main";
 config.databasePath = settings.userDataPath;
-config.databasePath = path.join(config.databasePath, 'Db');
+config.databasePath = path.join(config.databasePath, 'Db',`${config.network}DB`);
 
 config.wethToken = {
     address: "0x28362cd634646620ef2290058744f9244bb90ed9",

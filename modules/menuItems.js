@@ -210,19 +210,6 @@ let menuTempl = function (webviews) {
             },
 
             {
-                label: 'New ERC20 account',
-                accelerator: 'CommandOrControl+M',
-                click() {
-                    Windows.createPopup('requestEthAccount', {
-                        ownerId : Windows.getByType('main').id,
-                        electronOptions: {
-                            width: 1120, height: 600, alwaysOnTop: true,
-                        },
-                    });
-                },
-            },
-
-            {
                 label: "Import Eth accounts",
                 accelerator: 'CommandOrControl+J',
 

@@ -35,6 +35,14 @@ function mkdirsSync(dirname) {
         }
     }
 }
+
+config.logfileName  = config.ccLog;
+config.errfileName  = config.ccErr;
+
+config.logfileNameMR  = config.mrLog;
+config.errfileNameMR  = config.gimrErr;
+
+
 mkdirsSync(config.databasePath);
 config.logger = new Logger('CrossChain',config.ccLog, config.ccErr,config.loglevel);
 config.getLogger = function(name){
