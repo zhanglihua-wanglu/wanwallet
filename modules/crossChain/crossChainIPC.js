@@ -55,7 +55,24 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
     }
     else if (data.action === 'listHistory') {
 
-        let collection = global.wanDb.getCollection(config.crossCollection);
+        // let addrList = data.parameters.addrList;
+        let tokenAddrList = data.parameters.tokenAddrList;
+        let symbol = data.parameters.symbol;
+
+        let collection = global.wanDb.queryComm(config.crossCollection, (o) => {
+            let bol1 = true ,bol2 = true;
+
+            if (symbol){
+                bol1 = o['tokenSymbol'] === symbol;
+            }
+            if (tokenAddrList){
+                bol2 = ['srcChainAddr', 'dstChainAddr'].some((item) => {
+                    return tokenAddrList.includes(o[item]);
+                });
+            }
+
+            return bol1 && bol2;
+        });
 
         data.value = collection;
         callbackMessage('CrossChain_ETH2WETH', e, data);

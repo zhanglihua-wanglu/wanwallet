@@ -69,7 +69,29 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action === 'listHistory') {
 
-        let collection = global.wanDb.getCollection(config.crossCollection);
+        let addrList = data.parameters.addrList;
+        let tokenAddrList = data.parameters.tokenAddrList;
+        let symbol = data.parameters.symbol;
+
+        let collection = global.wanDb.queryComm(config.crossCollection, (o) => {
+            let bol1 = true ,bol2 = true,bol3 = true;
+
+            if (addrList){
+                bol1 = ['from', 'to'].some((item) => {
+                    return addrList.includes(o[item]);
+                });
+            }
+            if (symbol){
+                bol2 = o['tokenSymbol'] === symbol;
+            }
+            if (tokenAddrList){
+                bol3 = ['srcChainAddr', 'dstChainAddr'].some((item) => {
+                    return tokenAddrList.includes(o[item]);
+                });
+            }
+
+            return bol1 && bol2 && bol3;
+        });
 
         data.value = collection;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
