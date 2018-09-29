@@ -108,6 +108,7 @@ const argv = require('yargs')
         logfile: {
             demand: false,
             describe: 'Logs will be written to this file in addition to the console.',
+            default: `${app.getPath('userData')}/log/mist.log`,
             requiresArg: true,
             nargs: 1,
             type: 'string',

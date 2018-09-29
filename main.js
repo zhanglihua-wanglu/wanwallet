@@ -17,12 +17,10 @@ Q.config({
     cancellation: true,
 });
 
-
+Settings.init();
 // logging setup
 const log = logger.create('main');
 
-
-Settings.init();
 
 if (Settings.cli.version) {
     log.info(Settings.appVersion);
