@@ -4,7 +4,7 @@
 const config = require('./config.js');
 const {app, ipcMain: ipc, shell, webContents} = require('electron');
 let WanchainCore = require('wanchain-js-sdk').walletCore;
-let {CrossChainEthLock, CrossChainEthRefund, CrossChainEthRevoke} = require('wanchain-js-sdk').CrossChain;
+let {CrossChainEthLock, CrossChainEthRedeem, CrossChainEthRevoke} = require('wanchain-js-sdk').CrossChain;
 
 let ccUtil = require('wanchain-js-sdk').ccUtil;
 
@@ -137,7 +137,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRefund = new CrossChainEthRedeem(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
 
@@ -219,28 +219,28 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRefund = new CrossChainEthRefund(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRedeem = new CrossChainEthRedeem(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceRefund.trans = crossChainInstanceRefund.createTrans().result;
-        crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
+        crossChainInstanceRedeem.trans = crossChainInstanceRedeem.createTrans().result;
+        crossChainInstanceRedeem.txDataCreator = crossChainInstanceRedeem.createDataCreator().result;
 
-        crossChainInstanceRefund.dataSign = crossChainInstanceRefund.createDataSign().result;
-        crossChainInstanceRefund.commonData = (await crossChainInstanceRefund.txDataCreator.createCommonData()).result;
-        crossChainInstanceRefund.contractData = crossChainInstanceRefund.txDataCreator.createContractData().result;
+        crossChainInstanceRedeem.dataSign = crossChainInstanceRedeem.createDataSign().result;
+        crossChainInstanceRedeem.commonData = (await crossChainInstanceRedeem.txDataCreator.createCommonData()).result;
+        crossChainInstanceRedeem.contractData = crossChainInstanceRedeem.txDataCreator.createContractData().result;
 
-        crossChainInstanceRefund.trans.setCommonData(crossChainInstanceRefund.commonData);
-        crossChainInstanceRefund.trans.setContractData(crossChainInstanceRefund.contractData);
+        crossChainInstanceRedeem.trans.setCommonData(crossChainInstanceRedeem.commonData);
+        crossChainInstanceRedeem.trans.setContractData(crossChainInstanceRedeem.contractData);
 
-        crossChainInstanceRefund.input.password = data.parameters.password;
+        crossChainInstanceRedeem.input.password = data.parameters.password;
 
         try {
-            let signedData = crossChainInstanceRefund.dataSign.sign(crossChainInstanceRefund.trans).result;
+            let signedData = crossChainInstanceRedeem.dataSign.sign(crossChainInstanceRedeem.trans).result;
 
-            crossChainInstanceRefund.preSendTrans(signedData);
+            crossChainInstanceRedeem.preSendTrans(signedData);
 
-            let txHash = await crossChainInstanceRefund.sendTrans(signedData);
+            let txHash = await crossChainInstanceRedeem.sendTrans(signedData);
 
-            crossChainInstanceRefund.postSendTrans(txHash);
+            crossChainInstanceRedeem.postSendTrans(txHash);
 
             data.value = txHash;
             callbackMessage('CrossChain_ETH2WETH', e, data);

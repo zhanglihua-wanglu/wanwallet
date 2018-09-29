@@ -4,7 +4,7 @@
 const config = require('./config.js');
 const {app, ipcMain: ipc, shell, webContents} = require('electron');
 let WanchainCore = require('wanchain-js-sdk').walletCore;
-let {CrossChainE20Approve, CrossChainE20Lock, CrossChainE20Refund, CrossChainE20Revoke} = require('wanchain-js-sdk').CrossChain;
+let {CrossChainE20Approve, CrossChainE20Lock, CrossChainE20Redeem, CrossChainE20Revoke} = require('wanchain-js-sdk').CrossChain;
 
 let ccUtil = require('wanchain-js-sdk').ccUtil;
 
@@ -178,16 +178,16 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRefund = new CrossChainE20Refund(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRedeem = new CrossChainE20Redeem(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
+        crossChainInstanceRedeem.txDataCreator = crossChainInstanceRedeem.createDataCreator().result;
 
-        crossChainInstanceRefund.contractData = crossChainInstanceRefund.txDataCreator.createContractData().result;
+        crossChainInstanceRedeem.contractData = crossChainInstanceRedeem.txDataCreator.createContractData().result;
 
-        let refundDataResult = {};
-        refundDataResult.refundTransData = crossChainInstanceRefund.contractData;
+        let redeemDataResult = {};
+        redeemDataResult.refundTransData = crossChainInstanceRedeem.contractData;
 
-        data.value = refundDataResult;
+        data.value = redeemDataResult;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action == 'getRevokeTransData') {
@@ -268,7 +268,7 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
-        let crossChainInstanceRefund = new CrossChainE20Refund(data.parameters.tx, crossInvokerConfig);
+        let crossChainInstanceRefund = new CrossChainE20Redeem(data.parameters.tx, crossInvokerConfig);
 
         crossChainInstanceRefund.trans = crossChainInstanceRefund.createTrans().result;
         crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
