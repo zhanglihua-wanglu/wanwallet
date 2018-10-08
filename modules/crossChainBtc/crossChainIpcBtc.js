@@ -271,6 +271,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listStoremanGroups>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let smgs = await ccUtil.getBtcSmgList(ccUtil.btcSender);
+      if (smgs.length > 0) {
+        if (smgs[0].ethAddress.startsWith('0x')) {
+          smgs[0].ethAddress = btcUtil.hash160ToAddress(smgs[0].ethAddress, 'pubkeyhash', settings.network);
+        }
+      }
+
       data.value = smgs;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -368,6 +374,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       console.time('fund');
       log.debug('fund...');
       let value = Number(web3.toBigNumber(amount).mul(100000000));
+
+      if (!storeman.ethAddress.startsWith('0x')) {
+        storeman.ethAddress = btcUtil.addressToHash160(storeman.ethAddress, 'pubkeyhash', settings.network);
+      }
+
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
 
       console.timeEnd('fund');
