@@ -48,7 +48,7 @@ const db = global.db = require('./modules/db');
 
 require('./modules/ipcCommunicator.js');
 let startCCinit = require('./modules/crossChain/crossChainIPC.js').init;
-let startCCinitErc20 = require('./modules/crossChainErc20/crossChainIPC.js').init
+let startCCinitErc20 = require('./modules/crossChainErc20/crossChainIPC.js').init;
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
 const ethereumNode = require('./modules/ethereumNode.js');
@@ -370,7 +370,7 @@ onReady = () => {
     // Delegating events to save window bounds on windowStateKeeper
     defaultWindow.manage(mainWindow.window);
     const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
-        console.log("Another instance exist.")
+        console.log("Another instance exist.");
     });
     if (shouldQuit) {
         app.quit();

@@ -249,30 +249,19 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
 
-        // crossChainInstanceLock.trans = crossChainInstanceLock.createTrans().result;
-        // crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
-        //
-        // crossChainInstanceLock.dataSign = crossChainInstanceLock.createDataSign().result;
-        // crossChainInstanceLock.commonData = (await crossChainInstanceLock.txDataCreator.createCommonData()).result;
-        // crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
-        //
-        // crossChainInstanceLock.trans.setCommonData(crossChainInstanceLock.commonData);
-        // crossChainInstanceLock.trans.setContractData(crossChainInstanceLock.contractData);
-        //
-        // crossChainInstanceLock.input.password = data.parameters.password;
-
         try {
-            // let signedData = crossChainInstanceLock.dataSign.sign(crossChainInstanceLock.trans).result;
-            //
-            // crossChainInstanceLock.preSendTrans(signedData);
-            //
-            // let txHash = await crossChainInstanceLock.sendTrans(signedData);
-            //
-            // crossChainInstanceLock.postSendTrans(txHash);
 
-            let txHash = (await crossChainInstanceLock.run()).result;
-            data.value = txHash;
-            callbackMessage('CrossChain_ERC202WERC20', e, data);
+            let crossChainInstance = await crossChainInstanceLock.run();
+            let code = crossChainInstance.code;
+            if (code){
+                let txHash = crossChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }else{
+                data.error = crossChainInstance.result;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }
+
         } catch (error) {
             log.error("sendLockTrans : ", error);
             data.error = error.toString();
@@ -290,31 +279,22 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
+        data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceRefund = new CrossChainE20Redeem(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceRefund.trans = crossChainInstanceRefund.createTrans().result;
-        crossChainInstanceRefund.txDataCreator = crossChainInstanceRefund.createDataCreator().result;
-
-        crossChainInstanceRefund.dataSign = crossChainInstanceRefund.createDataSign().result;
-        crossChainInstanceRefund.commonData = (await crossChainInstanceRefund.txDataCreator.createCommonData()).result;
-        crossChainInstanceRefund.contractData = crossChainInstanceRefund.txDataCreator.createContractData().result;
-
-        crossChainInstanceRefund.trans.setCommonData(crossChainInstanceRefund.commonData);
-        crossChainInstanceRefund.trans.setContractData(crossChainInstanceRefund.contractData);
-
-        crossChainInstanceRefund.input.password = data.parameters.password;
-
         try {
-            let signedData = crossChainInstanceRefund.dataSign.sign(crossChainInstanceRefund.trans).result;
 
-            crossChainInstanceRefund.preSendTrans(signedData);
+            let crossChainInstance = await crossChainInstanceRefund.run();
+            let code = crossChainInstance.code;
+            if (code){
+                let txHash = crossChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }else{
+                data.error = crossChainInstance.result;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }
 
-            let txHash = await crossChainInstanceRefund.sendTrans(signedData);
-
-            crossChainInstanceRefund.postSendTrans(txHash);
-
-            data.value = txHash;
-            callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
             log.error("sendDepositX: ", error);
             data.error = error.toString();
@@ -333,31 +313,22 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
+        data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceRevoke = new CrossChainE20Revoke(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceRevoke.trans = crossChainInstanceRevoke.createTrans().result;
-        crossChainInstanceRevoke.txDataCreator = crossChainInstanceRevoke.createDataCreator().result;
-
-        crossChainInstanceRevoke.dataSign = crossChainInstanceRevoke.createDataSign().result;
-        crossChainInstanceRevoke.commonData = (await crossChainInstanceRevoke.txDataCreator.createCommonData()).result;
-        crossChainInstanceRevoke.contractData = crossChainInstanceRevoke.txDataCreator.createContractData().result;
-
-        crossChainInstanceRevoke.trans.setCommonData(crossChainInstanceRevoke.commonData);
-        crossChainInstanceRevoke.trans.setContractData(crossChainInstanceRevoke.contractData);
-
-        crossChainInstanceRevoke.input.password = data.parameters.password;
-
         try {
-            let signedData = crossChainInstanceRevoke.dataSign.sign(crossChainInstanceRevoke.trans).result;
 
-            crossChainInstanceRevoke.preSendTrans(signedData);
+            let crossChainInstance = await crossChainInstanceRevoke.run();
+            let code = crossChainInstance.code;
+            if (code){
+                let txHash = crossChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }else{
+                data.error = crossChainInstance.result;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }
 
-            let txHash = await crossChainInstanceRevoke.sendTrans(signedData);
-
-            crossChainInstanceRevoke.postSendTrans(txHash);
-
-            data.value = txHash;
-            callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
             log.error("sendWithdrawCancel: ", error);
             data.error = error.toString();

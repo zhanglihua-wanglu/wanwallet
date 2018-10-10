@@ -195,32 +195,23 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr("ETH","ETH"):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+        data.parameters.tx.password = data.parameters.password;
 
         let crossChainInstanceLock = new CrossChainEthLock(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceLock.trans = crossChainInstanceLock.createTrans().result;
-        crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
-
-        crossChainInstanceLock.dataSign = crossChainInstanceLock.createDataSign().result;
-        crossChainInstanceLock.commonData = (await crossChainInstanceLock.txDataCreator.createCommonData()).result;
-        crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
-
-        crossChainInstanceLock.trans.setCommonData(crossChainInstanceLock.commonData);
-        crossChainInstanceLock.trans.setContractData(crossChainInstanceLock.contractData);
-
-        crossChainInstanceLock.input.password = data.parameters.password;
-
         try {
-            let signedData = crossChainInstanceLock.dataSign.sign(crossChainInstanceLock.trans).result;
 
-            crossChainInstanceLock.preSendTrans(signedData);
+            let crossChainInstance = await crossChainInstanceLock.run();
+            let code = crossChainInstance.code;
+            if (code){
+                let txHash = crossChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }else{
+                data.error = crossChainInstance.result;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
 
-            let txHash = await crossChainInstanceLock.sendTrans(signedData);
-
-            crossChainInstanceLock.postSendTrans(txHash);
-
-            data.value = txHash;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
         } catch (error) {
             log.error("sendLockTrans : ", error);
             data.error = error.toString();
@@ -236,31 +227,22 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
+        data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceRedeem = new CrossChainEthRedeem(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceRedeem.trans = crossChainInstanceRedeem.createTrans().result;
-        crossChainInstanceRedeem.txDataCreator = crossChainInstanceRedeem.createDataCreator().result;
-
-        crossChainInstanceRedeem.dataSign = crossChainInstanceRedeem.createDataSign().result;
-        crossChainInstanceRedeem.commonData = (await crossChainInstanceRedeem.txDataCreator.createCommonData()).result;
-        crossChainInstanceRedeem.contractData = crossChainInstanceRedeem.txDataCreator.createContractData().result;
-
-        crossChainInstanceRedeem.trans.setCommonData(crossChainInstanceRedeem.commonData);
-        crossChainInstanceRedeem.trans.setContractData(crossChainInstanceRedeem.contractData);
-
-        crossChainInstanceRedeem.input.password = data.parameters.password;
-
         try {
-            let signedData = crossChainInstanceRedeem.dataSign.sign(crossChainInstanceRedeem.trans).result;
 
-            crossChainInstanceRedeem.preSendTrans(signedData);
+            let crossChainInstance = await crossChainInstanceRedeem.run();
+            let code = crossChainInstance.code;
+            if (code){
+                let txHash = crossChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }else{
+                data.error = crossChainInstance.result;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
 
-            let txHash = await crossChainInstanceRedeem.sendTrans(signedData);
-
-            crossChainInstanceRedeem.postSendTrans(txHash);
-
-            data.value = txHash;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
         } catch (error) {
             log.error("sendDepositX: ", error);
             data.error = error.toString();
@@ -277,31 +259,22 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
 
+        data.parameters.tx.password = data.parameters.password;
         let crossChainInstanceRevoke = new CrossChainEthRevoke(data.parameters.tx, crossInvokerConfig);
 
-        crossChainInstanceRevoke.trans = crossChainInstanceRevoke.createTrans().result;
-        crossChainInstanceRevoke.txDataCreator = crossChainInstanceRevoke.createDataCreator().result;
-
-        crossChainInstanceRevoke.dataSign = crossChainInstanceRevoke.createDataSign().result;
-        crossChainInstanceRevoke.commonData = (await crossChainInstanceRevoke.txDataCreator.createCommonData()).result;
-        crossChainInstanceRevoke.contractData = crossChainInstanceRevoke.txDataCreator.createContractData().result;
-
-        crossChainInstanceRevoke.trans.setCommonData(crossChainInstanceRevoke.commonData);
-        crossChainInstanceRevoke.trans.setContractData(crossChainInstanceRevoke.contractData);
-
-        crossChainInstanceRevoke.input.password = data.parameters.password;
-
         try {
-            let signedData = crossChainInstanceRevoke.dataSign.sign(crossChainInstanceRevoke.trans).result;
 
-            crossChainInstanceRevoke.preSendTrans(signedData);
+            let crossChainInstance = await crossChainInstanceRevoke.run();
+            let code = crossChainInstance.code;
+            if (code){
+                let txHash = crossChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }else{
+                data.error = crossChainInstance.result;
+                callbackMessage('CrossChain_ETH2WETH', e, data);
+            }
 
-            let txHash = await crossChainInstanceRevoke.sendTrans(signedData);
-
-            crossChainInstanceRevoke.postSendTrans(txHash);
-
-            data.value = txHash;
-            callbackMessage('CrossChain_ETH2WETH', e, data);
         } catch (error) {
             log.error("sendWithdrawCancel: ", error);
             data.error = error.toString();
@@ -309,10 +282,14 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         }
 
     } else if (data.action == 'getMultiTokenBalance') {
-
-        let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters[0], config.ethTokenAddressOnWan, "WAN");
-        data.value = balanceList;
-        callbackMessage('CrossChain_ETH2WETH', e, data);
+        try {
+            let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters[0], config.ethTokenAddressOnWan, "WAN");
+            data.value = balanceList;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        } catch (error) {
+            data.error = error.error;
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }
     }
     else if (data.action == 'getWethToken') {
         data.value = config.wethToken;
