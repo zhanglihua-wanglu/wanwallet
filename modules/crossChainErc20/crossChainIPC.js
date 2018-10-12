@@ -366,9 +366,29 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     // else if (data.action == 'sendRawTrans') {
     //     sendRawTransactions('CrossChain_ERC202WERC20', e, data);
     // }
-    // else if (data.action == 'sendNormalTransaction') {
-    //     sendNormalTransaction('CrossChain_ERC202WERC20', e, data);
-    // }
+    else if (data.action == 'sendNormalTransaction') {
+        data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
+        let srcChain = ccUtil.getSrcChainNameByContractAddr( data.parameters.tokenOrigAddr,data.chainType);
+        data.parameters.tx.password = data.parameters.password;
+
+        try {
+            let normalChainInstance = await global.crossInvoker.invokeNormalTrans(srcChain,data.parameters.tx);
+            let code = normalChainInstance.code;
+            if (code){
+                let txHash = normalChainInstance.result;
+                data.value = txHash;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }else{
+                data.error = normalChainInstance.result;
+                callbackMessage('CrossChain_ERC202WERC20', e, data);
+            }
+
+        } catch (error) {
+            log.error("sendNormalTransaction: ", error);
+            data.error = error.toString();
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
+        }
+    }
 
     else if (sendServer.hasMessage(data.action)) {
 
@@ -398,17 +418,6 @@ function sendRawTransactions(message, e, data) {
         data.error = err;
         data.value = result;
         callbackMessage(message, e, data);
-    });
-}
-
-async function sendNormalTransaction(message, e, data) {
-    let tx = data.parameters.tx;
-    let sendTransaction = wanchainCore.createSendTransaction(data.chainType);
-    sendTransaction.createNormalTransaction(tx.from, tx.to, tx.value, tx.gas, toGweiString(tx.gasPrice), tx.nonce);
-    sendTransaction.sendNormalTrans(data.parameters.passwd, function (err, result) {
-        data.error = err;
-        data.value = result;
-        callbackMessage('CrossChain_ERC202WERC20', e, data);
     });
 }
 

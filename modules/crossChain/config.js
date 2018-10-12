@@ -53,7 +53,7 @@ config.ethKeyStorePath = config.ethkeyStorePath;
 
 config.ethGasPrice = 60;
 config.wanGasPrice = 200;
-config.ethNormalGas = 21000;
+config.ethNormalGas = 30000;//21004
 config.ethLockGas = 200000; //171866;
 config.ethRefundGas = 120000;  // 91663;
 config.ethRevokeGas = 100000; // 40323;
