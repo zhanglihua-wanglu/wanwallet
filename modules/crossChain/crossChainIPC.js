@@ -59,7 +59,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         let tokenAddrList = data.parameters.tokenAddrList;
         let symbol = data.parameters.symbol;
 
-        let collection = global.wanDb.queryComm(config.crossCollection, (o) => {
+        let crossCollection = global.wanDb.queryComm(config.crossCollection, (o) => {
             let bol1 = true ,bol2 = true;
 
             if (symbol){
@@ -74,7 +74,21 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             return bol1 && bol2;
         });
 
-        data.value = collection;
+        let normalCollection = global.wanDb.queryComm(config.normalCollection, (o) => {
+            let bol1 = true ,bol2 = true;
+
+            if (symbol){
+                bol1 = o['tokenSymbol'] === symbol;
+            }
+
+            if (data.chainType){
+                bol2 = o['chainType'] === data.chainType;
+            }
+
+            return bol1 && bol2;
+        });
+
+        data.value = {"crossCollection":crossCollection, "normalCollection":normalCollection};
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if (data.action === 'getGasPrice') {

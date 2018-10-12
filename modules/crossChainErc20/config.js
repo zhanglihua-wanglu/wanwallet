@@ -53,7 +53,7 @@ config.ethKeyStorePath = config.ethkeyStorePath;
 
 config.ethGasPrice = 60;
 config.wanGasPrice = 200;
-config.ethNormalGas = 210000;
+config.ethNormalGas = 50000;//37153
 config.ethLockGas = 300000; //200850;
 config.ethRefundGas = 200000;  // 91663;
 config.ethRevokeGas = 200000; // 40323;
@@ -78,7 +78,7 @@ config.outStgLockEventE20   = 'OutboundLockLogger(address,address,bytes32,uint25
 config.crossDbname              = 'crossTransDb2.1';
 config.crossCollection          = 'crossTrans';             // E20 & ETH
 config.crossCollectionBtc       = 'crossTransBtc';
-
+config.normalCollection         = 'normalTrans';
 
 
 config.consoleColor = {

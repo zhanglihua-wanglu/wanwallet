@@ -78,7 +78,7 @@ config.outStgLockEventE20 = 'OutboundLockLogger(address,address,bytes32,uint256,
 config.crossDbname = 'crossTransDb2.1';
 config.crossCollection = 'crossTrans';             // E20 & ETH
 config.crossCollectionBtc = 'crossTransBtc';
-
+config.normalCollection = 'normalTrans';
 
 config.consoleColor = {
     'COLOR_FgRed': '\x1b[31m',
