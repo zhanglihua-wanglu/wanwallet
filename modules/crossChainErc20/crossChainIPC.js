@@ -53,6 +53,11 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         data.value = await ccUtil.getErc20SymbolInfo(data.parameters.tokenAddr);
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
+    else if (data.action === 'getErc20Info') {
+
+        data.value = await ccUtil.getErc20Info(data.parameters.tokenAddr);
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
     else if (data.action === 'syncErc20StoremanGroups') {
 
         data.value = await ccUtil.syncErc20StoremanGroups(data.parameters.tokenAddr);
