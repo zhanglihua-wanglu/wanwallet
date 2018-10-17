@@ -260,7 +260,13 @@ class Settings {
     getKeystoreDir(chain){ //wanchain  /  ethereum
         let keystorePath = this.userHomePath;
 
-        if (process.platform === 'darwin') keystorePath += '/Library/' + chain;
+        if (process.platform === 'darwin') {
+            if( chain === 'wanchain' ) {
+                keystorePath += '/Library/' + 'Wanchain';
+            } else {
+                keystorePath += '/Library/' + chain;
+            }
+        }
 
         if (process.platform === 'freebsd' ||
             process.platform === 'linux' ||
