@@ -73,7 +73,11 @@ class EthereumNode extends EventEmitter {
 
         let ksdir = 'wanchain';
 
-        if (process.platform === 'darwin') keystorePath += '/Library/' + ksdir;
+        if (process.platform === 'darwin') {
+
+            ksdir = 'Wanchain';
+            keystorePath += '/Library/' + ksdir;
+        }
 
         if (process.platform === 'freebsd' ||
             process.platform === 'linux' ||

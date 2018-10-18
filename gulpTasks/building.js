@@ -148,6 +148,7 @@ gulp.task('build-dist', (cb) => {
             mac: {
                 category: 'public.app-category.productivity',
                 target: ['zip']
+                // target: ['zip', 'dmg']
             },
             // dmg: {
             //     background: '../build/bg-homestead.jpg',

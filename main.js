@@ -49,6 +49,8 @@ const db = global.db = require('./modules/db');
 require('./modules/ipcCommunicator.js');
 let startCCinit = require('./modules/crossChain/crossChainIPC.js').init;
 let startCCinitErc20 = require('./modules/crossChainErc20/crossChainIPC.js').init;
+let startCCinitBtc = require('./modules/crossChainBtc/crossChainIpcBtc.js').init;
+
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
 const ethereumNode = require('./modules/ethereumNode.js');
@@ -195,6 +197,13 @@ async function startCrossChain(){
             log.error("startCrossChainErc20: ", error.toString());
         }
     log.debug('startCCinitErc20...finish!');
+    log.debug('startCCinitBtc...');
+    try{
+        await startCCinitBtc();
+    }catch(error){
+        log.error("startCrossChainBtc: ", error.toString());
+    }
+    log.debug('startCCinitBtc...finish!');
 
     return new Q((resolve, reject) => {
         resolve(this);

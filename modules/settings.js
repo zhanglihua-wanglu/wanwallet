@@ -41,7 +41,7 @@ const argv = require('yargs')
         },
         network: {
             demand: false,
-            default: 'main',
+            default: null, //'main',
             describe: 'Network to connect to: main, testnet',
             requiresArg: true,
             nargs: 1,
@@ -261,7 +261,13 @@ class Settings {
     getKeystoreDir(chain){ //wanchain  /  ethereum
         let keystorePath = this.userHomePath;
 
-        if (process.platform === 'darwin') keystorePath += '/Library/' + chain;
+        if (process.platform === 'darwin') {
+            if( chain === 'wanchain' ) {
+                keystorePath += '/Library/' + 'Wanchain';
+            } else {
+                keystorePath += '/Library/' + chain;
+            }
+        }
 
         if (process.platform === 'freebsd' ||
             process.platform === 'linux' ||
@@ -360,12 +366,31 @@ class Settings {
 
         ipcPath = this.userHomePath;
 
+        // let network = this.network;
+
+        // if (process.platform === 'win32') {
+        //     network = network + '\\';
+        // }
+        // else {
+        //     network = network + '/';
+        // }
+
+        // if (process.platform === 'darwin') {
+        //     ipcPath += '/Library/Wanchain/'+network+'gwan.ipc';
+        // } else if (process.platform === 'freebsd' ||
+        //     process.platform === 'linux' ||
+        //     process.platform === 'sunos') {
+        //     ipcPath += '/.wanchain/'+network+'gwan.ipc';
+        // } else if (process.platform === 'win32') {
+        //     ipcPath = '\\\\.\\pipe\\gwan.ipc';
+        // }
+
         if (process.platform === 'darwin') {
-            ipcPath += '/Library/Wanchain/gwan.ipc';
+            ipcPath += '/Library/Wanchain/' + 'gwan.ipc';
         } else if (process.platform === 'freebsd' ||
-       process.platform === 'linux' ||
-       process.platform === 'sunos') {
-            ipcPath += '/.wanchain/gwan.ipc';
+            process.platform === 'linux' ||
+            process.platform === 'sunos') {
+            ipcPath += '/.wanchain/' + 'gwan.ipc';
         } else if (process.platform === 'win32') {
             ipcPath = '\\\\.\\pipe\\gwan.ipc';
         }
@@ -383,7 +408,7 @@ class Settings {
         if(argv.network){
             return argv.network;
         }else{
-            return 'main'
+            return this.loadUserData('network') || 'main';
         }
     }
 
@@ -451,7 +476,7 @@ class Settings {
     loadUserData(path2) {
         const fullPath = this.constructUserDataPath(path2);
 
-        this._log.trace('Load user data', fullPath);
+        if(this._log) {this._log.trace('Load user data', fullPath);}
 
       // check if the file exists
         try {
@@ -463,10 +488,10 @@ class Settings {
       // try to read it
         try {
             const data = fs.readFileSync(fullPath, { encoding: 'utf8' });
-            this._log.debug(`Reading "${data}" from ${fullPath}`);
+            if(this._log) {this._log.debug(`Reading "${data}" from ${fullPath}`);}
             return data;
         } catch (err) {
-            this._log.warn(`File not readable: ${fullPath}`, err);
+            if(this._log) {this._log.warn(`File not readable: ${fullPath}`, err);}
         }
 
         return null;

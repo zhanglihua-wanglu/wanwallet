@@ -6,6 +6,7 @@ interface_build/
 interface/public/i18n/
 interface/.meteor/dev_bundle
 interface/.meteor/public/
+interface/yarn.lock
 dist_wallet/
 dist_mist/
 nodes/geth/
@@ -15,3 +16,9 @@ yarn.lock
 gwan.exe
 gwan_linux
 gwan_mac
+.vscode/
+crossTransDb
+yarn-error.log
+crossTransDbBtc
+.DS_Store
+

@@ -222,6 +222,18 @@ let menuTempl = function (webviews) {
                 },
             },
             {
+                label: 'New BTC account',
+                accelerator: 'CommandOrControl+K',
+                click() {
+                    Windows.createPopup('requestBtcAccount', {
+                        ownerId : Windows.getByType('main').id,
+                        electronOptions: {
+                            width: 1120, height: 600, alwaysOnTop: true,
+                        },
+                    });
+                },
+            },
+            {
                 type: 'separator',
             },
             {
@@ -245,6 +257,14 @@ let menuTempl = function (webviews) {
                         label: 'Eth Accounts',
                         click() {
                             let userPath = Settings.getKeystoreDir('ethereum');
+                            shell.showItemInFolder(userPath);
+                        },
+                    },
+                    {
+                        label: 'Btc Accounts',
+                        click() {
+                            let userPath = Settings.userDataPath;
+                            userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
                             shell.showItemInFolder(userPath);
                         },
                     }

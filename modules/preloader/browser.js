@@ -99,6 +99,9 @@ window.addEventListener('message', function message(event) {
     else if(data.type == 'CrossChain_ERC202WERC20'){
         ipcRenderer.send('CrossChain_ERC202WERC20', data.message);
     }
+    else if(data.type == 'CrossChain_BTC2WBTC'){
+        ipcRenderer.send('CrossChain_BTC2WBTC', data.message);
+    }
     //cranelv add wan-Message 2017-11-17
     else if (/^wan_[a-z]/i.test(data.type)) {
         ipcRenderer.send(data.type, data);
@@ -154,6 +157,16 @@ const postMessage = function (payload) {
     });
 });
 ['Callback_CrossChain_ERC202WERC20','Callback_CrossChain_WERC202ERC20'].forEach(function (type) {
+    ipcRenderer.on(type, function onIpcRenderer(e, result) {
+
+        // this type needs special packaging
+        postMessage({
+            type: type,
+            message: result
+        });
+    });
+});
+['Callback_CrossChain_BTC2WBTC','Callback_CrossChain_WBTC2BTC'].forEach(function (type) {
     ipcRenderer.on(type, function onIpcRenderer(e, result) {
 
         // this type needs special packaging

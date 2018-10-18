@@ -188,7 +188,7 @@
             },
             "requestAccount": {
                 "title": "Create Account",
-                "enterPassword": "8 digits password",
+                "enterPassword": "must be equal or greater than 8 digits password",
                 "repeatPassword": "Re-enter Password",
                 "creating": "Generating account...",
                 "backupHint": "Make sure you backup your KEYFILES and PASSWORD!\n\nYou can find your keyfiles folder using the main File -> Backup -> Accounts. Keep a copy of the \"keystore\" folder where you can't lose it!",
