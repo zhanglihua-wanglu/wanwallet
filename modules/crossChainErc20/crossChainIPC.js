@@ -441,7 +441,9 @@ function sendRawTransactions(message, e, data) {
 
 async function init() {
     wanchainCore = new WanchainCore(config);
+    log.debug('wait for wanchainCore.init...');
     await wanchainCore.init(config);
+    log.debug('wanchainCore.init...finish!');
 }
 
 exports.init = init;
