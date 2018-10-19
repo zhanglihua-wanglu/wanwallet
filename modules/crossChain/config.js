@@ -36,18 +36,12 @@ function mkdirsSync(dirname) {
     }
 }
 
-config.logfileName  = config.ccLog;
-config.errfileName  = config.ccErr;
-
-config.logfileNameMR  = config.mrLog;
-config.errfileNameMR  = config.mrErr;
-
-
-mkdirsSync(config.databasePath);
+mkdirsSync(config.databasePathPrex);
 config.logger = new Logger('CrossChain', config.ccLog, config.ccErr, config.loglevel);
 config.getLogger = function (name) {
     return new Logger(name, config.ccLog, config.ccErr, config.loglevel);
 }
+
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;
 
@@ -62,22 +56,9 @@ config.wanLockGas = 300000; // 232665;
 config.wanRefundGas = 120000; // 34881;
 config.wanRevokeGas = 100000; // 49917;
 
-// inbound storemengroup lock event  ETH->WAN
-config.inStgLockEvent = 'ETH2WETHLock(address,address,bytes32,uint256)';
-// outbound storemengroup lock event  WAN->ETH
-config.outStgLockEvent = 'WETH2ETHLock(address,address,bytes32,uint256)';
-
-// inbound storemengroup lock event  E20->WAN
-//storemanGroup,wanAddr,xHash,value,tokenOrigAddr
-config.inStgLockEventE20 = 'InboundLockLogger(address,address,bytes32,uint256,address)';
-// outbound storemengroup lock event  WAN->E20
-//storemanGroup,user,xHash,value,tokenOrigAddr
-config.outStgLockEventE20 = 'OutboundLockLogger(address,address,bytes32,uint256,address)';
-
-
 config.crossDbname = 'crossTransDb2.1';
 config.crossCollection = 'crossTrans';             // E20 & ETH
-config.crossCollectionBtc = 'crossTransBtc';
+// config.crossCollectionBtc = 'crossTransBtc';
 config.normalCollection = 'normalTrans';
 
 config.consoleColor = {
