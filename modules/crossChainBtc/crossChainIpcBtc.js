@@ -332,35 +332,17 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wanPassword = data.parameters.wanPassword;
       let btcPassword = data.parameters.btcPassword;
 
-      log.debug('getECPairs...');
-      //check passwd
-      console.time('getECPairs');
-      let keyPairArray = await btcUtil.getECPairs(btcPassword);
-      console.timeEnd('getECPairs');
-      if (keyPairArray.length === 0) {
-        throw new Error('wrong password of btc.');
-      }
-
-      console.time('checkWanPassword');
-      if(!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
-        throw new Error('wrong password of wan.');
-      }
-      console.timeEnd('checkWanPassword');
-
       log.debug('getAddressList...');
 
       console.time('check btc balance');
       //check balance
       let addressList = await btcUtil.getAddressList();
 
-      let aliceAddr = [];
-      for (let i = 0; i < addressList.length; i++) {
-        aliceAddr.push(addressList[i].address)
-      }
+      addressList = await ccUtil.filterBtcAddressByAmount(addressList, amount);
 
       log.debug('checkBalance...');
 
-      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, aliceAddr);
+      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
       let result = await ccUtil.getUTXOSBalance(utxos);
       let btcBalance = web3.toBigNumber(result).div(100000000);
 
@@ -370,6 +352,26 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       }
 
       console.timeEnd('check btc balance');
+
+      log.debug('getECPairs...');
+      //check passwd
+      console.time('getECPairs');
+      let keyPairArray = [];
+      //let keyPairArray = await btcUtil.getECPairs(btcPassword);
+      for (let i = 0; i < addressList.length; i++) {
+        let kp = await btcUtil.getECPairsbyAddr(btcPassword, addressList[i]);
+        keyPairArray.push(kp);
+      }
+      console.timeEnd('getECPairs');
+      if (keyPairArray.length === 0) {
+        throw new Error('wrong password of btc.');
+      }
+
+      console.time('checkWanPassword');
+      if (!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
+        throw new Error('wrong password of wan.');
+      }
+      console.timeEnd('checkWanPassword');
 
       console.time('fund');
       log.debug('fund...');
@@ -487,7 +489,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('BTC address is invalid.');
       }
 
-      if(!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
+      if (!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
         throw new Error('wrong password of wan.');
       }
       //Check whether the wbtc balance is enought.
@@ -585,7 +587,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let HashX = data.parameters.HashX.startsWith('0x') ? data.parameters.HashX : '0x' + data.parameters.HashX;
       let wanPassword = data.parameters.wanPassword;
 
-      if(!ccUtil.checkWanPassword(from, wanPassword)) {
+      if (!ccUtil.checkWanPassword(from, wanPassword)) {
         throw new Error('wrong password of wan.');
       }
 
