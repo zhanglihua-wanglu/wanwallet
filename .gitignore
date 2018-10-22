@@ -21,4 +21,4 @@ crossTransDb
 yarn-error.log
 crossTransDbBtc
 .DS_Store
-
+logs/
