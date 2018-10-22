@@ -181,12 +181,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let utxos;
       // Check whether the btc balance is enough.
       addressList = await btcUtil.getAddressList();
-      let array = [];
-      for (let i = 0; i < addressList.length; i++) {
-        array.push(addressList[i].address);
-      }
+      
+      addressList = await ccUtil.filterBtcAddressByAmount(addressList, amount);
 
-      utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+      utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
       let result = await ccUtil.getUTXOSBalance(utxos);
       btcBalance = web3.toBigNumber(result).div(100000000);
 
@@ -196,7 +194,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       //Check password
       let keyPairArray = [];
-      keyPairArray = await btcUtil.getECPairs(passwd);
+      for (let i = 0; i < addressList.length; i++) {
+        let kp = await btcUtil.getECPairsbyAddr(passwd, addressList[i]);
+        keyPairArray.push(kp);
+      }
       if (keyPairArray.length === 0) {
         throw new Error('Password is wrong!');
       }
@@ -357,7 +358,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       //check passwd
       console.time('getECPairs');
       let keyPairArray = [];
-      //let keyPairArray = await btcUtil.getECPairs(btcPassword);
       for (let i = 0; i < addressList.length; i++) {
         let kp = await btcUtil.getECPairsbyAddr(btcPassword, addressList[i]);
         keyPairArray.push(kp);
