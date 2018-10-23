@@ -2,7 +2,7 @@
 const config = require('./config.js');
 const log = config.getLogger('crossChain-BTC');
 const { app, ipcMain: ipc, shell, webContents } = require('electron');
-let WanchainCoreBTC = require('wanchain-crosschain-btc');
+let WanchainCoreBTC = require('wanchain-crosschainbtc');
 const Web3 = require("web3");
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 const Windows = require('../windows.js');
