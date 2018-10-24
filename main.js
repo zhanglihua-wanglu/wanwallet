@@ -50,6 +50,8 @@ require('./modules/ipcCommunicator.js');
 let startCCinit = require('./modules/crossChain/crossChainIPC.js').init;
 let startCCinitErc20 = require('./modules/crossChainErc20/crossChainIPC.js').init;
 let startCCinitBtc = require('./modules/crossChainBtc/crossChainIpcBtc.js').init;
+let upgradeDb = require('./modules/upgradeDb');
+upgradeDb.initLog(logger.create("upgradeDb"));
 
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
@@ -512,6 +514,9 @@ onReady = () => {
         })
         .then(()=>{
             return startCrossChain();
+        })
+        .then(() => {
+            upgradeDb.upgradeDb_2_1(Settings.userDataPath);
         })
         .then(() => {
             // Wallet shouldn't start Swarm
