@@ -5,8 +5,7 @@ const path = require('path');
 const settings = require('../settings.js');
 
 config.network = "main";
-config.socketUrl = 'wss://apitest.wanchain.info';
-// config.socketUrl = 'wss://api.wanchain.info';
+config.socketUrl = 'wss://api.wanchain.info';
 
 // log path
 config.logPathPrex = path.join(settings.userDataPath,'log',config.network);
@@ -20,8 +19,8 @@ config.mrErr = path.join(config.logPathPrex, 'ccMonitorErr.log');
 config.databasePathPrex = path.join(settings.userDataPath, 'Db',`${config.network}DB`);
 
 // for E20 new contract
-config.ethHtlcAddrE20      = "0x87a0dee965e7679d15327ce0cc3df8dfc009b43d";
-config.wanHtlcAddrE20      = "0xe10515355e684e515c9c632c9eed04cca425cda1";
+config.ethHtlcAddrE20      = "0x6f5acab8ead629ca6dbad5dc2aafd01e740d3c47";
+config.wanHtlcAddrE20      = "0xec74fa1ce5b58b85ae68c7cd4d571d0d1adfce23";
 
 
 config.confirmBlocks            = 12;
