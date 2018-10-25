@@ -87,8 +87,25 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
             return bol1 && bol2;
         });
+        if (!typeof crossCollection instanceof Array){
+            crossCollection = [crossCollection];
+        }
+        if (!typeof normalCollection instanceof Array){
+            normalCollection = [normalCollection];
+        }
+        let crossCollectionArr = new Array();
+        let normalCollectionArr = new Array();
+        for(let data of crossCollection){
+            crossCollectionArr.push(data);
+        }
+        for(let data of normalCollection){
+            normalCollectionArr.push(data);
+        }
 
-        data.value = {"crossCollection":crossCollection, "normalCollection":normalCollection};
+        crossCollectionArr.reverse();
+        normalCollectionArr.reverse();
+        data.value = {"crossCollection":crossCollectionArr, "normalCollection":normalCollectionArr};
+
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if (data.action === 'getGasPrice') {
