@@ -373,7 +373,7 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'getCoin2WanRatio') {
         try {
-            let c2wRatio = await ccUtil.getEthC2wRatio();
+            let c2wRatio = await ccUtil.getToken2WanRatio(data.parameters.tokenOrigAddr,data.chainType);
             data.value = c2wRatio;
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
