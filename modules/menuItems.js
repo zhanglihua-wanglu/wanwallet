@@ -264,7 +264,11 @@ let menuTempl = function (webviews) {
                         label: 'Btc Accounts',
                         click() {
                             let userPath = Settings.userDataPath;
-                            userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
+                            if(Settings.network === 'main') {
+                                userPath = path.join(userPath, 'btcWallet.db');
+                            } else {
+                                userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
+                            }
                             shell.showItemInFolder(userPath);
                         },
                     }
