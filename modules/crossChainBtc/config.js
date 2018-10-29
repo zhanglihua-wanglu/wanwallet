@@ -37,8 +37,14 @@ function mkdirsSync(dirname) {
 }
 mkdirsSync(config.databasePath);
 config.logger = new Logger('CrossChainBtc',config.ccLog, config.ccErr,config.loglevel);
-config.getLogger = function(name){
-    return new Logger(name,config.ccLog, config.ccErr,config.loglevel);
+let loggers = [];
+config.getLogger = function (name) {
+    if (loggers[name]) {
+        return loggers[name];
+    } else {
+        loggers[name] = new Logger(name, config.ccLog, config.ccErr, config.loglevel);
+        return loggers[name];
+    }
 }
 config.wanKeyStorePath = config.keyStorePath;
 config.ethKeyStorePath = config.ethkeyStorePath;

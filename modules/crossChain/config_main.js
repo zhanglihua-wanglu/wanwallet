@@ -5,8 +5,7 @@ const path = require('path');
 const settings=require('../settings.js');
 
 config.network = "main";
-config.socketUrl = 'wss://apitest.wanchain.info';
-// config.socketUrl = 'wss://api.wanchain.info';
+config.socketUrl = 'wss://api.wanchain.info';
 
 // log path
 config.logPathPrex = path.join(settings.userDataPath,'log',config.network);

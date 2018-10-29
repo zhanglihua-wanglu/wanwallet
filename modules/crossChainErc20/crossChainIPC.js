@@ -112,7 +112,24 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
             return bol1 && bol2;
         });
 
-        data.value = {"crossCollection":crossCollection, "normalCollection":normalCollection};
+        if (!typeof crossCollection instanceof Array){
+            crossCollection = [crossCollection];
+        }
+        if (!typeof normalCollection instanceof Array){
+            normalCollection = [normalCollection];
+        }
+        let crossCollectionArr = new Array();
+        let normalCollectionArr = new Array();
+        for(let data of crossCollection){
+            crossCollectionArr.push(data);
+        }
+        for(let data of normalCollection){
+            normalCollectionArr.push(data);
+        }
+
+        crossCollectionArr.reverse();
+        normalCollectionArr.reverse();
+        data.value = {"crossCollection":crossCollectionArr, "normalCollection":normalCollectionArr};
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
     else if (data.action === 'getGasPrice') {
@@ -373,7 +390,7 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
     }
     else if (data.action == 'getCoin2WanRatio') {
         try {
-            let c2wRatio = await ccUtil.getEthC2wRatio();
+            let c2wRatio = await ccUtil.getToken2WanRatio(data.parameters.tokenOrigAddr,data.chainType);
             data.value = c2wRatio;
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         } catch (error) {
