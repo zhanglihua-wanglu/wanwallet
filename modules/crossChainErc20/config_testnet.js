@@ -5,6 +5,7 @@ const path = require('path');
 const settings = require('../settings.js');
 
 config.network = "testnet";
+global.wanchain_js_sdk_testnet =  true;
 config.socketUrl = 'wss://apitest.wanchain.info';
 
 // log path
