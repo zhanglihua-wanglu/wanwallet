@@ -181,7 +181,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let utxos;
       // Check whether the btc balance is enough.
       addressList = await btcUtil.getAddressList();
-      
+
       addressList = await ccUtil.filterBtcAddressByAmount(addressList, amount);
 
       utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
@@ -274,7 +274,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let smgs = await ccUtil.getBtcSmgList(ccUtil.btcSender);
       if (smgs.length > 0) {
         if (smgs[0].ethAddress.startsWith('0x')) {
-          smgs[0].ethAddress = btcUtil.hash160ToAddress(smgs[0].ethAddress, 'pubkeyhash', settings.network);
+          smgs[0].ethAddress = btcUtil.hash160ToAddress(smgs[0].ethAddress, 'pubkeyhash', settings.btcNetwork);
         }
       }
 
@@ -300,7 +300,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         //console.log(value);
         //console.log(settings.network);
         if ((value.chain === 'WAN') && value.crossAddress.startsWith('0x')) {
-          value.crossAddress = btcUtil.hash160ToAddress(value.crossAddress, null, settings.network);
+          value.crossAddress = btcUtil.hash160ToAddress(value.crossAddress, null, settings.btcNetwork);
         }
         return value;
       });
@@ -378,7 +378,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let value = Number(web3.toBigNumber(amount).mul(100000000));
 
       if (!storeman.ethAddress.startsWith('0x')) {
-        storeman.ethAddress = btcUtil.addressToHash160(storeman.ethAddress, 'pubkeyhash', settings.network);
+        storeman.ethAddress = btcUtil.addressToHash160(storeman.ethAddress, 'pubkeyhash', settings.btcNetwork);
       }
 
       let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
@@ -521,7 +521,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       wdTx.gasPrice = config.gasPrice;
       wdTx.passwd = wanPassword;
       let btcAddr = btcAddress;
-      wdTx.cross = '0x' + btcUtil.addressToHash160(btcAddr, 'pubkeyhash', settings.network);
+      wdTx.cross = '0x' + btcUtil.addressToHash160(btcAddr, 'pubkeyhash', settings.btcNetwork);
       wdTx.from = wanAddress;
       wdTx.amount = Number(web3.toBigNumber(amount).mul(100000000));
       wdTx.storemanGroup = storeman.wanAddress;
@@ -553,7 +553,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       let aliceAddr
       if (crossAddress.startsWith('0x')) {
-        aliceAddr = btcUtil.hash160ToAddress(crossAddress, 'pubkeyhash', settings.network);
+        aliceAddr = btcUtil.hash160ToAddress(crossAddress, 'pubkeyhash', settings.btcNetwork);
       } else {
         aliceAddr = crossAddress;
       }

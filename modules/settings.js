@@ -411,7 +411,13 @@ class Settings {
             return this.loadUserData('network') || 'main';
         }
     }
-
+    get btcNetwork() {
+        let net = this.network;
+        if (net === 'main') {
+            net = 'mainnet';
+        }
+        return net;
+    }
     get syncmode() {
         return argv.syncmode;
     }
