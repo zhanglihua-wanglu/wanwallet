@@ -17,6 +17,7 @@ config.btcConfirmBlocks = 1;
 config.feeRate = 300;
 config.feeHard = 100000;
 config.bitcoinNetwork = bitcoin.networks.testnet;
+config.network = 'testnet';
 
 
 config.wbtcToken = {

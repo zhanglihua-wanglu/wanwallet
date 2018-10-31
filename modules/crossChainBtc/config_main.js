@@ -17,6 +17,7 @@ config.btcConfirmBlocks = 3;
 config.feeRate = 30;
 config.feeHard = 10000;
 config.bitcoinNetwork = bitcoin.networks.bitcoin;
+config.network = 'mainnet';
 
 config.wbtcToken = {
     address: "0xfa4b6988e8cb90bb25e51ea80257ffcdd8ebdd24",
