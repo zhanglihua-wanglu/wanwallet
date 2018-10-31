@@ -104,7 +104,7 @@ upgradeDb.upgradeDb_2_1 = function (appPath) {
                 _data.chainAddr = 'ETH';
                 _data.chainType = 'ETH';
                 _data.tokenSymbol = 'ETH';
-                _data.status = data.status == "success" ? "Success" : "Faild";
+                _data.status = "Success";
 
                 log.debug("normal_data:", _data);
                 global.wanDb.insertItem(ethconfig.normalCollection, _data);
