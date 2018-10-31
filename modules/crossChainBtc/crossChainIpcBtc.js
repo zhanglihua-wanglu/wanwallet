@@ -246,15 +246,15 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listWbtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let wanAddressList = [];
-      let wethBalance;
+      let tokenBalance;
       data.value = {};
 
       //This method can not use local node, must use remote node.
       wanAddressList = await ccUtil.getWanAccountsInfo(ccUtil.wanSender);
 
       wanAddressList.forEach(function (wanAddress, index) {
-        wethBalance = web3.toBigNumber(wanAddress.wethBalance).div(100000000).toString();
-        data.value[wanAddress.address] = wethBalance;
+        tokenBalance = web3.toBigNumber(wanAddress.tokenBalance).div(100000000).toString();
+        data.value[wanAddress.address] = tokenBalance;
       });
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -273,9 +273,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     try {
       let smgs = await ccUtil.getBtcSmgList(ccUtil.btcSender);
       if (smgs.length > 0) {
-        if (smgs[0].ethAddress.startsWith('0x')) {
-          smgs[0].ethAddress = btcUtil.hash160ToAddress(smgs[0].ethAddress, 'pubkeyhash', settings.btcNetwork);
-        }
+        smgs.forEach((smg)=>{
+          if (smg.btcAddress.startsWith('0x')) {
+            smg.btcAddress = btcUtil.hash160ToAddress(smg.btcAddress, 'pubkeyhash', settings.btcNetwork);
+          }
+        });
       }
 
       data.value = smgs;
@@ -377,11 +379,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       log.debug('fund...');
       let value = Number(web3.toBigNumber(amount).mul(100000000));
 
-      if (!storeman.ethAddress.startsWith('0x')) {
-        storeman.ethAddress = btcUtil.addressToHash160(storeman.ethAddress, 'pubkeyhash', settings.btcNetwork);
+      if (!storeman.btcAddress.startsWith('0x')) {
+        storeman.btcAddress = btcUtil.addressToHash160(storeman.btcAddress, 'pubkeyhash', settings.btcNetwork);
       }
 
-      let record = await ccUtil.fund(keyPairArray, storeman.ethAddress, value);
+      let record = await ccUtil.fund(keyPairArray, storeman.btcAddress, value);
 
       console.timeEnd('fund');
 
@@ -499,7 +501,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wbtcEnough;
       wanAddressList.forEach(function (wanAddr) {
         if (wanAddress === wanAddr.address) {
-          let wbtcBalance = web3.toBigNumber(wanAddr.wethBalance).div(100000000);
+          let wbtcBalance = web3.toBigNumber(wanAddr.tokenBalance).div(100000000);
           wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance);
           log.info(`amount:${Number(amount)}, wbtcBalance:${Number(wbtcBalance.toString())}`);
         }
