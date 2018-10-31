@@ -5,7 +5,7 @@ const path = require('path');
 const settings=require('../settings.js');
 
 config.network = "main";
-global.wanchain_js_sdk_testnet =  false;
+global.wanchain_js_testnet =  false;
 config.socketUrl = 'wss://api.wanchain.info';
 
 // log path
