@@ -368,8 +368,13 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
             callbackMessage('CrossChain_ETH2WETH', e, data);
         });
-
-        sendServer.sendMessage(data.action, ...args);
+        try {
+            sendServer.sendMessage(data.action, ...args);
+        }catch (error){
+            log.error(`method ${data.action} error:`, error);
+            data.error = error.toString();
+            callbackMessage('CrossChain_ETH2WETH', e, data);
+        }
     }
 });
 

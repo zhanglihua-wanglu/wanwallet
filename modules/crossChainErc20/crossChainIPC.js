@@ -425,8 +425,13 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
 
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         });
-
-        sendServer.sendMessage(data.action, ...args);
+        try {
+            sendServer.sendMessage(data.action, ...args);
+        }catch (error){
+            log.error(`method ${data.action} error:`, error);
+            data.error = error.toString();
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
+        }
     }
 });
 
