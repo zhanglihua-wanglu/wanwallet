@@ -33,17 +33,6 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
 
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
 
-    if (sendServer.webSocket.readyState != 1) {
-        try {
-            await wanchainCore.init();
-        } catch (error) {
-            log.error("Failed to connect to apiserver:", error.toString());
-            data.error = error.toString();
-            callbackMessage('CrossChain_ERC202WERC20', e, data);
-            return;
-        }
-    }
-
     if (data.action === 'getRegErc20Tokens') {
         data.value = await ccUtil.getRegErc20Tokens();
         callbackMessage('CrossChain_ERC202WERC20', e, data);

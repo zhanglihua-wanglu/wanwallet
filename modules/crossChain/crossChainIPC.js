@@ -29,20 +29,9 @@ const log = config.getLogger('crossChain');
 
 
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
-    // console.log('CrossChainIPC : ',data);
+    console.log('CrossChainIPC : ',data.action);
 
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
-
-    if (sendServer.webSocket.readyState != 1) {
-        try {
-            await wanchainCore.init();
-        } catch (error) {
-            log.error("Failed to connect to apiserver:", error.toString());
-            data.error = error.toString();
-            callbackMessage('CrossChain_ETH2WETH', e, data);
-            return;
-        }
-    }
 
     if (data.action === 'getAddressList') {
         if (data.chainType === 'ETH') {
@@ -51,6 +40,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         else {
             data.value = ccUtil.getWanAccounts();
         }
+        console.log("address List: ",data.value);
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if (data.action === 'listHistory') {
