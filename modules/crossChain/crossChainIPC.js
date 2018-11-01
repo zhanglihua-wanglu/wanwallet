@@ -60,7 +60,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         let symbol = data.parameters.symbol;
 
         let crossCollection = global.wanDb.queryComm(config.crossCollection, (o) => {
-            let bol1 = true ,bol2 = true,bol3 = true;
+            let bol1 = false ,bol2 = true,bol3 = true;
 
             if (addrList){
                 bol1 = ['from', 'to'].some((item) => {
