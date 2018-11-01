@@ -40,7 +40,6 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         else {
             data.value = ccUtil.getWanAccounts();
         }
-        console.log("address List: ",data.value);
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if (data.action === 'listHistory') {
