@@ -29,7 +29,7 @@ const log = config.getLogger('crossChain');
 
 
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
-    console.log('CrossChainIPC : ',data.action);
+    // console.log('CrossChainIPC : ',data.action);
 
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
 
