@@ -10,7 +10,7 @@ config.socketUrl = 'wss://apitest.wanchain.info';
 config.databasePath = settings.userDataPath;
 config.databasePath=path.join(config.databasePath, 'testnetDb');
 
-config.wanchainHtlcAddr = "0xef1b0855787dc964dda78db9551a2f8732b05ccf";
+config.wanchainHtlcAddr = "0xd2f14b0067f6fc0d99311c055491b29f01b72004";
 
 config.confirmBlocks = 3;
 config.btcConfirmBlocks = 1;
@@ -21,7 +21,7 @@ config.network = 'testnet';
 
 
 config.wbtcToken = {
-    address: "0x6a40a70a0bd72de24918e6eec3cdc5e131e6b1cf",
+    address: "0xa3158cdcb24702e5612d20275745901fbc69331e",
     name: 'Wanchain Btc Crosschain Token',
     symbol: 'WBTC',
     decimals: 8
