@@ -73,8 +73,8 @@ Return the app icon path.
 @method (iconPath)
 **/
 Template.registerHelper('appIconPath', function () {
-    // return 'file://' + window.dirname + '/icons/' + window.mistMode + '/icon2x.png';
-    return false;
+    return 'file://' + window.dirname + '/icons/' + window.mistMode + '/icon.png';
+    // return false;
 });
 
 /**

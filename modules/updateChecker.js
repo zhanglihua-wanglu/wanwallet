@@ -23,26 +23,28 @@ const check = exports.check = () => {
         str = 'wallet';
         break;
     }
-
-    return got('https://api.github.com/repos/wanchain/wanwallet/releases', {
+    // https://api.github.com/repos/wanchain/wanwallet/releases
+    return got('http://47.104.60.142/wanwalletVersion.json', {
         timeout: 3000,
         json: true,
     })
     .then((res) => {
-        const releases = _.filter(res.body, (release) => {
-            return (
-                !_.get(release, 'draft')
-                && _.get(release, 'name', '').toLowerCase().indexOf(str) >= 0
-            );
-        });
+        // const releases = _.filter(res.body, (release) => {
+        //     return (
+        //         !_.get(release, 'draft')
+        //         && _.get(release, 'name', '').toLowerCase().indexOf(str) >= 0
+        //     );
+        // });
 
-        if (!releases.length) {
-            log.debug('No releases available to check against.');
+        // if (!releases.length) {
+        //     log.debug('No releases available to check against.');
 
-            return;
-        }
+        //     return;
+        // }
 
-        const latest = releases[0];
+        // const latest = releases[0];
+        const latest = res.body;
+        // console.log('latest: ', latest);
 
         if (semver.gt(latest.tag_name, Settings.appVersion)) {
             log.info(`App (${Settings.appVersion}) is out of date. New ${latest.tag_name} found.`);

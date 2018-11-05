@@ -1,0 +1,696 @@
+[16:37:51]  COMMAND	POST 	 "/wd/hub/session"
+[16:37:51]  DATA		{"desiredCapabilities":{"javascriptEnabled":true,"locationContextEnabled":true,"handlesAlerts":true,"rotatable":true,"browserName":"electron","chromeOptions":{"binary":"/Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/node_modules/spectron/lib/launcher.js","args":["spectron-path=/Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/MacOS/Mist","spectron-arg0=--loglevel","spectron-arg1=debug","spectron-arg2=--logfile","spectron-arg3=/Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/tests/mist.log","spectron-arg4=--node-datadir","spectron-arg5=/var/folders/5k/t8r6gyhj2yj7swfykp2bfc_00000gn/T/tmp-30552qxHNnyG3xsSD","spectron-arg6=--rpc","spectron-arg7=/var/folders/5k/t8r6gyhj2yj7swfykp2bfc_00000gn/T/tmp-30552qxHNnyG3xsSD/geth.ipc"]},"loggingPrefs":{"browser":"ALL","driver":"ALL"},"requestOrigins":{"url":"http://webdriver.io","version":"4.14.0","name":"webdriverio"}}}
+[16:37:57]  INFO	SET SESSION ID 4d96bfcb88ee71dfc3445af1d1b40dd2
+[16:37:57]  RESULT		{"acceptSslCerts":true,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"browserName":"chrome","chrome":{"chromedriverVersion":"2.27 (44a803957cb27610c38f7e859016ac257959aeb5)","userDataDir":"/var/folders/5k/t8r6gyhj2yj7swfykp2bfc_00000gn/T/.org.chromium.Chromium.2JdiXj"},"cssSelectorsEnabled":true,"databaseEnabled":false,"handlesAlerts":true,"hasTouchScreen":false,"javascriptEnabled":true,"locationContextEnabled":true,"mobileEmulationEnabled":false,"nativeEvents":true,"networkConnectionEnabled":false,"pageLoadStrategy":"normal","platform":"Mac OS X","rotatable":false,"takesHeapSnapshot":true,"takesScreenshot":true,"unexpectedAlertBehaviour":"","version":"","webStorageEnabled":true}
+[16:37:57]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/execute"
+[16:37:57]  DATA		{"script":"return (function (requireName) {\n    return typeof window[requireName] === 'function'\n  }).apply(null, arguments)","args":["electronRequire"]}
+[16:37:57]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/timeouts"
+[16:37:57]  DATA		{"type":"script","ms":10000}
+[16:37:57]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:37:57]  DATA		{}
+[16:37:57]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:37:57]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:37:57]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:37:57]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:37:57]  DATA		{}
+[16:37:58]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:37:58]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:37:58]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:37:58]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:37:58]  DATA		{}
+[16:37:58]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:37:59]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:37:59]  DATA		{}
+[16:37:59]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:37:59]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:37:59]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:37:59]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:37:59]  DATA		{}
+[16:37:59]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:37:59]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:37:59]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:37:59]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:37:59]  DATA		{}
+[16:37:59]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:00]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:00]  DATA		{}
+[16:38:00]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:00]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:00]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:00]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:00]  DATA		{}
+[16:38:00]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:00]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:00]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:00]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:00]  DATA		{}
+[16:38:00]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:01]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:01]  DATA		{}
+[16:38:01]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:01]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:01]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:01]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:01]  DATA		{}
+[16:38:01]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:01]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:01]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:01]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:01]  DATA		{}
+[16:38:01]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:02]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:02]  DATA		{}
+[16:38:02]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:02]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:02]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:02]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:02]  DATA		{}
+[16:38:02]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:02]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:02]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:02]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:02]  DATA		{}
+[16:38:02]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:03]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:03]  DATA		{}
+[16:38:03]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:03]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:03]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:03]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:03]  DATA		{}
+[16:38:03]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:03]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:03]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:03]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:03]  DATA		{}
+[16:38:03]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:04]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:04]  DATA		{}
+[16:38:04]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:04]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:04]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:04]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:04]  DATA		{}
+[16:38:04]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:04]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:04]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:04]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:04]  DATA		{}
+[16:38:04]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:05]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:05]  DATA		{}
+[16:38:05]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:05]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:05]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:05]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:05]  DATA		{}
+[16:38:05]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:05]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:05]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:05]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:05]  DATA		{}
+[16:38:05]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:06]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:06]  DATA		{}
+[16:38:06]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:06]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:06]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:06]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:06]  DATA		{}
+[16:38:06]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:06]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:06]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:06]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:06]  DATA		{}
+[16:38:06]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:07]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:07]  DATA		{}
+[16:38:07]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:07]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:07]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:07]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:07]  DATA		{}
+[16:38:07]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:07]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:07]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:07]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:07]  DATA		{}
+[16:38:07]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:08]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:08]  DATA		{}
+[16:38:08]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:08]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:08]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:08]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:08]  DATA		{}
+[16:38:08]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:08]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:08]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:08]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:08]  DATA		{}
+[16:38:08]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:09]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:09]  DATA		{}
+[16:38:09]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:09]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:09]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:09]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:09]  DATA		{}
+[16:38:09]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:09]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:09]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:09]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:09]  DATA		{}
+[16:38:09]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:10]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:10]  DATA		{}
+[16:38:10]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:10]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:10]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:10]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:10]  DATA		{}
+[16:38:10]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:10]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:10]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:10]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:10]  DATA		{}
+[16:38:10]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:11]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:11]  DATA		{}
+[16:38:11]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:11]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:11]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:11]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:11]  DATA		{}
+[16:38:11]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:11]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:11]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:11]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:11]  DATA		{}
+[16:38:11]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:12]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:12]  DATA		{}
+[16:38:12]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:12]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:12]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:12]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:12]  DATA		{}
+[16:38:12]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:12]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:12]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:12]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:12]  DATA		{}
+[16:38:12]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:13]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:13]  DATA		{}
+[16:38:13]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:13]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:13]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:13]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:13]  DATA		{}
+[16:38:13]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:13]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:13]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:13]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:13]  DATA		{}
+[16:38:13]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:14]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:14]  DATA		{}
+[16:38:14]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:14]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:14]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:14]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:14]  DATA		{}
+[16:38:14]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:14]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:14]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:14]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:14]  DATA		{}
+[16:38:14]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:15]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:15]  DATA		{}
+[16:38:15]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:15]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:15]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:15]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:15]  DATA		{}
+[16:38:15]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:15]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:15]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:15]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:15]  DATA		{}
+[16:38:15]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:16]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:16]  DATA		{}
+[16:38:16]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:16]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:16]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:16]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:16]  DATA		{}
+[16:38:16]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:16]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:16]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:16]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:16]  DATA		{}
+[16:38:16]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:18]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:18]  DATA		{}
+[16:38:18]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:18]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:18]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:18]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:18]  DATA		{}
+[16:38:18]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:18]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:18]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:18]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:18]  DATA		{}
+[16:38:18]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:19]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:19]  DATA		{}
+[16:38:19]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:19]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:19]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:19]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:19]  DATA		{}
+[16:38:19]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:19]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:19]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:19]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:19]  DATA		{}
+[16:38:19]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:20]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:20]  DATA		{}
+[16:38:20]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:20]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:20]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:20]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:20]  DATA		{}
+[16:38:20]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:20]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:20]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:20]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:20]  DATA		{}
+[16:38:20]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:21]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:21]  DATA		{}
+[16:38:21]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:21]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:21]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:21]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:21]  DATA		{}
+[16:38:21]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:21]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:21]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:21]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:21]  DATA		{}
+[16:38:21]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:22]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:22]  DATA		{}
+[16:38:22]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:22]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:22]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:22]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:22]  DATA		{}
+[16:38:22]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:22]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:22]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:22]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:22]  DATA		{}
+[16:38:22]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:23]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:23]  DATA		{}
+[16:38:23]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:23]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:23]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:23]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:23]  DATA		{}
+[16:38:23]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:23]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:23]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:23]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:23]  DATA		{}
+[16:38:23]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:24]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:24]  DATA		{}
+[16:38:24]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:24]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:24]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:24]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:24]  DATA		{}
+[16:38:24]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:24]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:24]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:24]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:24]  DATA		{}
+[16:38:24]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:25]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:25]  DATA		{}
+[16:38:25]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:25]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:25]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:25]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:25]  DATA		{}
+[16:38:25]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:25]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:25]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:25]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:25]  DATA		{}
+[16:38:25]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:26]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:26]  DATA		{}
+[16:38:26]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:26]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:26]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:26]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:26]  DATA		{}
+[16:38:26]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:26]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:26]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:26]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:26]  DATA		{}
+[16:38:26]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:27]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:27]  DATA		{}
+[16:38:27]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:27]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:27]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:27]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:27]  DATA		{}
+[16:38:27]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:27]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:27]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:27]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:27]  DATA		{}
+[16:38:27]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:28]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:28]  DATA		{}
+[16:38:28]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:28]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:28]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:28]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:28]  DATA		{}
+[16:38:28]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:28]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:28]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:28]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:28]  DATA		{}
+[16:38:28]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:29]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:29]  DATA		{}
+[16:38:29]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:29]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:29]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:29]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:29]  DATA		{}
+[16:38:29]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:29]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:29]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:29]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:29]  DATA		{}
+[16:38:29]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:30]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:30]  DATA		{}
+[16:38:30]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:30]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:30]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:30]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:30]  DATA		{}
+[16:38:30]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:30]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:30]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:30]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:30]  DATA		{}
+[16:38:30]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:31]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:31]  DATA		{}
+[16:38:31]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:31]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:31]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:31]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:31]  DATA		{}
+[16:38:31]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:31]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:31]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:31]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:31]  DATA		{}
+[16:38:31]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:32]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:32]  DATA		{}
+[16:38:32]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:32]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:32]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:32]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:32]  DATA		{}
+[16:38:32]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:32]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:32]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:32]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:32]  DATA		{}
+[16:38:32]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:33]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:33]  DATA		{}
+[16:38:33]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:33]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:33]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:33]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:33]  DATA		{}
+[16:38:33]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:33]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:33]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:33]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:33]  DATA		{}
+[16:38:33]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:34]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:34]  DATA		{}
+[16:38:34]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:34]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:34]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:34]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:34]  DATA		{}
+[16:38:34]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:34]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:34]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:34]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:34]  DATA		{}
+[16:38:34]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:35]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:35]  DATA		{}
+[16:38:35]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:35]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:35]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:35]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:35]  DATA		{}
+[16:38:35]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:35]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:35]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:35]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:35]  DATA		{}
+[16:38:35]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:36]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:36]  DATA		{}
+[16:38:36]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:36]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:36]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:36]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:36]  DATA		{}
+[16:38:36]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:36]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:36]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:36]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:36]  DATA		{}
+[16:38:36]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:37]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:37]  DATA		{}
+[16:38:37]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:37]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:37]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:37]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:37]  DATA		{}
+[16:38:37]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:37]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:37]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:37]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:37]  DATA		{}
+[16:38:37]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:38]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:38]  DATA		{}
+[16:38:38]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:38]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:38]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:38]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:38]  DATA		{}
+[16:38:38]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:38]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:38]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:38]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:38]  DATA		{}
+[16:38:38]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:39]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:39]  DATA		{}
+[16:38:39]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:39]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:39]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:39]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:39]  DATA		{}
+[16:38:39]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:39]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:39]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:39]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:39]  DATA		{}
+[16:38:39]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:40]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:40]  DATA		{}
+[16:38:40]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:40]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:40]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:40]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:40]  DATA		{}
+[16:38:40]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:40]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:40]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:40]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:40]  DATA		{}
+[16:38:40]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:41]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:41]  DATA		{}
+[16:38:41]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:41]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:41]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:41]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:41]  DATA		{}
+[16:38:41]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:41]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:41]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:41]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:41]  DATA		{}
+[16:38:41]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:42]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:42]  DATA		{}
+[16:38:42]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:42]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:42]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:42]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:42]  DATA		{}
+[16:38:42]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:42]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:42]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:42]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:42]  DATA		{}
+[16:38:42]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:43]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:43]  DATA		{}
+[16:38:43]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:43]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:43]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:43]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:43]  DATA		{}
+[16:38:43]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:43]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:43]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:43]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:43]  DATA		{}
+[16:38:43]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:44]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:44]  DATA		{}
+[16:38:44]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:44]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:44]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:44]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:44]  DATA		{}
+[16:38:44]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:44]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:44]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:44]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:44]  DATA		{}
+[16:38:44]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:45]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:45]  DATA		{}
+[16:38:45]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:45]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:45]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:45]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:45]  DATA		{}
+[16:38:45]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:45]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:45]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:45]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:45]  DATA		{}
+[16:38:45]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:46]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:46]  DATA		{}
+[16:38:46]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:46]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:46]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:46]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:46]  DATA		{}
+[16:38:46]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:46]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:46]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:46]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:46]  DATA		{}
+[16:38:46]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:47]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:47]  DATA		{}
+[16:38:47]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:47]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:47]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:47]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:47]  DATA		{}
+[16:38:47]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:47]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:47]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:47]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:47]  DATA		{}
+[16:38:47]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:48]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:48]  DATA		{}
+[16:38:48]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:48]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:48]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:48]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:48]  DATA		{}
+[16:38:48]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:48]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:48]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:48]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:48]  DATA		{}
+[16:38:48]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:49]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:49]  DATA		{}
+[16:38:49]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:49]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:49]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:49]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:49]  DATA		{}
+[16:38:49]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:49]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:49]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:49]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:49]  DATA		{}
+[16:38:49]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:50]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:50]  DATA		{}
+[16:38:50]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"]
+[16:38:50]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:50]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:50]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:50]  DATA		{}
+[16:38:50]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:50]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:50]  DATA		{"name":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c","handle":"CDwindow-824e4d66-ef94-4b02-883b-e02885844c3c"}
+[16:38:50]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:50]  DATA		{}
+[16:38:50]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#clientUpdateAvailable"
+[16:38:51]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:51]  DATA		{}
+[16:38:51]  RESULT		["CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"]
+[16:38:51]  COMMAND	POST 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window"
+[16:38:51]  DATA		{"name":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4","handle":"CDwindow-245ab0e5-f78a-48b6-8dc9-fa316980f8e4"}
+[16:38:51]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/url"
+[16:38:51]  DATA		{}
+[16:38:51]  RESULT		"file:///Users/wanchain/astro/jsPro/wanchainPro/wanwalletPro/wanwallet/dist_mist/dist/mac/Mist.app/Contents/Resources/app.asar/interface/index.html#loadingWindow"
+[16:38:52]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:52]  DATA		{}
+[16:38:52]  COMMAND	GET 	 "/wd/hub/session/4d96bfcb88ee71dfc3445af1d1b40dd2/window_handles"
+[16:38:52]  DATA		{}

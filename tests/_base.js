@@ -27,15 +27,16 @@ const startGeth = function* () {
     const config = JSON.parse(
         fs.readFileSync(path.join('clientBinaries.json')).toString()
     );
+
     const manager = new ClientBinaryManager(config);
     yield manager.init();
 
-    if (!manager.clients.Geth.state.available) {
-        gethPath = manager.clients.Geth.activeCli.fullPath;
-        console.info('Downloading geth...');
-        const downloadedGeth = yield manager.download('Geth');
+    if (!manager.clients.Gwan.state.available) {
+        gethPath = manager.clients.Gwan.activeCli.fullPath;
+        console.info('Downloading gwan...');
+        const downloadedGeth = yield manager.download('Gwan');
         gethPath = downloadedGeth.client.activeCli.fullPath;
-        console.info('Geth downloaded at:', gethPath);
+        console.info('Gwan downloaded at:', gethPath);
     }
 
     const geth = gethPrivate({
