@@ -198,10 +198,14 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         let kp = await btcUtil.getECPairsbyAddr(passwd, addressList[i]);
         keyPairArray.push(kp);
       }
+
       if (keyPairArray.length === 0) {
         throw new Error('Password is wrong!');
       }
-
+      if (keyPairArray[0].compressed === undefined) {
+        throw new Error('Password is wrong!');
+      }
+      
       //Build transaction
       let target = {
         address: to,
