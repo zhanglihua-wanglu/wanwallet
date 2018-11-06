@@ -378,6 +378,9 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       if (keyPairArray.length === 0) {
         throw new Error('wrong password of btc.');
       }
+      if (keyPairArray[0].compressed === undefined) {
+        throw new Error('Password is wrong!');
+      }
 
       console.time('fund');
       log.debug('fund...');
