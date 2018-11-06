@@ -205,7 +205,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       //Build transaction
       let target = {
         address: to,
-        value: web3.toBigNumber(amount).mul(100000000)
+        value: Number(web3.toBigNumber(amount).mul(100000000))
       };
 
       const { rawTx, fee } = await ccUtil.btcBuildTransaction(utxos, keyPairArray, target, config.feeRate);
