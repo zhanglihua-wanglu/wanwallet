@@ -356,6 +356,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       console.timeEnd('check btc balance');
 
+      console.time('checkWanPassword');
+      if (!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
+        throw new Error('wrong password of wan.');
+      }
+      console.timeEnd('checkWanPassword');
+
       log.debug('getECPairs...');
       //check passwd
       console.time('getECPairs');
@@ -368,12 +374,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       if (keyPairArray.length === 0) {
         throw new Error('wrong password of btc.');
       }
-
-      console.time('checkWanPassword');
-      if (!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
-        throw new Error('wrong password of wan.');
-      }
-      console.timeEnd('checkWanPassword');
 
       console.time('fund');
       log.debug('fund...');
