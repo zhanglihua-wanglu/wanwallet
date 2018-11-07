@@ -150,7 +150,7 @@ function transitionState(status) {
         case 'sentRevokeConfirming': return 'RevokeSent';
         case 'revokeFinished': return 'Revoked';
 
-        default: return 'Faild';
+        default: return 'Failed';
     }
 }
 

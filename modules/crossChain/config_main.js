@@ -27,8 +27,8 @@ config.wethToken = {
     decimals: 18
 };
 
-config.ethHtlcAddr          = "0x78eb00ec1c005fec86a074060cc1bc7513b1ee88";
-config.wanHtlcAddr          = "0x7a333ba427fce2e0c6dd6a2d727e5be6beb13ac2";
+// config.ethHtlcAddr          = "0x78eb00ec1c005fec86a074060cc1bc7513b1ee88";
+// config.wanHtlcAddr          = "0x7a333ba427fce2e0c6dd6a2d727e5be6beb13ac2";
 
 config.ethTokenAddressOnWan   = config.wethToken.address;
 

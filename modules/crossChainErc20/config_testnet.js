@@ -20,8 +20,8 @@ config.mrErr = path.join(config.logPathPrex, 'ccMonitorErr.log');
 config.databasePathPrex = path.join(settings.userDataPath, 'Db',`${config.network}DB`);
 
 // for E20 new contract
-config.ethHtlcAddrE20      = "0x4a8f5dd531e4cd1993b79b23dbda21faacb9c731";
-config.wanHtlcAddrE20      = "0xfc0eba261b49763decb6c911146e3cf524fa7ebc";
+// config.ethHtlcAddrE20      = "0x905b3237b2367b2ddebdf54d4f5320429710850a";
+// config.wanHtlcAddrE20      = "0x2b71a02033a5fdf20037aa184994a684a9229a15";
 
 config.confirmBlocks            = 2;
 config.tryTimes                 = 3;
