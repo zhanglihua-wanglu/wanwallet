@@ -15,12 +15,17 @@ upgradeDb.initLog = function (_log){
 };
 
 let fsExits = true;
-upgradeDb.upgradeDb_2_1 = function (appPath) {
+upgradeDb.upgradeDb_2_1 = function (appPath,network) {
 
     let ethCrossChainDb;
 
     new Q((resolve, reject) => {
-        let crossChainDbFile = `${appPath}/crossTransDb`;
+        let crossChainDbFile;
+        if (network=='main'){
+            crossChainDbFile = `${appPath}/crossTransDb`;
+        }else{
+            crossChainDbFile = `${appPath}/testnetDb/crossTransDb`;
+        }
 
         if (!fs.existsSync(crossChainDbFile)) {
             fsExits = false;
@@ -116,7 +121,12 @@ upgradeDb.upgradeDb_2_1 = function (appPath) {
         }
         log.info("upgrade db success.");
 
-        let crossChainDbFile = `${appPath}/crossTransDb`;
+        let crossChainDbFile;
+        if (network=='main'){
+            crossChainDbFile = `${appPath}/crossTransDb`;
+        }else{
+            crossChainDbFile = `${appPath}/testnetDb/crossTransDb`;
+        }
         fs.unlink(crossChainDbFile, function (error) {
             if (error) {
                 console.log(error);
