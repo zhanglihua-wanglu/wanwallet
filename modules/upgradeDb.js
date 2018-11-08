@@ -56,7 +56,7 @@ upgradeDb.upgradeDb_2_1 = function (appPath) {
 
                 let _data = {};
 
-                _data.hashx = data.HashX;
+                _data.hashX = data.HashX;
                 _data.x = data.x;
                 _data.from = data.from;
                 _data.to = data.crossAdress;
