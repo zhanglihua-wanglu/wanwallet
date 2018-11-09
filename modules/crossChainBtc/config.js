@@ -4,6 +4,8 @@ const settings=require('../settings.js');
 const Logger = require('./logger.js');
 const path = require('path');
 const fs = require('fs');
+const mkdirsSync = require('mkdirs-sync');
+
 let config;
 if(settings.network === 'testnet'){
     config = require('./config_testnet.js');
@@ -25,16 +27,6 @@ config.loglevel = settings.loglevel;
 
 config.listOption = true;
 
-function mkdirsSync(dirname) {
-    if (fs.existsSync(dirname)) {
-        return true;
-    } else {
-        if (mkdirsSync(path.dirname(dirname))) {
-            fs.mkdirSync(dirname);
-            return true;
-        }
-    }
-}
 mkdirsSync(config.databasePath);
 config.logger = new Logger('CrossChainBtc',config.ccLog, config.ccErr,config.loglevel);
 let loggers = [];
