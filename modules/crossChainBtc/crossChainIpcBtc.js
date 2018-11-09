@@ -638,7 +638,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         bs58check.decode(address);
         data.value = 'success';
       } catch (error) {
-        data.value = 'failed';
+        throw new Error('BTC address is invalid.');        
       }
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
