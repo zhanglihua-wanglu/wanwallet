@@ -631,6 +631,27 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       }
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
+  } else if (data.action === 'checkBtcAddress') {
+    try {
+      let address = data.parameters.address;
+      try {
+        bs58check.decode(address);
+        data.value = 'success';
+      } catch (error) {
+        data.value = 'failed';
+      }
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      if (error instanceof Error) {
+        log.error(error.toString());
+        log.error(error.stack);
+        data.error = error.toString();
+      } else {
+        log.error(error);
+        data.error = error;
+      }
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
   } else if (sendServer.hasMessage(data.action)) {
     // console.log('sendServer :', data);
     let args = data.parameters;
