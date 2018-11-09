@@ -2,8 +2,6 @@
 
 const settings=require('../settings.js');
 const Logger = require('./logger.js');
-const path = require('path');
-const fs = require('fs');
 const mkdirsSync = require('mkdirs-sync');
 
 let config;
