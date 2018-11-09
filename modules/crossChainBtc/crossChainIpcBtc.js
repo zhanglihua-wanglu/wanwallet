@@ -51,14 +51,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = newAddress.address;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
     }
@@ -76,14 +69,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         callbackMessage('CrossChain_BTC2WBTC', e, data);
       });
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'getBtcBalance') {
@@ -111,14 +97,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'getBtcMultiBalances') {
@@ -147,14 +126,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value.balance = web3.toBigNumber(result).div(100000000).toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'sendBtcToAddress') {
@@ -236,14 +208,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       log.debug('CrossChain_BTC2WBTC->sendBtcToAddress->sendRawTransaction success!');
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'listWbtcBalance') {
@@ -262,14 +227,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       });
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'listStoremanGroups') {
@@ -287,14 +245,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = smgs;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'listTransactions') {
@@ -319,14 +270,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = records;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'lockBtc') {
@@ -418,14 +362,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       log.info('notice wan finish. txHash:' + data.value);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'redeemBtc') {
@@ -445,14 +382,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error("Failed to redeemBtc:", error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'revokeBtc') {
@@ -474,14 +404,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'lockWbtc') {
@@ -544,14 +467,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = wdHash;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);      
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'redeemWbtc') {
@@ -580,14 +496,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'revokeWbtc') {
@@ -606,14 +515,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = revokeWbtcHash;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'getBtcFeeRate') {
@@ -621,14 +523,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = config.feeRate;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'checkBtcAddress') {
@@ -638,18 +533,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         bs58check.decode(address);
         data.value = 'success';
       } catch (error) {
-        throw new Error('BTC address is invalid.');        
+        data.error = 'BTC address is invalid.';
+        log.error(data.error);        
       }
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      if (error instanceof Error) {
-        log.error(error.toString());
-        log.error(error.stack);
-        data.error = error.toString();
-      } else {
-        log.error(error);
-        data.error = error;
-      }
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (sendServer.hasMessage(data.action)) {
@@ -665,6 +554,17 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     sendServer.sendMessage(data.action, ...args);
   }
 });
+
+function parseError(data, error) {
+  if (error instanceof Error) {
+    log.error(error.toString());
+    log.error(error.stack);
+    data.error = error.toString();
+  } else {
+    log.error(error);
+    data.error = error;
+  }
+}
 
 function callbackMessage(message, e, data) {
   const windowId = e.sender.id;
