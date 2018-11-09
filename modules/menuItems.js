@@ -264,7 +264,7 @@ let menuTempl = function (webviews) {
                         label: 'Btc Accounts',
                         click() {
                             let userPath = Settings.userDataPath;
-                            if(Settings.network === 'main') {
+                            if(Settings.network.includes('main')) {
                                 userPath = path.join(userPath, 'btcWallet.db');
                             } else {
                                 userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');

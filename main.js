@@ -516,7 +516,7 @@ onReady = () => {
             return startCrossChain();
         })
         .then(() => {
-            upgradeDb.upgradeDb_2_1(Settings.userDataPath);
+            upgradeDb.upgradeDb_2_1(Settings.userDataPath,Settings.network);
         })
         .then(() => {
             // Wallet shouldn't start Swarm
