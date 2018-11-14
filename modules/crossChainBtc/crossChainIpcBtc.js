@@ -541,6 +541,20 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
+  } else if (data.action === 'getCoin2WanRatio') {
+    try {
+      let address = data.parameters.address;
+      let result = await ccUtil.getBtcC2wRatio(ccUtil.btcSender);
+      log.info(result);
+      data.value = {};
+      data.value.c2wRatio = result;
+      data.value.status = 'success';
+      log.info(data);
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      parseError(data, error);
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
   } else if (sendServer.hasMessage(data.action)) {
     // console.log('sendServer :', data);
     let args = data.parameters;
