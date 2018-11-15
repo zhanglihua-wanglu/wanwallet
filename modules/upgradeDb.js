@@ -73,6 +73,7 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
 
                 _data.lockedTime = data.time ? parseInt(data.time / 1000) : "";
                 _data.buddyLockedTime = "";
+                _data.sendTime = data.time ? parseInt(data.time / 1000) : "";
 
                 _data.srcChainAddr = data.chain === 'WAN' ? 'WAN' : 'ETH';
                 _data.dstChainAddr = data.to;
@@ -105,7 +106,7 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
                 _data.from = data.from;
                 _data.to = data.to;
                 _data.value = web3.toWei(data.value);
-                _data.sentTime = data.time ? parseInt(data.time / 1000) : "";
+                _data.sendTime = data.time ? parseInt(data.time / 1000) : "";
                 _data.chainAddr = 'ETH';
                 _data.chainType = 'ETH';
                 _data.tokenSymbol = 'ETH';
