@@ -100,6 +100,8 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         crossCollectionArr.sort(function (a,b) {
             return Number(b.sendTime)- Number(a.sendTime);// time desc
         });
+
+        data.value = {"crossCollection": crossCollectionArr};
         callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if (data.action === 'getGasPrice') {
