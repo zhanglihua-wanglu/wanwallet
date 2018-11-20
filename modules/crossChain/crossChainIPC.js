@@ -167,6 +167,8 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
 
         let lockDataResult = {};
         lockDataResult.lockTransData = crossChainInstanceLock.contractData;
+        lockDataResult.x = crossChainInstanceLock.txDataCreator.input.x;
+        lockDataResult.hashX = crossChainInstanceLock.txDataCreator.input.hashX;
 
         data.value = lockDataResult;
 
