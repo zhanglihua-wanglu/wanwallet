@@ -76,7 +76,7 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
                 _data.sendTime = data.time ? parseInt(data.time / 1000) : "";
 
                 _data.srcChainAddr = data.chain === 'WAN' ? 'WAN' : 'ETH';
-                _data.dstChainAddr = data.to;
+                _data.dstChainAddr = data.chain === 'WAN' ? 'ETH' : 'WAN';
 
                 _data.srcChainType = data.chain === 'WAN' ? 'WAN' : 'ETH';
                 _data.dstChainType = data.chain === 'WAN' ? 'ETH' : 'WAN';
