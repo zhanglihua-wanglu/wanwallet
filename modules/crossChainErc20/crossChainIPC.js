@@ -143,7 +143,7 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
                 data.err = err;
                 callbackMessage('CrossChain_ERC202WERC20', e, data);
             } else {
-                result.gasPrice = Number(r) > 1000000000 ? r : 1000000000;
+                result.gasPrice = Number(r) > 1000000000 ? new BigNumber(r).mul(1.1).toNumber() : 1000000000;
                 data.value = result;
                 callbackMessage('CrossChain_ERC202WERC20', e, data);
             }
