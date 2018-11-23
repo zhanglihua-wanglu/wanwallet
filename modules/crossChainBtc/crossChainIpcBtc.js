@@ -252,7 +252,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     console.log('CrossChain_BTC2WBTC->>>>>>>>>listTransactions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let recordAll = ccUtil.getBtcWanTxHistory({});
-      let records = recordAll.slice(0);
+      let records = JSON.parse(JSON.stringify(recordAll));
       records = records.map((value) => {
         //console.log(value);
         //console.log(settings.network);
