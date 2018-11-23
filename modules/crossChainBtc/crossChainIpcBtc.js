@@ -177,7 +177,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       if (keyPairArray[0].compressed === undefined) {
         throw new Error('Password is wrong!');
       }
-      
+
       //Build transaction
       let target = {
         address: to,
@@ -251,8 +251,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'listTransactions') {
     console.log('CrossChain_BTC2WBTC->>>>>>>>>listTransactions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
-      let records = ccUtil.getBtcWanTxHistory({});
-
+      let recordAll = ccUtil.getBtcWanTxHistory({});
+      let records = recordAll.slice(0);
       records = records.map((value) => {
         //console.log(value);
         //console.log(settings.network);
@@ -467,7 +467,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = wdHash;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
-      parseError(data, error);      
+      parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
   } else if (data.action === 'redeemWbtc') {
@@ -534,7 +534,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         data.value = 'success';
       } catch (error) {
         data.error = 'BTC address is invalid.';
-        log.error(data.error);        
+        log.error(data.error);
       }
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
