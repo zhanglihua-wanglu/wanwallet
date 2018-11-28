@@ -526,9 +526,9 @@ let menuTempl = function (webviews) {
         if (gwanClient) {
             nodeSubmenu.push({
                 label: `Gwan ${gwanClient.version}`,
-                // checked: false, // ethereumNode.isOwnNode && ethereumNode.isGwan,
-                // enabled: ethereumNode.isOwnNode,
-                // type: 'checkbox',
+                checked: false, // ethereumNode.isOwnNode && ethereumNode.isGwan,
+                enabled: false, //ethereumNode.isOwnNode,
+                type: 'radio',// 'checkbox',
                 // click() {
                 //     restartNode('geth', null, 'fast', webviews);
                 // },
@@ -658,7 +658,7 @@ let menuTempl = function (webviews) {
         {
             label: "WanWallet Version: " + version,
             click() {
-                shell.openExternal('https://github.com/wanchain/go-wanchain/releases');
+                shell.openExternal('https://wanchain.org/product');
             },
         },
 
@@ -674,12 +674,13 @@ let menuTempl = function (webviews) {
         //         });
         //     },
         // },
-        // {
-        //     label: i18n.t('mist.applicationMenu.app.checkForUpdates'),
-        //     click() {
-        //         updateChecker.runVisibly();
-        //     },
-        // },
+
+        {
+            label: i18n.t('mist.applicationMenu.app.checkForUpdates'),
+            click() {
+                updateChecker.runVisibly();
+            },
+        },
 
         {
         label: i18n.t('mist.applicationMenu.help.reportBug'),

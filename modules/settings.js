@@ -296,6 +296,16 @@ class Settings {
         return packageJson.version;
     }
 
+    get checkAppVersion() {
+        // 'http://47.104.60.142/wanwalletVersion.json'
+        let result = {
+            appVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchainMerge/wanwalletVersion.json', 
+            gwanVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchainMerge/clientBinaries.json'
+        };
+        
+        return result;
+    }
+
     get appName() {
         return this.uiMode === 'mist' ? 'Mist' : 'Wanchain Wallet';
     }

@@ -23,8 +23,8 @@ const check = exports.check = () => {
         str = 'wallet';
         break;
     }
-    // https://api.github.com/repos/wanchain/wanwallet/releases
-    return got('http://47.104.60.142/wanwalletVersion.json', {
+    
+    return got(Settings.checkAppVersion.appVersion, {
         timeout: 3000,
         json: true,
     })

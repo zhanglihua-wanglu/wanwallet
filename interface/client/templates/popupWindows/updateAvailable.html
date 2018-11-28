@@ -39,9 +39,12 @@
                 {{/with}}
             {{else}}
                 <div class="col col-8 text">
-                    <h1 class="no-update">
+                    <!-- <h1 class="no-update" style="padding-left: 30px;">
                         {{i18n "mist.popupWindows.updateAvailable.noUpdateFound" name=appName }}
-                    </h1>
+                    </h1> -->
+                    <ul class="no-bullets" style="padding-left: 50px;">
+                        <li style=" margin-top: 30px;font-size: 30px;font-weight: 600;">{{i18n "mist.popupWindows.updateAvailable.noUpdateFound" name=appName }}</li>
+                    </ul>
                 </div>
             {{/if}}
         {{/if}}

@@ -11,17 +11,8 @@ const EventEmitter = require('events').EventEmitter;
 
 const log = require('./utils/logger').create('ClientBinaryManager');
 
-let BINARY_URL;
-let ALLOWED_DOWNLOAD_URLS_REGEX;
-
-if (Settings.internal) {
-    BINARY_URL = 'http://47.104.60.142:/clientBinaries.json';
-    ALLOWED_DOWNLOAD_URLS_REGEX =  /.+/;
-} else {
-    BINARY_URL = 'https://raw.githubusercontent.com/wanchain/wanwallet/cc/clientBinaries.json';
-
-    ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
-}
+let BINARY_URL = Settings.checkAppVersion.gwanVersion;
+let ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
 
 class Manager extends EventEmitter {
     constructor() {

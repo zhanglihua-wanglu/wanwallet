@@ -4,7 +4,7 @@
             <h1 style="margin: 50px 0 20px!important; font-weight: bold;">Create BTC Account</h1>
 
             <div class="checkmes">
-                <p><em></em><span>Important：Your password should be in common with the first btcion address you had created!</span></p>
+                <p><em></em><span>Important notice: Password for the new BTC account should be identical to the first BTC address's password</span></p>
             </div>
 
             {{#if TemplateVar.get "creating"}}
@@ -13,7 +13,7 @@
                         {{#if TemplateVar.get "createdTrue"}}
                             <h2 style="background: #ffffff!important;">Create Btc Address Success!</h2>
                             {{else}}
-                            <h2 style="background: red!important;">Create Btc Address Wrong!</h2>
+                            <h2 style="background: red!important;">Password entered is not identical to the 1st BTC address's password</h2>
                         {{/if}}
 
                         <div class="dapp-modal-buttons" style="background: white!important;width: 75px;margin: 80px auto 0;">
