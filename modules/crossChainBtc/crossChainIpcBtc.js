@@ -259,6 +259,9 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         if ((value.chain === 'WAN') && value.crossAddress.startsWith('0x')) {
           value.crossAddress = btcUtil.hash160ToAddress(value.crossAddress, null, settings.btcNetwork);
         }
+        if (value.chain === 'BTC' && value.storeman) {
+          value.storeman = btcUtil.hash160ToAddress(value.storeman, null, settings.btcNetwork);
+        }
         return value;
       });
 
