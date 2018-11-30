@@ -677,9 +677,7 @@ let menuTempl = function (webviews) {
 
         {
             label: i18n.t('mist.applicationMenu.app.checkForUpdates'),
-            click() {
-                updateChecker.runVisibly();
-            },
+            click: () => updateChecker.runVisibly(),
         },
 
         {

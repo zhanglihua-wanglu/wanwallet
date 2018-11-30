@@ -4,7 +4,7 @@
             <img class="left-overlay {{mode}}" src="{{appIconPath}}" />
         </div>
         {{#with Session "data"}}
-        <div class="col col-8 text">
+        <div class="col col-8 text" style="z-index: 999;position: relative;">
                 <h1>
                     {{i18n "mist.popupWindows.updateAvailable.newVersionAvailable" name=name version=version }}
                 </h1>
@@ -18,7 +18,10 @@
                 </p>
         </div>
         <footer class="dapp-small">
-            <div class="dapp-modal-buttons">
+            <div class="dapp-modal-buttons" style="margin: 0 auto; margin-bottom: 40px;">
+                    <button class="remind" type="button" >
+                            Remind me later
+                        </button>
                 <button class="cancel" type="button">
                     {{i18n "mist.popupWindows.updateAvailable.skipUpdate"}}
                 </button>

@@ -102,9 +102,7 @@ exports.runVisibly = () => {
 
     wnd.on('ready', () => {
         check().then((update) => {
-            wnd.send({
-                uiAction_checkUpdateDone: update,
-            });
+            wnd.send('uiAction_checkUpdateDone', update);
         }).catch((err) => {
             log.error(err);
 

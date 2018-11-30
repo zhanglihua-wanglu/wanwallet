@@ -12,4 +12,7 @@ Template['popupWindows_clientUpdateAvailable'].events({
     'click .cancel': function (e) {
         ipc.send('backendAction_windowCallback', 'skip');
     },
+    'click .remind': function (e) {
+        ipc.send('backendAction_windowCallback', 'remind');
+    },
 });

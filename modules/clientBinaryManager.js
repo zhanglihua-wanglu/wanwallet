@@ -160,6 +160,10 @@ class Manager extends EventEmitter {
 
                                 resolve(localConfig);
                             }
+                            // remind
+                            else if (update === 'skip') {
+                                resolve(localConfig);
+                            }
 
                             wnd.close();
                         });
