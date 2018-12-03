@@ -184,16 +184,10 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         let crossChainE20Approve = new CrossChainE20Approve(data.parameters.tx, crossInvokerConfig);
 
         crossChainE20Approve.txDataCreator = crossChainE20Approve.createDataCreator().result;
-        crossChainE20Approve.commonData = (await crossChainE20Approve.txDataCreator.createCommonData()).result;
         crossChainE20Approve.contractData = crossChainE20Approve.txDataCreator.createContractData().result;
 
         let approveDataResult = {};
         approveDataResult.approveTransData = crossChainE20Approve.contractData;
-        approveDataResult.commonData = crossChainE20Approve.commonData;
-
-        approveDataResult.hashX = crossChainE20Approve.commonData.hashX;
-        approveDataResult.x = crossChainE20Approve.commonData.x;
-        approveDataResult.approveNonce = crossChainE20Approve.commonData.nonce;
 
         data.value = approveDataResult;
 
@@ -209,15 +203,19 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         let dstChain = data.chainType==='WAN'? ccUtil.getSrcChainNameByContractAddr(tokenOrigAddr,tokenChainType):null;
 
         let crossInvokerConfig = ccUtil.getCrossInvokerConfig(srcChain, dstChain);
+        let x = ccUtil.generatePrivateKey();
+        let hashX = ccUtil.getHashKey(x);
+        data.parameters.tx.x = x;
+        data.parameters.tx.hashX = hashX;
         let crossChainInstanceLock = new CrossChainE20Lock(data.parameters.tx, crossInvokerConfig);
-
         crossChainInstanceLock.txDataCreator = crossChainInstanceLock.createDataCreator().result;
 
         crossChainInstanceLock.contractData = crossChainInstanceLock.txDataCreator.createContractData().result;
 
         let lockDataResult = {};
         lockDataResult.lockTransData = crossChainInstanceLock.contractData;
-
+        lockDataResult.x = x;
+        lockDataResult.hashX = hashX;
         data.value = lockDataResult;
 
         callbackMessage('CrossChain_ERC202WERC20', e, data);
