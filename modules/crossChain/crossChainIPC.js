@@ -90,6 +90,11 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
         let crossCollectionArr = new Array();
         for(let data of crossCollection){
             data.isNormalTrans = false;
+            let canRedeem = ccUtil.canRedeem(data).code;
+            let canRevoke = ccUtil.canRevoke(data).code;
+            data.isCanRedeem = canRedeem;
+            data.isCanRevoke = canRevoke;
+
             crossCollectionArr.push(data);
         }
         for(let data of normalCollection){

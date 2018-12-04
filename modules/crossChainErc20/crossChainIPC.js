@@ -110,6 +110,11 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         let crossCollectionArr = new Array();
         for(let data of crossCollection){
             data.isNormalTrans = false;
+            let canRedeem = ccUtil.canRedeem(data).code;
+            let canRevoke = ccUtil.canRevoke(data).code;
+            data.isCanRedeem = canRedeem;
+            data.isCanRevoke = canRevoke;
+
             crossCollectionArr.push(data);
         }
         for(let data of normalCollection){
@@ -170,6 +175,26 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
             }
         }
 
+    }
+    else if (data.action === 'canRedeem') {
+        try {
+            let canRedeem = ccUtil.canRedeem(data.parameters.record).code;
+            data.value = canRedeem;
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
+        } catch (error) {
+            data.error = error.error;
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
+        }
+    }
+    else if (data.action === 'canRevoke') {
+        try {
+            let canRevoke = ccUtil.canRevoke(data.parameters.record).code;
+            data.value = canRevoke;
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
+        } catch (error) {
+            data.error = error.error;
+            callbackMessage('CrossChain_ERC202WERC20', e, data);
+        }
     }
     else if (data.action == 'getApproveTransData') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
