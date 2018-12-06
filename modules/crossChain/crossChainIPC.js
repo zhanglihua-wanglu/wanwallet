@@ -128,7 +128,7 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
                 data.err = err;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             } else {
-                result.gasPrice = Number(r) > 1000000000 ? new BigNumber(r).mul(1.1).toNumber() : 1000000000;
+                result.gasPrice = Number(r) > 1000000000 ? new BigNumber(r).mul(1.1).toNumber().toFixed() : 1000000000;
                 data.value = result;
                 callbackMessage('CrossChain_ETH2WETH', e, data);
             }
