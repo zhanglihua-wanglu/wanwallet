@@ -299,8 +299,8 @@ class Settings {
     get checkAppVersion() {
         // 'http://47.104.60.142/wanwalletVersion.json'
         let result = {
-            appVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchainMerge/wanwalletVersion.json', 
-            gwanVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchainMerge/clientBinaries.json'
+            appVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchain3.0_beta/wanwalletVersion.json', 
+            gwanVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchain3.0_beta/clientBinaries.json'
         };
         
         return result;
