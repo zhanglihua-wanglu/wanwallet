@@ -30,7 +30,7 @@
                         "download": {
                             "url": "https://www.wanchain.org/download/gwan-mac-amd64-1.0.7-3c1c638c.tar.gz",
                             "type": "tar",
-                            "md5": "25cfb0523fddff0bc91b0c253456891d",
+                            "md5": "fe82afb43c99d39435c4ef30d62e73c0",
                             "bin": "gwan-mac-amd64-1.0.7-3c1c638c/gwan"
                         },
                         "bin": "gwan",
