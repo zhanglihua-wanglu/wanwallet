@@ -297,10 +297,18 @@ class Settings {
     }
 
     get checkAppVersion() {
-        // 'http://47.104.60.142/wanwalletVersion.json'
+        // 'http://47.104.60.142/'
+        // 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchain3.0_beta/'
+        let defauleUrl = 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchain3.0_beta/'
+
+        // /./
+        // /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/
+        let url_regex = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/
+
         let result = {
-            appVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchain3.0_beta/wanwalletVersion.json', 
-            gwanVersion: 'https://raw.githubusercontent.com/wanchain/wanwallet/wanchain3.0_beta/clientBinaries.json'
+            url_regex: url_regex,
+            appVersion: defauleUrl + 'wanwalletVersion.json', 
+            gwanVersion: defauleUrl + 'clientBinaries.json'
         };
         
         return result;

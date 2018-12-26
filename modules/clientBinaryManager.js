@@ -12,7 +12,7 @@ const EventEmitter = require('events').EventEmitter;
 const log = require('./utils/logger').create('ClientBinaryManager');
 
 let BINARY_URL = Settings.checkAppVersion.gwanVersion;
-let ALLOWED_DOWNLOAD_URLS_REGEX = /^https:\/\/www\.wanchain\.org\/download\/(?:.+)/;
+let ALLOWED_DOWNLOAD_URLS_REGEX = Settings.checkAppVersion.url_regex;
 
 class Manager extends EventEmitter {
     constructor() {
@@ -47,6 +47,7 @@ class Manager extends EventEmitter {
         const nodeType = 'Gwan';
         let binariesDownloaded = false;
         let nodeInfo;
+        let ifRemind = false;
 
         log.info(`Checking for new client binaries config from: ${BINARY_URL}`);
 
@@ -148,11 +149,13 @@ class Manager extends EventEmitter {
                         }), (update) => {
                             // update
                             if (update === 'update') {
-                                // this._writeLocalConfig(latestConfig);
+                                this._writeLocalConfig(latestConfig);
                                 resolve(latestConfig);
 
                             // skip
                             } else if (update === 'skip') {
+                                ifRemind = true;
+
                                 fs.writeFileSync(
                                     path.join(Settings.userDataPath, 'skippedNodeVersion.json'),
                                     nodeVersion
@@ -161,7 +164,8 @@ class Manager extends EventEmitter {
                                 resolve(localConfig);
                             }
                             // remind
-                            else if (update === 'skip') {
+                            else if (update === 'remind') {
+                                ifRemind = true;
                                 resolve(localConfig);
                             }
 
@@ -204,7 +208,7 @@ class Manager extends EventEmitter {
                         this._availableClients = {};
                         const available = _.filter(clients, c => !!c.state.available);
 
-                        if (!available.length) {
+                        if (!available.length && !ifRemind) {
                             if (_.isEmpty(clients)) {
                                 throw new Error('No client binaries available for this system!');
                             }
@@ -234,13 +238,8 @@ class Manager extends EventEmitter {
                             }
                         });
 
-                        log.debug('restart: ', restart);
-                        log.debug('binariesDownloaded: ', binariesDownloaded);
-
                         // restart if it downloaded while running
                         if (restart && binariesDownloaded) {
-                            this._writeLocalConfig(localConfig);
-
                             log.info('Restarting app ...');
                             app.relaunch();
                             app.quit();
@@ -319,6 +318,7 @@ class Manager extends EventEmitter {
         }
 
         log.info(`Eth client binary path: ${binPath}`);
+        console.log(`Eth client binary path: ${binPath}`);
 
         this._availableClients.eth = {
             binPath,

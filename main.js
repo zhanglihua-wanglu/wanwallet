@@ -272,6 +272,7 @@ onReady = () => {
 
     let fromPath = path.join(exePath,gwan);
     let toPath = path.join(filePath ,gwanto);
+
     log.debug('copy Gwan from :' + fromPath);
     log.debug('copy Gwan to :' + toPath);
 
@@ -283,18 +284,26 @@ onReady = () => {
             mkdirsSync(filePath);
         }
         let timeto = 0;
+
         if(fs.existsSync(toPath)){
             timeto = fs.statSync(toPath).mtime.getTime();
-        }
-        let timefrom = fs.statSync(fromPath).mtime.getTime();
-        log.debug("timeto:", timeto);
-        log.debug("timefrom:", timefrom);
-        if( timeto < timefrom){
+
+            let timefrom = fs.statSync(fromPath).mtime.getTime();
+            
+            log.debug("timeto:", timeto);
+            log.debug("timefrom:", timefrom);
+        
+            if( timeto < timefrom){
+                copy(fromPath,toPath);
+                fs.chmodSync(toPath, '0755');
+                log.info(gwan, " copied");
+            }
+        } else {
             copy(fromPath,toPath);
             fs.chmodSync(toPath, '0755');
             log.info(gwan, " copied");
-
         }
+        
     }
     // copy clientBinarys.json
     let cbJsonFrom = path.join(exePath, 'clientBinaries.json');
