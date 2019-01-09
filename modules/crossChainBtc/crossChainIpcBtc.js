@@ -17,6 +17,12 @@ let be;
 let ccUtil;
 let btcUtil;
 
+// reserve for merge
+
+let WanchainCore = require('wanchain-js-sdk').walletCore;
+let CCUtil = require('wanchain-js-sdk').ccUtil;
+let BTCUtil = require('wanchain-js-sdk').btcUtil
+
 ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   log.info('CrossChain_BTC2WBTC->Message Received!->' + data.action);
   //log.info('parameters:' + JSON.stringify(data.parameters, null, 4));
@@ -44,10 +50,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   if (data.action === 'createBtcAddress') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>createBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      //log.debug(JSON.stringify(data, null, 4));
-      let newAddress = await btcUtil.createAddress(data.parameters);
-      log.debug('newAddress:', newAddress);
-      await ccUtil.btcImportAddress(ccUtil.btcSender, newAddress.address);
+      let newAddress = await BTCUtil.createBTCAddress(data.parameters);
+      await CCUtil.btcImportAddress(newAddress.address);
       data.value = newAddress.address;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -61,7 +65,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'listBtcAddress') {
     try {
       log.debug('CrossChain_BTC2WBTC->>>>>>>>>listBtcAddress>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      btcUtil.getAddressList().then((addressList) => {
+      await BTCUtil.getAddressList().then((addressList) => {
         addressList.forEach(function (Array, index) {
           log.debug(config.consoleColor.COLOR_FgYellow, (index + 1) + ': ' + Array.address, '\x1b[0m');
         });
@@ -74,13 +78,14 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'getBtcBalance') {
     try {
-      let addressList = await btcUtil.getAddressList();
+      let addressList = await BTCUtil.getAddressList();
       let array = [];
 
       if (addressList.length === 0) {
         log.debug('address list lenght === 0');
 
         data.value = null;
+
 
         callbackMessage('CrossChain_BTC2WBTC', e, data);
         return;
@@ -90,8 +95,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         array.push(addressList[i].address)
       }
 
-      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
-      let result = await ccUtil.getUTXOSBalance(utxos);
+      let utxos = await CCUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+      let result = await CCUtil.getUTXOSBalance(utxos);
 
       data.value = web3.toBigNumber(result).div(100000000).toString();
 
@@ -102,7 +107,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     }
   } else if (data.action === 'getBtcMultiBalances') {
     try {
-      let addressList = await btcUtil.getAddressList();
+      let addressList = await BTCUtil.getAddressList();
       if (addressList.length === 0) {
         log.debug('address list lenght === 0');
         data.value = null;
@@ -120,8 +125,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       for (let i = 0; i < addressList.length; i++) {
         array.push(addressList[i].address);
       }
-      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
-      let result = await ccUtil.getUTXOSBalance(utxos);
+      let utxos = await CCUtil.getBtcUtxo(config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, array);
+      let result = await CCUtil.getUTXOSBalance(utxos);
 
       data.value.balance = web3.toBigNumber(result).div(100000000).toString();
       callbackMessage('CrossChain_BTC2WBTC', e, data);
@@ -152,57 +157,61 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let addressList;
       let utxos;
       // Check whether the btc balance is enough.
-      addressList = await btcUtil.getAddressList();
+      // addressList = await btcUtil.getAddressList();
+      // addressList = await btcUtil.getAddressList();
+      addressList = await BTCUtil.getAddressList();
+      let addr = JSON.stringify(addressList, null, 2)
+      
+      // addressList = await ccUtil.filterBtcAddressByAmount(addressList, amount);
+      addressList = await CCUtil.filterBtcAddressByAmount(addressList, amount);
+      let addr2 = JSON.stringify(addressList, null, 2)
 
-      addressList = await ccUtil.filterBtcAddressByAmount(addressList, amount);
+      // utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
+      utxos = await CCUtil.getBtcUtxo(config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
+      let utxosStr = JSON.stringify(utxos, null, 2)
+      let result = await CCUtil.getUTXOSBalance(utxos);
 
-      utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
-      let result = await ccUtil.getUTXOSBalance(utxos);
       btcBalance = web3.toBigNumber(result).div(100000000);
-
+      
       if (!btcScripts.checkBalance(amount, btcBalance)) {
         throw new Error('Balance not enough.');
       }
 
       //Check password
-      let keyPairArray = [];
-      for (let i = 0; i < addressList.length; i++) {
-        let kp = await btcUtil.getECPairsbyAddr(passwd, addressList[i]);
-        keyPairArray.push(kp);
+      // let keyPairArray = [];
+      // for (let i = 0; i < addressList.length; i++) {
+      //   let kp = await BTCUtil.getECPairsbyAddr(passwd, addressList[i]);
+      //   keyPairArray.push(kp);
+      // }
+
+      // if (keyPairArray.length === 0) {
+      //   throw new Error('Password is wrong!');
+      // }
+      // if (keyPairArray[0].compressed === undefined) {
+      //   throw new Error('Password is wrong!');
+      // }
+
+      // //Build transaction
+      // let target = {
+      //   address: to,
+      //   value: Number(web3.toBigNumber(amount).mul(100000000))
+      // };
+
+      let input = {
+        utxos: utxos,
+        to: to,
+        value: amount,
+        feeRate: config.feeRate,
+        password: passwd,
+        changeAddress: addressList[0]
       }
 
-      if (keyPairArray.length === 0) {
-        throw new Error('Password is wrong!');
-      }
-      if (keyPairArray[0].compressed === undefined) {
-        throw new Error('Password is wrong!');
-      }
+      let srcChain = CCUtil.getSrcChainNameByContractAddr("BTC", "BTC");
 
-      //Build transaction
-      let target = {
-        address: to,
-        value: Number(web3.toBigNumber(amount).mul(100000000))
-      };
+      let ret = await global.crossInvoker.invokeNormalTrans(srcChain, input);
 
-      const { rawTx, fee } = await ccUtil.btcBuildTransaction(utxos, keyPairArray, target, config.feeRate);
-      if (!rawTx) {
-        throw new Error('btcBuildTransaction error.');
-      }
-
-      //Send transaction
-      let result2 = await ccUtil.sendRawTransaction(ccUtil.btcSender, rawTx);
-      log.debug('hash: ', result2);
-
-      let txInfo = {
-        from: "local btc account",
-        to: target.address,
-        value: target.value,
-        txHash: result2,
-        crossType: 'BTC2WAN'
-      };
-
-      ccUtil.saveNormalBtcTransactionInfo(txInfo);
-
+      console.log('\n\n\n\n\ntx hash:', ret, '\n\n\n\n\n\n')
+      
       data.value = 'success';
 
       log.debug('CrossChain_BTC2WBTC->sendBtcToAddress->sendRawTransaction success!');
@@ -233,11 +242,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'listStoremanGroups') {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listStoremanGroups>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
-      let smgs = await ccUtil.getBtcSmgList(ccUtil.btcSender);
+      let smgs = await CCUtil.getBtcSmgList();
+      console.log('\n\n\n\n storeman group list: ', JSON.stringify(smgs), '\n\n\n\n\n')
       if (smgs.length > 0) {
         smgs.forEach((smg)=>{
           if (smg.btcAddress.startsWith('0x')) {
-            smg.btcAddress = btcUtil.hash160ToAddress(smg.btcAddress, 'pubkeyhash', settings.btcNetwork);
+            smg.btcAddress = BTCUtil.hash160ToAddress(smg.btcAddress, 'pubkeyhash', settings.btcNetwork);
           }
         });
       }
@@ -251,16 +261,17 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'listTransactions') {
     console.log('CrossChain_BTC2WBTC->>>>>>>>>listTransactions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
-      let recordAll = ccUtil.getBtcWanTxHistory({});
+      let recordAll = CCUtil.getBtcWanTxHistory({});
       let records = JSON.parse(JSON.stringify(recordAll));
+      
+      console.log("\n\n\n\nRECORDS: ", records, "n\n\n\n")
+
       records = records.map((value) => {
-        //console.log(value);
-        //console.log(settings.network);
         if ((value.chain === 'WAN') && value.crossAddress.startsWith('0x')) {
-          value.crossAddress = btcUtil.hash160ToAddress(value.crossAddress, null, settings.btcNetwork);
+          value.crossAddress = BTCUtil.hash160ToAddress(value.crossAddress, null, settings.btcNetwork);
         }
         if (value.chain === 'BTC' && value.storeman) {
-          value.storeman = btcUtil.hash160ToAddress(value.storeman, null, settings.btcNetwork);
+          value.storeman = BTCUtil.hash160ToAddress(value.storeman, null, settings.btcNetwork);
         }
         return value;
       });
@@ -269,8 +280,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         return Number(b.time) - Number(a.time);
       });
 
-      // log.debug(JSON.stringify(records, null, 4));
-      data.value = records;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       parseError(data, error);
@@ -287,80 +296,69 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let btcPassword = data.parameters.btcPassword;
 
       log.debug('getAddressList...');
-
+      // 1. construct UTXO for transfer
       console.time('check btc balance');
       //check balance
-      let addressList = await btcUtil.getAddressList();
-
-      addressList = await ccUtil.filterBtcAddressByAmount(addressList, amount);
-
+      let addressList = await BTCUtil.getAddressList();
+      console.log('\n\n\naddress list 1: ', addressList, '\n\n\n')
+      addressList = await CCUtil.filterBtcAddressByAmount(addressList, amount);
+      console.log('\n\n\naddress list 2: ', addressList, '\n\n\n')
       log.debug('checkBalance...');
 
-      let utxos = await ccUtil.getBtcUtxo(ccUtil.btcSender, config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
-      let result = await ccUtil.getUTXOSBalance(utxos);
+      let utxos = await CCUtil.getBtcUtxo(config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
+
+      let result = await CCUtil.getUTXOSBalance(utxos);
+
       let btcBalance = web3.toBigNumber(result).div(100000000);
 
       log.debug('current balance:' + btcBalance);
+
       if (!btcScripts.checkBalance(amount, btcBalance)) {
         throw new Error('Balance is not enough.');
       }
 
-      console.timeEnd('check btc balance');
+      console.log('\n\n\n storeman: ', JSON.stringify(storeman), '\n\n\n')
 
-      console.time('checkWanPassword');
-      if (!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
-        throw new Error('wrong password of wan.');
-      }
-      console.timeEnd('checkWanPassword');
-
-      log.debug('getECPairs...');
-      //check passwd
-      console.time('getECPairs');
-      let keyPairArray = [];
-      for (let i = 0; i < addressList.length; i++) {
-        let kp = await btcUtil.getECPairsbyAddr(btcPassword, addressList[i]);
-        keyPairArray.push(kp);
-      }
-      console.timeEnd('getECPairs');
-      if (keyPairArray.length === 0) {
-        throw new Error('wrong password of btc.');
-      }
-      if (keyPairArray[0].compressed === undefined) {
-        throw new Error('Password is wrong!');
+      const input = {
+        utxos: utxos,
+        smgBtcAddr: BTCUtil.addressToHash160(storeman.btcAddress, 'pubkeyhash', settings.btcNetwork),
+        // smgBtcAddr: storeman.btcAddress,
+        // value: amount,
+        value: Number(web3.toBigNumber(amount).mul(100000000)),
+        feeRate: config.feeRate,
+        password: btcPassword,
+        changeAddress: addressList[0],
+        keypair: [],
+        storeman: storeman['wanAddress'],
+        wanAddress: wanAddress,
+        gas: 2e6,
+        gasPrice: 180e9,
       }
 
-      console.time('fund');
-      log.debug('fund...');
-      let value = Number(web3.toBigNumber(amount).mul(100000000));
+      console.log('\n input: ', JSON.stringify(input), '\n')
 
-      if (!storeman.btcAddress.startsWith('0x')) {
-        storeman.btcAddress = btcUtil.addressToHash160(storeman.btcAddress, 'pubkeyhash', settings.btcNetwork);
+      let addrMap = {};
+      for (let i = 0; i < input.utxos.length; i++) {
+        let utxo = input.utxos[i];
+        // must call this in async func
+        if (!addrMap.hasOwnProperty(utxo.address)) {
+            console.log("Get key pair for: %d:%s ",i, utxo.address);
+            let kp = await BTCUtil.getECPairsbyAddr(input.password, utxo.address);
+            input.keypair.push(kp);
+            addrMap[utxo.address] = true;
+        }
       }
 
-      let record = await ccUtil.fund(keyPairArray, storeman.btcAddress, value);
+      console.log("key pair array length", input.keypair.length);
 
-      console.timeEnd('fund');
+      
+      let srcChain = CCUtil.getSrcChainNameByContractAddr('BTC','BTC');
+      console.log(JSON.stringify(srcChain, null, 4));
+      let dstChain = CCUtil.getSrcChainNameByContractAddr('WAN','WAN');
+      console.log(JSON.stringify(dstChain, null, 4));
 
-      console.time('sendWanNotice');
-      log.debug('sendWanNotice...');
-      // notice wan.
-      const tx = {};
-      tx.storeman = storeman.wanAddress;
-      tx.from = wanAddress;
-      tx.userH160 = '0x' + bitcoin.crypto.hash160(keyPairArray[0].publicKey).toString('hex');
-      tx.hashx = '0x' + record.hashx;
-      tx.txHash = '0x' + record.txhash;
-      tx.lockedTimestamp = record.redeemLockTimeStamp;
-      tx.gas = config.gasLimit;
-      tx.gasPrice = config.gasPrice;
-      tx.passwd = wanPassword;
-
-      //log.info('notice wan tx:' + JSON.stringify(tx, null, 4));
-      let txHash = await ccUtil.sendWanNotice(wanSender, tx);
-      log.info("sendWanNotice txHash:", txHash);
-
-      console.timeEnd('sendWanNotice');
-      data.value = 'txHash';
+      let ret = await global.crossInvoker.invoke(srcChain, dstChain, 'LOCK', input);
+      console.log('\n\n\n\n\n ret: ', ret.result, '\n\n\n\n\n');
 
       log.info('notice wan finish. txHash:' + data.value);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
@@ -592,9 +590,9 @@ function callbackMessage(message, e, data) {
 async function init() {
   log.info(config.socketUrl);
 
-  config.crossDbname = path.join(config.databasePath, config.crossDbname);
-  config.btcWallet = path.join(config.databasePath, config.btcWallet);
-  log.info(config.crossDbname);
+  config.crossDbname = path.join(config.databasePathPrex, config.crossDbname);
+  config.btcWallet = path.join(config.databasePathPrex, config.btcWallet);
+  log.info('crossDbname: ', config.crossDbname);
   log.info(config.btcWallet);
 
   wanchainCore = new WanchainCoreBTC(config);
@@ -604,6 +602,10 @@ async function init() {
   await wanchainCore.init();
 
   log.info('crossChainIpcBtc->sdk->useLocalNode:' + ccUtil.config.useLocalNode);
+
+  // for refactoring
+  let WanchainCoreInst = new WanchainCore(config)
+  await WanchainCoreInst.init(config)
 }
 exports.init = init;
 
