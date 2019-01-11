@@ -47,9 +47,7 @@ const db = global.db = require('./modules/db');
 
 
 require('./modules/ipcCommunicator.js');
-let startCCinit = require('./modules/crossChain/crossChainIPC.js').init;
-let startCCinitErc20 = require('./modules/crossChainErc20/crossChainIPC.js').init;
-let startCCinitBtc = require('./modules/crossChainBtc/crossChainIpcBtc.js').init;
+const initCrossChain = require('./modules/walletBackend').init
 let upgradeDb = require('./modules/upgradeDb');
 upgradeDb.initLog(logger.create("upgradeDb"));
 
@@ -186,26 +184,11 @@ async function startCrossChain(){
 
     log.debug('startCCinit...');
     try{
-        await startCCinit();
+        await initCrossChain();
     }catch(error){
         log.error("startCrossChain: ", error.toString());
     }
     log.debug('startCCinit...finish!');
-
-    log.debug('startCCinitErc20...');
-        try{
-            await startCCinitErc20();
-        }catch(error){
-            log.error("startCrossChainErc20: ", error.toString());
-        }
-    log.debug('startCCinitErc20...finish!');
-    log.debug('startCCinitBtc...');
-    try{
-        await startCCinitBtc();
-    }catch(error){
-        log.error("startCrossChainBtc: ", error.toString());
-    }
-    log.debug('startCCinitBtc...finish!');
 
     return new Q((resolve, reject) => {
         resolve(this);
