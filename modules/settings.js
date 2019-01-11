@@ -116,7 +116,7 @@ const argv = require('yargs')
         },
         loglevel: {
             demand: false,
-            default: 'info',
+            default: 'debug',
             describe: 'Minimum logging threshold: info, debug, error, trace (shows all logs, including possible passwords over IPC!).',
             requiresArg: true,
             nargs: 1,
@@ -195,7 +195,7 @@ class Settings {
     init() {
     mkdirsSync(this.getKeystoreDir('ethereum'));
     mkdirsSync(this.getKeystoreDir('wanchain'));
-       logger.setup(argv);
+    logger.setup(argv);
 
         this._log = logger.create('Settings');
     }
