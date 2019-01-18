@@ -125,6 +125,23 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         data.value = {"crossCollection": crossCollectionArr};
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
+    else if (data.action === 'listAllCrossTrans') {
+        let crossCollection = global.wanDb.getItemAll(config.crossCollection, {});
+        let newArr = {
+            'canRedeem': [],
+            'canRevoke': []
+        };
+        crossCollection.forEach(record =>{
+            if(ccUtil.canRedeem(record).code) {
+                newArr['canRedeem'].push(record);
+            }
+            if(ccUtil.canRevoke(record).code) {
+                newArr['canRevoke'].push(record);
+            }
+        });
+        data.value = newArr;
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
     else if (data.action === 'getGasPrice') {
         let result = {};
         if (data.chainType === 'ETH') {
