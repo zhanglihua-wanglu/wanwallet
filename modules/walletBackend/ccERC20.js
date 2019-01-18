@@ -387,7 +387,8 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
 
-    } else if (data.action === 'getMultiTokenBalance') {
+    } 
+    else if (data.action === 'getMultiTokenBalance') {
         // chainType ETH WAN
         let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters.addressList, data.parameters.tokenAddress, data.chainType);
         data.value = balanceList;
@@ -414,10 +415,6 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
     }
-
-    // else if (data.action == 'sendRawTrans') {
-    //     sendRawTransactions('CrossChain_ERC202WERC20', e, data);
-    // }
     else if (data.action == 'sendNormalTransaction') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
         let srcChain = ccUtil.getSrcChainNameByContractAddr( data.parameters.tokenOrigAddr,data.chainType);
@@ -440,7 +437,6 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
             callbackMessage('CrossChain_ERC202WERC20', e, data);
         }
     }
-
     else if (sendServer.hasMessage(data.action)) {
 
         let args = data.parameters;

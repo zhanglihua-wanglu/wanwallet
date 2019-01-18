@@ -310,7 +310,8 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             callbackMessage('CrossChain_ETH2WETH', e, data);
         }
 
-    } else if (data.action == 'getMultiTokenBalance') {
+    } 
+    else if (data.action == 'getMultiTokenBalance') {
         try {
             let balanceList = await ccUtil.getMultiTokenBalanceByTokenScAddr(data.parameters[0], config.ethTokenAddressOnWan, "WAN");
             data.value = balanceList;
@@ -360,6 +361,10 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             data.error = error.toString();
             callbackMessage('CrossChain_ETH2WETH', e, data);
         }
+    }
+    else if (data.action === 'syncStoremanGroups') {
+        data.value = await ccUtil.getEthSmgList();
+        callbackMessage('CrossChain_ETH2WETH', e, data);
     }
     else if (sendServer.hasMessage(data.action)) {
 

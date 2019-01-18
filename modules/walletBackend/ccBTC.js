@@ -1,5 +1,6 @@
 "use strict";
 
+const _ = require('lodash')
 const { app, ipcMain: ipc, shell, webContents } = require('electron')
 const { ccUtil, btcUtil } = require('wanchain-js-sdk')
 
@@ -127,8 +128,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let addressList;
       let utxos;
       // Check whether the btc balance is enough.
-      // addressList = await btcUtil.getAddressList();
-      // addressList = await btcUtil.getAddressList();
       addressList = await btcUtil.getAddressList();
       let addr = JSON.stringify(addressList, null, 2)
       
@@ -145,41 +144,21 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('Balance not enough.');
       }
 
-      //Check password
-      // let keyPairArray = [];
-      // for (let i = 0; i < addressList.length; i++) {
-      //   let kp = await btcUtil.getECPairsbyAddr(passwd, addressList[i]);
-      //   keyPairArray.push(kp);
-      // }
+      let srcChain = ccUtil.getSrcChainNameByContractAddr("BTC", "BTC");
 
-      // if (keyPairArray.length === 0) {
-      //   throw new Error('Password is wrong!');
-      // }
-      // if (keyPairArray[0].compressed === undefined) {
-      //   throw new Error('Password is wrong!');
-      // }
-
-      // //Build transaction
-      // let target = {
-      //   address: to,
-      //   value: Number(web3.toBigNumber(amount).mul(100000000))
-      // };
-
-      let input = {
+      let ret = await global.crossInvoker.invokeNormalTrans(srcChain, {
         utxos: utxos,
         to: to,
-        value: amount,
+        value: Number(web3.toBigNumber(amount).mul(100000000)),
         feeRate: config.feeRate,
         password: passwd,
         changeAddress: addressList[0]
+      });
+      
+      if (!ret.code) {
+        throw new Error('btc normal tx error')
       }
 
-      let srcChain = ccUtil.getSrcChainNameByContractAddr("BTC", "BTC");
-
-      let ret = await global.crossInvoker.invokeNormalTrans(srcChain, input);
-
-      console.log('\n\n\n\n\ntx hash:', ret, '\n\n\n\n\n\n')
-      
       data.value = 'success';
 
       log.debug('CrossChain_BTC2WBTC->sendBtcToAddress->sendRawTransaction success!');
@@ -192,16 +171,20 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
     log.debug('CrossChain_BTC2WBTC->>>>>>>>>listWbtcBalance>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     try {
       let wanAddressList = [];
+      let wanTokenBalanceObj = [];
       let tokenBalance;
       data.value = {};
 
       //This method can not use local node, must use remote node.
-      wanAddressList = await ccUtil.getWanAccountsInfo()
 
-      wanAddressList.forEach(function (wanAddress, index) {
-        tokenBalance = web3.toBigNumber(wanAddress.tokenBalance).div(100000000).toString();
-        data.value[wanAddress.address] = tokenBalance;
-      });
+      wanAddressList = await ccUtil.getWanAccounts()
+      wanTokenBalanceObj = await ccUtil.getMultiTokenBalanceByTokenScAddr(wanAddressList,config.wbtcToken.address, 'WAN')
+
+      for (let key in wanTokenBalanceObj) {
+        tokenBalance = web3.toBigNumber(wanTokenBalanceObj[key]).div(100000000).toString();
+        data.value[key] = tokenBalance;
+      }
+
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       parseError(data, error);
@@ -241,12 +224,17 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         if (value.chain === 'BTC' && value.storeman) {
           value.storeman = btcUtil.hash160ToAddress(value.storeman, null, settings.btcNetwork);
         }
+        if (value.chain === 'BTC' && value.from === 'local btc account') {
+          return _.omit(value, ['HashX'])
+        }
         return value;
       });
 
       records = records.sort((a, b) => {
         return Number(b.time) - Number(a.time);
       });
+
+      data.value = records;
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -327,6 +315,11 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let ret = await global.crossInvoker.invoke(srcChain, dstChain, 'LOCK', input);
       console.log('\n\n\n\n\n ret: ', ret.result, '\n\n\n\n\n');
 
+      if (!ret.code) {
+        throw new Error('lock btc error')
+      }
+
+      data.value = ret.result
       log.info('notice wan finish. txHash:' + data.value);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -339,19 +332,18 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let dstChain = ccUtil.getSrcChainNameByContractAddr('WAN','WAN');
       // assemble input data
       let input = {}
-      input.x = (data.parameters.x.startsWith('0x') ? data.parameters.x : '0x' + data.parameters.x)
-      input.gas = 2e6
-      input.gasPrice = 180e9
+      input.x = ccUtil.hexAdd0x(data.parameters.x)
+      input.gas = config.wanRefundGas
+      input.gasPrice = config.wanGasPrice
       input.password = data.parameters.wanPassword
 
       let ret = await global.crossInvoker.invoke(srcChain, dstChain, 'REDEEM', input)
 
-      if (!ret.result) {
-        throw new Error('redeemBtc failed.');
+      if (!ret.code) {
+        throw new Error('redeem btc fail');
       }
 
       data.value = ret.result
-
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
       parseError(data, error);
@@ -362,15 +354,15 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       let password = data.parameters.btcPassword
       let input = {}
-
-      input.hashX = data.parameters.HashX
+      let hashX = ccUtil.hexTrip0x(data.parameters.HashX)
+      input.hashX = hashX
       input.feeHard = config.feeHard
 
       let rec
       let records = await ccUtil.getBtcWanTxHistory();
 
-      for (let i=0; i<records.length; i++) {
-        if (records[i].crossAddress != '') {
+      for (let i = 0; i < records.length; i++) {
+        if (records[i].HashX == hashX) {
             rec = records[i]; 
             break;
         }
@@ -384,13 +376,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       console.log("Source chain: ", JSON.stringify(srcChain, null, 4));
       console.log("Destination chain: ", JSON.stringify(dstChain, null, 4));
 
-      // let alice = await btcUtil.getECPairsbyAddr(btcPassword, from);
-
-      // if (alice.length === 0) {
-      //   throw new Error('Password of btc is wrong!');
-      // }
-
       const ret = await global.crossInvoker.invoke(srcChain, dstChain, 'REVOKE', input);
+      if (!ret.code) {
+        throw new Error('revoke btc error')
+      }
 
       log.info('revokeBtc finish, txhash:' + ret.result);
       data.value = ret.result;
@@ -414,44 +403,47 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('BTC address is invalid.');
       }
 
-      if (!ccUtil.checkWanPassword(wanAddress, wanPassword)) {
+      if (!ccUtil.checkWanPassword(wanAddress, password)) {
         throw new Error('wrong password of wan.');
       }
-      //Check whether the wbtc balance is enought.
-      //This method can not use local node, must use remote node.
-      let wanAddressList = await ccUtil.getWanAccountsInfo();
+      // Check whether the wbtc balance is enough
+      // This method can not use local node, must use remote node.
+      // let wanAddressList = await ccUtil.getWanAccountsInfo();
+      let wanAddressList = await ccUtil.getWanAccounts()
+      let wanTokenBalanceObj = await ccUtil.getMultiTokenBalanceByTokenScAddr(wanAddressList, config.wbtcToken.address, 'WAN')
 
       let wbtcEnough;
-      wanAddressList.forEach(function (wanAddr) {
-        if (wanAddress === wanAddr.address) {
-          let wbtcBalance = web3.toBigNumber(wanAddr.tokenBalance).div(100000000);
-          wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance);
-          // log.info(`amount:${Number(amount)}, wbtcBalance:${Number(wbtcBalance.toString())}`);
-          console.log(`amount:${Number(amount)}, wbtcBalance:${Number(wbtcBalance.toString())}`);
+      for (let key in wanTokenBalanceObj) {
+        if (key === wanAddress) {
+          let wbtcBalance = web3.toBigNumber(wanTokenBalanceObj[key]).div(100000000)
+          wbtcEnough = btcScripts.checkBalance(amount, wbtcBalance)
+          console.log(`amount:${Number(amount)}, wbtcBalance:${Number(wbtcBalance.toString())}`)
+          break
         }
-      });
+      }
 
-      if (wbtcEnough === false) {
+      if (!wbtcEnough) {
         log.error(JSON.stringify(wanAddressList, null, 4));
-        log.error(wanAddress);
-        throw new Error('The wbtc balance is not enough.');
+        log.error(wanAddress)
+        throw new Error('The wbtc balance is not enough or addresses provided invalid')
       }
 
-      if (wbtcEnough === undefined) {
-        throw new Error('The wan address is invalid. input:' + wanAddress + ', list: ' + JSON.stringify(wanAddressList, null, 4));
-      }
+      // if (wbtcEnough === undefined) {
+      //   throw new Error('The wan address is invalid. input:' + wanAddress + ', list: ' + JSON.stringify(wanAddressList, null, 4));
+      // }
 
       let input ={}
       input.from = wanAddress
-      input.gas = config.gasLimit
-      input.gasPrice = config.gasPrice
-      input.amount = Number(web3.toBigNumber(amount).mul(100000000));
-      input.value = ccUtil.calculateLocWanFee(input.amount, global.btc2WanRatio, storeman.txFeeRatio);
-      input.crossAddress = btcUtil.addressToHash160(btcAddress, 'pubkeyhash', settings.btcNetwork)
-      input.storeman = storeman
+      input.gas = config.wanLockGas
+      input.gasPrice = config.wanGasPrice
+      input.amount = Number(web3.toBigNumber(amount).mul(100000000)) // in sats
+      // new function for fee calculation
+      // input.value = ccUtil.calculateLocWanFee(input.amount, global.btc2WanRatio, storeman.txFeeRatio)
+      input.value = ccUtil.calculateLocWanFeeWei(input.amount, global.btc2WanRatio, storeman.txFeeRatio)
+      input.crossAddr= btcUtil.addressToHash160(btcAddress, 'pubkeyhash', settings.btcNetwork)
+      input.crossAddr = input.crossAddr.startsWith('0x') ? input.crossAddr : '0x' + input.crossAddr
+      input.storeman = storeman.wanAddress // storeman is an object
       input.password = password
-      //Make the wdTx
-
 
       console.log("btc2WanRatio=", global.btc2WanRatio);
       console.log("Input:", JSON.stringify(input, null, 4));
@@ -464,6 +456,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   
       const ret = await global.crossInvoker.invoke(srcChain, dstChain, 'LOCK', input);
 
+      if (!ret.code) {
+        throw new Error('lock wbtc error')
+      }
+      
       data.value = ret.result;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
@@ -475,23 +471,25 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let password = data.parameters.btcPassword;
 
       let input = {}
-      input.hashX =  data.parameters.HashX; // use hashX to get record
+      let hashX = ccUtil.hexTrip0x(data.parameters.HashX)
+      input.hashX =  hashX // use hashX to get record
       input.feeHard = config.feeHard;
       
       let rec
       let records = await ccUtil.getBtcWanTxHistory();
       for (let i = 0; i < records.length; i++) {
-          if (records[i].crossAddress != '') {
+          if (records[i].HashX === hashX) {
               rec = records[i]; 
               break;
           }
       }
 
-      console.log("Alice:", JSON.stringify(rec, null, 4));
-      let kp = await btcUtil.getECPairsbyAddr(password, rec.from);
-      console.log("Alice:", alice);
+      console.log("Record:", JSON.stringify(rec, null, 4));
+      let addr = btcUtil.hash160ToAddress(rec.crossAddress,'pubkeyhash', 'testnet');
+      let kp = await btcUtil.getECPairsbyAddr(password, addr);
+      console.log("Alice:", kp);
 
-      input.keypair = alice;
+      input.keypair = kp;
 
       let dstChain = ccUtil.getSrcChainNameByContractAddr('BTC','BTC');
       let srcChain = ccUtil.getSrcChainNameByContractAddr('WAN','WAN');
@@ -499,7 +497,12 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       console.log("Destination chain: ", JSON.stringify(dstChain, null, 4));
 
       let ret = await global.crossInvoker.invoke(srcChain, dstChain, 'REDEEM', input);
-      
+      console.log(ret.result);
+
+      if (!ret.code) {
+        throw new Error('redeem wbtc error')
+      }
+
       data.value = ret.result;
 
       callbackMessage('CrossChain_BTC2WBTC', e, data);
@@ -517,16 +520,21 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         throw new Error('wrong password of wan.');
       }
 
-      let input = {}
-
       // assemble tx data
-      input.hashX = data.parameters.HashX.startsWith('0x') ? data.parameters.HashX : '0x' + data.parameters.HashX
-      input.gas = config.gasLimit
-      input.gasPrice = config.gasPrice
+      let input = {}
+      input.hashX = ccUtil.hexTrip0x(data.parameters.HashX)
+      input.gas = config.wanRevokeGas
+      input.gasPrice = config.wanGasPrice
       input.password = password
+
+      let dstChain = ccUtil.getSrcChainNameByContractAddr('BTC','BTC');
+      let srcChain = ccUtil.getSrcChainNameByContractAddr('WAN','WAN');
 
       // invoke tx sender
       let ret = await global.crossInvoker.invoke(srcChain, dstChain, 'REVOKE', input)
+      if (!ret.code) {
+        throw new Error('revoke wbtc error')
+      }
 
       data.value = ret.result;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
