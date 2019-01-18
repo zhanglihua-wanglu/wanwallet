@@ -25,15 +25,9 @@ if (config.network === 'testnet') {
         decimals: 8
     }
 
-    config.confirmBlocks = {
-        'btc' : 1,
-        'eth' : 2,
-        'wan' : 3
-    }
+    config.confirmBlocks = 3
+    config.btcConfirmBlocks = 1
 
-    config.htlcs = {
-        'btc': '0xb248ed04e1f1bbb661b56f210e4b0399b2899d16'
-    }
 } else {
     global.wanchain_js_testnet =  false
     config.bitcoinNetwork = bitcoin.networks.bitcoin
@@ -52,23 +46,8 @@ if (config.network === 'testnet') {
         decimals: 8
     }
 
-    config.htlcs = {
-        'btc': '0x50c53a4f6702c2713b3535fc896bc21597534906'
-    }
-
-    
-    config.confirmBlocks = {
-        'btc' : 3,
-        'eth' : 12,
-        'wan' : 12
-    }
-}
-
-config.fee = {
-    'btc' : {
-        'rate'  : 300,
-        'fixed' : 100000 
-    }
+    config.confirmBlocks = 12
+    config.btcConfirmBlocks = 3
 }
 
 config.tryTimes                 = 3
@@ -104,26 +83,29 @@ config.wanKeyStorePath = config.keyStorePath
 config.ethKeyStorePath = config.ethkeyStorePath
 config.btcKeyStorePath = ''
 
-config.ethGasPrice = 60
-config.wanGasPrice = 200
-config.ethNormalGas = 30000//21004
-config.ethLockGas = 200000 //171866;
+config.ethGasPrice = 60e9
+config.wanGasPrice = 200e9
+config.ethNormalGas = 100000//21004
+config.ethLockGas = 2000000 //171866;
 config.ethRefundGas = 120000  // 91663;
 config.ethRevokeGas = 100000 // 40323;
 
-config.wanLockGas = 300000 // 232665;
-config.wanRefundGas = 120000 // 34881;
-config.wanRevokeGas = 100000 // 49917;
+config.wanLockGas = 2e6 // 232665;
+config.wanRefundGas = 1e6 // 34881;
+config.wanRevokeGas = 1e6 // 49917;
+
+config.feeRate = 300
+config.feeHard = 100000
 
 config.MAX_CONFIRM_BLKS = 100000000;
 config.MIN_CONFIRM_BLKS = 0;
 
 // database config
-// config.crossDbname = 'wanchainDb'
-// config.crossCollection = 'crossTrans'             // E20 & ETH
-// config.crossCollectionBtc = 'crossTransBtc';      // BTC crosschain + normal
-// config.normalCollection = 'normalTrans'           // E20 & ETH normal
-// config.btcWalletCollection = 'data'               // BTC wallet balance
+config.crossDbname = 'wanchainDb'
+config.crossCollection = 'crossTrans'             // E20 & ETH
+config.crossCollectionBtc = 'crossTransBtc';      // BTC crosschain + normal
+config.normalCollection = 'normalTrans'           // E20 & ETH normal
+config.btcWalletCollection = 'data'               // BTC wallet balance
 
 config.consoleColor = {
     'COLOR_FgRed': '\x1b[31m',
