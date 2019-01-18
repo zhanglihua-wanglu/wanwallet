@@ -4,7 +4,7 @@ const Q = require('bluebird');
 let fs = require('fs');
 let Web3 = require('web3');
 let web3 = new Web3();
-const ethconfig = require('./crossChain/config');
+const ethconfig = require('./walletBackend/config');
 
 // oldVersion
 // let oldVersion = '2.1.0';
