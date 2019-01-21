@@ -335,10 +335,6 @@ ipc.on('CrossChain_ETH2WETH', async (e, data) => {
             callbackMessage('CrossChain_ETH2WETH', e, data);
         }
     }
-
-    // else if (data.action == 'sendRawTrans') {
-    //     sendRawTransactions('CrossChain_ETH2WETH', e, data);
-    // }
     else if (data.action === 'sendNormalTransaction') {
         data.parameters.tx.gasPrice = new BigNumber(data.parameters.tx.gasPrice).dividedBy(new BigNumber("1000000000"));
         let srcChain = ccUtil.getSrcChainNameByContractAddr("ETH","ETH");

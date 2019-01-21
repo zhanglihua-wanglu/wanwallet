@@ -1,5 +1,8 @@
 global._ = require('./modules/utils/underscore');
 const { app, dialog, ipcMain, shell, protocol } = require('electron');
+
+console.log('electron userData: \n', app.getPath('userData'))
+
 const timesync = require('os-timesync');
 const dbSync = require('./modules/dbSync.js');
 const i18n = require('./modules/i18n.js');
@@ -17,7 +20,11 @@ Q.config({
     cancellation: true,
 });
 
+let isBtcDbMigrated = false
+
 Settings.init();
+
+console.log(Settings.userDataPath)
 // logging setup
 const log = logger.create('main');
 
@@ -193,6 +200,41 @@ async function startCrossChain(){
     return new Q((resolve, reject) => {
         resolve(this);
     });
+}
+
+async function startBtcDBMigration() {    
+    if (Settings.network.includes('main')) {
+        btcWalletLegacyConfig = {
+            btcWallet: `${Settings.userDataPath}/btcWallet.db`,
+            databasePath: `${process.env.HOME}/LocalDb`,
+            network: 'mainnet'
+        }
+        btcTxHistoryLegacyConfig = {
+            crossDbname: `${Settings.userDataPath}/crossTransDbBtc`,
+            srcCrossCollection: 'btcCrossTransaction',
+            databasePath: `${process.env.HOME}/LocalDb`,
+            dstCrossCollection: 'crossTransBtc',
+            network: 'testnet'
+        }
+    } else {
+        btcWalletLegacyConfig = {
+            btcWallet: `${Settings.userDataPath}/testnetDb/btcWallet.db`,
+            databasePath: `${process.env.HOME}/LocalDb`,
+            network: 'testnet'
+        }
+        btcTxHistoryLegacyConfig = {
+            crossDbname: `${Settings.userDataPath}/testnetDb/crossTransDbBtc`,
+            srcCrossCollection: 'btcCrossTransaction',
+            databasePath: `${process.env.HOME}/LocalDb`,
+            dstCrossCollection: 'crossTransBtc',
+            network: 'testnet'
+        }
+    }
+    
+    await upgradeDb.upgradeBtcWallet(btcWalletLegacyConfig)
+    await upgradeDb.upgradeBtcTxHistory(btcTxHistoryLegacyConfig)
+
+    log.info('database migrationg done')
 }
 
 
@@ -504,11 +546,14 @@ onReady = () => {
         .then(() => {
             return ethereumNode.init();
         })
-        .then(()=>{
-            return startCrossChain();
+        .then(() => {
+            upgradeDb.upgradeDb_2_1(Settings.userDataPath, Settings.network);
         })
         .then(() => {
-            upgradeDb.upgradeDb_2_1(Settings.userDataPath,Settings.network);
+            return startBtcDBMigration()
+        })
+        .then(()=>{
+            return startCrossChain();
         })
         .then(() => {
             // Wallet shouldn't start Swarm

@@ -5,6 +5,7 @@ let fs = require('fs');
 let Web3 = require('web3');
 let web3 = new Web3();
 const ethconfig = require('./walletBackend/config');
+const upgradeBtc = require('wanchain-js-sdk').upgrade;
 
 // oldVersion
 // let oldVersion = '2.1.0';
@@ -138,6 +139,10 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
     });
 
 };
+
+upgradeDb.upgradeBtcWallet = upgradeBtc.migrateBTCWallet
+
+upgradeDb.upgradeBtcTxHistory = upgradeBtc.importBTCHistroyTx
 
 function transitionState(status) {
     switch (status){
