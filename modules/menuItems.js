@@ -260,15 +260,28 @@ let menuTempl = function (webviews) {
                             shell.showItemInFolder(userPath);
                         },
                     },
+                    // {
+                    //     label: 'Btc Accounts',
+                    //     click() {
+                    //         let userPath = Settings.userDataPath;
+                    //         if(Settings.network.includes('main')) {
+                    //             userPath = path.join(userPath, 'btcWallet.db');
+                    //         } else {
+                    //             userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
+                    //         }
+                    //         shell.showItemInFolder(userPath);
+                    //     },
+                    // },
                     {
                         label: 'Btc Accounts',
                         click() {
-                            let userPath = Settings.userDataPath;
-                            if(Settings.network.includes('main')) {
-                                userPath = path.join(userPath, 'btcWallet.db');
-                            } else {
-                                userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
-                            }
+                            let userPath = process.platform === 'win32' ? process.env.APPDATA : process.env.HOME
+                            // if(Settings.network.includes('main')) {
+                            //     userPath = 
+                            // } else {
+                            //     userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
+                            // }
+                            userPath = path.join(userPath, 'LocalDb')
                             shell.showItemInFolder(userPath);
                         },
                     }
