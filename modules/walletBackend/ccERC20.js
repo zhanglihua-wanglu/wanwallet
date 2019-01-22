@@ -13,23 +13,20 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows');
 
-function toGweiString(swei) {
-    let exp = new BigNumber(10);
-    let wei = new BigNumber(swei);
-    let gwei = wei.dividedBy(exp.pow(9));
-    return gwei.toString(10);
-}
+// function toGweiString(swei) {
+//     let exp = new BigNumber(10);
+//     let wei = new BigNumber(swei);
+//     let gwei = wei.dividedBy(exp.pow(9));
+//     return gwei.toString(10);
+// }
 
 const log = config.getLogger('crossChain');
 
 
 ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
-    // console.log('CrossChainIPC : ',data);
-
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
 
     if (data.action === 'getRegErc20Tokens') {
-        console.log('\n\n\n\n\n\nhere\n\n\n\n\n')
         data.value = await ccUtil.getRegErc20Tokens();
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }

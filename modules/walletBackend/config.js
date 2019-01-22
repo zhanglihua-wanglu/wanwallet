@@ -7,28 +7,7 @@ const Logger = require('./logger.js');
 let config = {}
 config.network = settings.network
 
-if (config.network === 'testnet') {
-    global.wanchain_js_testnet =  true
-    config.bitcoinNetwork = bitcoin.networks.testnet
-    config.socketUrl = 'wss://apitest.wanchain.info'
-    config.wethToken = {
-        address: "0x46397994a7e1e926ea0de95557a4806d38f10b0d",
-        name: 'Wanchain Ethereum Crosschain Token',
-        symbol: 'WETH',
-        decimals: 18
-    }
-
-    config.wbtcToken = {
-        address: "0x89a3e1494bc3db81dadc893ded7476d33d47dcbd",
-        name: 'Wanchain Btc Crosschain Token',
-        symbol: 'WBTC',
-        decimals: 8
-    }
-
-    config.confirmBlocks = 3
-    config.btcConfirmBlocks = 1
-
-} else {
+if (settings.network.includes('main')) {
     global.wanchain_js_testnet =  false
     config.bitcoinNetwork = bitcoin.networks.bitcoin
     config.socketUrl = 'wss://api.wanchain.info'
@@ -48,15 +27,32 @@ if (config.network === 'testnet') {
 
     config.confirmBlocks = 12
     config.btcConfirmBlocks = 3
+} else {
+    global.wanchain_js_testnet =  true
+    config.bitcoinNetwork = bitcoin.networks.testnet
+    config.socketUrl = 'wss://apitest.wanchain.info'
+    config.wethToken = {
+        address: "0x46397994a7e1e926ea0de95557a4806d38f10b0d",
+        name: 'Wanchain Ethereum Crosschain Token',
+        symbol: 'WETH',
+        decimals: 18
+    }
+
+    config.wbtcToken = {
+        address: "0x89a3e1494bc3db81dadc893ded7476d33d47dcbd",
+        name: 'Wanchain Btc Crosschain Token',
+        symbol: 'WBTC',
+        decimals: 8
+    }
+
+    config.confirmBlocks = 3
+    config.btcConfirmBlocks = 1
 }
 
-config.tryTimes                 = 3
-config.ethTokenAddressOnWan   = config.wethToken.address;
+config.tryTimes = 3
+config.ethTokenAddressOnWan = config.wethToken.address;
 config.WBTCToken = config.wbtcToken.address;
 config.logPath = path.join(settings.userDataPath, 'LOG', settings.network)
-// config.dbPath = path.join(settings.userDataPath, 'DB', settings.network)
-
-// _mkdirsSync(settings.userDataPath)
 
 config.ccLog = path.join(config.logPath, 'crossChainLog.log')
 config.ccErr = path.join(config.logPath, 'crossChainErr.log')
@@ -85,14 +81,14 @@ config.btcKeyStorePath = ''
 
 config.ethGasPrice = 60e9
 config.wanGasPrice = 200e9
-config.ethNormalGas = 100000//21004
-config.ethLockGas = 2000000 //171866;
-config.ethRefundGas = 120000  // 91663;
-config.ethRevokeGas = 100000 // 40323;
+config.ethNormalGas = 100000
+config.ethLockGas = 2000000
+config.ethRefundGas = 120000 
+config.ethRevokeGas = 100000 
 
-config.wanLockGas = 2e6 // 232665;
-config.wanRefundGas = 1e6 // 34881;
-config.wanRevokeGas = 1e6 // 49917;
+config.wanLockGas = 2e6
+config.wanRefundGas = 1e6 
+config.wanRevokeGas = 1e6 
 
 config.feeRate = 300
 config.feeHard = 100000
@@ -112,16 +108,5 @@ config.consoleColor = {
     'COLOR_FgYellow': '\x1b[33m',
     'COLOR_FgGreen': "\x1b[32m"
 }
-
-// function _mkdirsSync(dirname) {
-//     if (fs.existsSync(dirname)) {
-//         return true
-//     } else {
-//         if (mkdirsSync(path.dirname(dirname))) {
-//             fs.mkdirSync(dirname)
-//             return true
-//         }
-//     }
-// }
 
 module.exports = config

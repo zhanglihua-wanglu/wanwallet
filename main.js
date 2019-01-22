@@ -16,18 +16,15 @@ const Q = require('bluebird');
 const windowStateKeeper = require('electron-window-state');
 const fs = require('fs');
 const path = require('path');
+
 Q.config({
     cancellation: true,
 });
 
-let isBtcDbMigrated = false
 
 Settings.init();
-
-console.log(Settings.userDataPath)
 // logging setup
 const log = logger.create('main');
-
 
 if (Settings.cli.version) {
     log.info(Settings.appVersion);
@@ -51,13 +48,12 @@ if (Settings.rpcMode === 'http') {
 
 // db
 const db = global.db = require('./modules/db');
-
+// upgrade db scripts
+const upgradeDb = require('./modules/upgradeDb');
+upgradeDb.initLog(logger.create("upgradeDb"));
 
 require('./modules/ipcCommunicator.js');
 const initCrossChain = require('./modules/walletBackend').init
-let upgradeDb = require('./modules/upgradeDb');
-upgradeDb.initLog(logger.create("upgradeDb"));
-
 const appMenu = require('./modules/menuItems');
 const ipcProviderBackend = require('./modules/ipc/ipcProviderBackend.js');
 const ethereumNode = require('./modules/ethereumNode.js');
@@ -176,7 +172,6 @@ Only do this if you have secured your HTTP connection or you know what you are d
     });
 });
 function mkdirsSync(dirname) {
-    //console.log(dirname);
     if (fs.existsSync(dirname)) {
         return true;
     } else {
@@ -188,21 +183,21 @@ function mkdirsSync(dirname) {
 }
 
 async function startCrossChain(){
-
     log.debug('startCCinit...');
-    try{
+    try {
         await initCrossChain();
-    }catch(error){
+    } catch (error) {
         log.error("startCrossChain: ", error.toString());
     }
-    log.debug('startCCinit...finish!');
-
+    log.debug('startCCinit...finish!')
     return new Q((resolve, reject) => {
         resolve(this);
-    });
+    })
 }
 
 async function startBtcDBMigration() {    
+    log.info('database migration start ...')
+
     if (Settings.network.includes('main')) {
         btcWalletLegacyConfig = {
             btcWallet: `${Settings.userDataPath}/btcWallet.db`,
@@ -229,12 +224,13 @@ async function startBtcDBMigration() {
             dstCrossCollection: 'crossTransBtc',
             network: 'testnet'
         }
-    }
+    }  
     
+    // btc wallet migration
     await upgradeDb.upgradeBtcWallet(btcWalletLegacyConfig)
+    // btc tx records migration
     await upgradeDb.upgradeBtcTxHistory(btcTxHistoryLegacyConfig)
-
-    log.info('database migrationg done')
+    log.info('database migration done ...')
 }
 
 
@@ -556,7 +552,6 @@ onReady = () => {
             return startCrossChain();
         })
         .then(() => {
-            // Wallet shouldn't start Swarm
             if (Settings.uiMode === 'wallet') {
                 return Promise.resolve();
             }

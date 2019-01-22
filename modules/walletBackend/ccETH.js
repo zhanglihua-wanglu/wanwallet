@@ -15,17 +15,14 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 const Windows = require('../windows');
 
-function toGweiString(swei) {
-    let exp = new BigNumber(10);
-    let wei = new BigNumber(swei);
-    let gwei = wei.dividedBy(exp.pow(9));
-    return gwei.toString(10);
-}
-
+// function toGweiString(swei) {
+//     let exp = new BigNumber(10);
+//     let wei = new BigNumber(swei);
+//     let gwei = wei.dividedBy(exp.pow(9));
+//     return gwei.toString(10);
+// }
 
 ipc.on('CrossChain_ETH2WETH', async (e, data) => {
-    // console.log('CrossChainIPC : ',data.action);
-
     let sendServer = global.sendByWebSocket ? global.sendByWebSocket : null;
 
     if (data.action === 'getAddressList') {
