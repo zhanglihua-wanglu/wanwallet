@@ -1,8 +1,5 @@
 global._ = require('./modules/utils/underscore');
 const { app, dialog, ipcMain, shell, protocol } = require('electron');
-
-console.log('electron userData: \n', app.getPath('userData'))
-
 const timesync = require('os-timesync');
 const dbSync = require('./modules/dbSync.js');
 const i18n = require('./modules/i18n.js');
@@ -202,7 +199,7 @@ async function startBtcDBMigration() {
         btcWalletLegacyConfig = {
             btcWallet: `${Settings.userDataPath}/btcWallet.db`,
             databasePath: `${process.env.HOME}/LocalDb`,
-            network: 'mainnet'
+            network: 'main'
         }
         btcTxHistoryLegacyConfig = {
             crossDbname: `${Settings.userDataPath}/crossTransDbBtc`,
@@ -226,11 +223,18 @@ async function startBtcDBMigration() {
         }
     }  
     
-    // btc wallet migration
-    await upgradeDb.upgradeBtcWallet(btcWalletLegacyConfig)
-    // btc tx records migration
-    await upgradeDb.upgradeBtcTxHistory(btcTxHistoryLegacyConfig)
-    log.info('database migration done ...')
+    try {
+        // btc wallet migration
+        await upgradeDb.upgradeBtcWallet(btcWalletLegacyConfig)
+        // btc tx records migration
+        await upgradeDb.upgradeBtcTxHistory(btcTxHistoryLegacyConfig)
+    } catch (e) {
+        log.error('upgradeDb error: ', e.toString())
+    }
+    log.debug('database migration done ...')
+    return new Q((resolve, reject) => {
+        resolve(this)
+    })
 }
 
 

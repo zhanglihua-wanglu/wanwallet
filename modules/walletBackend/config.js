@@ -52,12 +52,13 @@ if (settings.network.includes('main')) {
 config.tryTimes = 3
 config.ethTokenAddressOnWan = config.wethToken.address;
 config.WBTCToken = config.wbtcToken.address;
-config.logPath = path.join(settings.userDataPath, 'LOG', settings.network)
 
-config.ccLog = path.join(config.logPath, 'crossChainLog.log')
-config.ccErr = path.join(config.logPath, 'crossChainErr.log')
-config.mrLog = path.join(config.logPath, 'ccMonitorLog.log')
-config.mrErr = path.join(config.logPath, 'ccMonitorErr.log')
+config.logPathPrex = path.join(settings.userDataPath, 'log', config.network);
+config.ccLog = path.join(config.logPathPrex, 'crossChainLog.log');
+config.ccErr = path.join(config.logPathPrex, 'crossChainErr.log');
+config.mrLog = path.join(config.logPathPrex, 'ccMonitorLog.log');
+config.mrErr = path.join(config.logPathPrex, 'ccMonitorErr.log');
+
 
 config.loglevel = settings.loglevel
 config.rpcIpcPath = settings.rpcIpcPath

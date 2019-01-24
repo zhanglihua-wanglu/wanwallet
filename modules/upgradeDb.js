@@ -124,11 +124,12 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
         log.info("upgrade db success.");
 
         let crossChainDbFile;
-        if (network=='main'){
+        if (network.includes('main')) {
             crossChainDbFile = `${appPath}/crossTransDb`;
-        }else{
+        } else {
             crossChainDbFile = `${appPath}/testnetDb/crossTransDb`;
         }
+
         fs.unlink(crossChainDbFile, function (error) {
             if (error) {
                 console.log(error);
