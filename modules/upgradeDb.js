@@ -22,7 +22,7 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
 
     new Q((resolve, reject) => {
         let crossChainDbFile;
-        if (network=='main'){
+        if (network.includes('main')) {
             crossChainDbFile = `${appPath}/crossTransDb`;
         }else{
             crossChainDbFile = `${appPath}/testnetDb/crossTransDb`;

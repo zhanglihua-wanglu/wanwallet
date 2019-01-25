@@ -198,26 +198,26 @@ async function startBtcDBMigration() {
     if (Settings.network.includes('main')) {
         btcWalletLegacyConfig = {
             btcWallet: `${Settings.userDataPath}/btcWallet.db`,
-            databasePath: `${process.env.HOME}/LocalDb`,
+            databasePath: `${Settings.userDataPath}/Db/${Settings.network}DB`,
             network: 'main'
         }
         btcTxHistoryLegacyConfig = {
             crossDbname: `${Settings.userDataPath}/crossTransDbBtc`,
             srcCrossCollection: 'btcCrossTransaction',
-            databasePath: `${process.env.HOME}/LocalDb`,
+            databasePath: `${Settings.userDataPath}/Db/${Settings.network}DB`,
             dstCrossCollection: 'crossTransBtc',
             network: 'testnet'
         }
     } else {
         btcWalletLegacyConfig = {
             btcWallet: `${Settings.userDataPath}/testnetDb/btcWallet.db`,
-            databasePath: `${process.env.HOME}/LocalDb`,
+            databasePath: `${Settings.userDataPath}/Db/${Settings.network}DB`,
             network: 'testnet'
         }
         btcTxHistoryLegacyConfig = {
             crossDbname: `${Settings.userDataPath}/testnetDb/crossTransDbBtc`,
             srcCrossCollection: 'btcCrossTransaction',
-            databasePath: `${process.env.HOME}/LocalDb`,
+            databasePath: `${Settings.userDataPath}/Db/${Settings.network}DB`,
             dstCrossCollection: 'crossTransBtc',
             network: 'testnet'
         }

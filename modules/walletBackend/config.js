@@ -54,6 +54,7 @@ config.ethTokenAddressOnWan = config.wethToken.address;
 config.WBTCToken = config.wbtcToken.address;
 
 config.logPathPrex = path.join(settings.userDataPath, 'log', config.network);
+config.databasePathPrex = path.join(settings.userDataPath, 'Db', `${config.network}DB`);
 config.ccLog = path.join(config.logPathPrex, 'crossChainLog.log');
 config.ccErr = path.join(config.logPathPrex, 'crossChainErr.log');
 config.mrLog = path.join(config.logPathPrex, 'ccMonitorLog.log');
