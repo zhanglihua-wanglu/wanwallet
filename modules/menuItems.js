@@ -275,13 +275,7 @@ let menuTempl = function (webviews) {
                     {
                         label: 'Btc Accounts',
                         click() {
-                            let userPath = process.platform === 'win32' ? process.env.APPDATA : process.env.HOME
-                            // if(Settings.network.includes('main')) {
-                            //     userPath = 
-                            // } else {
-                            //     userPath = path.join(userPath, 'testnetDb', 'btcWallet.db');
-                            // }
-                            userPath = path.join(userPath, 'LocalDb')
+                            let userPath = path.join(Settings.userDataPath, 'Db', `${Settings.network}DB`);
                             shell.showItemInFolder(userPath);
                         },
                     }

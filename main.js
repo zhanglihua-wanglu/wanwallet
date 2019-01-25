@@ -194,7 +194,8 @@ async function startCrossChain(){
 
 async function startBtcDBMigration() {    
     log.info('database migration start ...')
-    let btcWalletLegacyConfig, btcTxHistoryLegacyConfig
+    let btcWalletLegacyConfig;
+    let btcTxHistoryLegacyConfig;
     if (Settings.network.includes('main')) {
         btcWalletLegacyConfig = {
             btcWallet: `${Settings.userDataPath}/btcWallet.db`,
