@@ -207,7 +207,7 @@ async function startBtcDBMigration() {
             srcCrossCollection: 'btcCrossTransaction',
             databasePath: `${Settings.userDataPath}/Db/${Settings.network}DB`,
             dstCrossCollection: 'crossTransBtc',
-            network: 'testnet'
+            network: 'main'
         }
     } else {
         btcWalletLegacyConfig = {
