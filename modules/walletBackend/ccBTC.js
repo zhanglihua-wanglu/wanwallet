@@ -245,6 +245,10 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let wanPassword = data.parameters.wanPassword;
       let btcPassword = data.parameters.btcPassword;
 
+      if (!btcScripts.checkPasswd(btcPassword)) {
+        throw new Error('wrong btc password')
+      }
+
       log.debug('getAddressList...');
       // 1. construct UTXO for transfer
       console.time('check btc balance');
@@ -286,7 +290,6 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         // must call this in async func
         if (!addrMap.hasOwnProperty(utxo.address)) {
             let kp = await btcUtil.getECPairsbyAddr(input.password, utxo.address);
-            log.info('lock btc key pair: ', kp)
             input.keypair.push(kp);
             addrMap[utxo.address] = true;
         }
