@@ -254,6 +254,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       log.debug('checkBalance...');
 
       let utxos = await ccUtil.getBtcUtxo(config.MIN_CONFIRM_BLKS, config.MAX_CONFIRM_BLKS, addressList);
+      log.info('utxos: ', utxos)
 
       let result = await ccUtil.getUTXOSBalance(utxos);
 
@@ -285,6 +286,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         // must call this in async func
         if (!addrMap.hasOwnProperty(utxo.address)) {
             let kp = await btcUtil.getECPairsbyAddr(input.password, utxo.address);
+            log.info('lock btc key pair: ', kp)
             input.keypair.push(kp);
             addrMap[utxo.address] = true;
         }
@@ -296,6 +298,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
 
       if (!ret.code) {
         throw new Error('lock btc error')
+        log.error('lock btc error: ', ret)
       }
 
       data.value = ret.result

@@ -55,6 +55,7 @@ config.WBTCToken = config.wbtcToken.address;
 
 config.logPathPrex = path.join(settings.userDataPath, 'log', config.network);
 config.databasePathPrex = path.join(settings.userDataPath, 'Db', `${config.network}DB`);
+
 config.ccLog = path.join(config.logPathPrex, 'crossChainLog.log');
 config.ccErr = path.join(config.logPathPrex, 'crossChainErr.log');
 config.mrLog = path.join(config.logPathPrex, 'ccMonitorLog.log');
@@ -84,9 +85,9 @@ config.btcKeyStorePath = ''
 config.ethGasPrice = 60e9
 config.wanGasPrice = 200e9
 config.ethNormalGas = 100000
-config.ethLockGas = 2000000
-config.ethRefundGas = 120000 
-config.ethRevokeGas = 100000 
+config.ethLockGas = 300000
+config.ethRefundGas = 200000 
+config.ethRevokeGas = 200000 
 
 config.wanLockGas = 2e6
 config.wanRefundGas = 1e6 
