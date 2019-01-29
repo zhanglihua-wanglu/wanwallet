@@ -438,7 +438,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
   } else if (data.action === 'redeemWbtc') {
     try {
       let password = data.parameters.btcPassword;
-      log.('btc password: ', password)
+      log.info('btc password: ', password)
 
       if (!btcScripts.checkPasswd(password)) {
         log.error('redeem wbtc error, wrong password is: ', password)
@@ -459,7 +459,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
           }
       }
 
-      let addr = btcUtil.hash160ToAddress(rec.crossAddress,'pubkeyhash', 'testnet');
+      let addr = btcUtil.hash160ToAddress(rec.crossAddress,'pubkeyhash', settings.btcNetwork);
       let kp = await btcUtil.getECPairsbyAddr(password, addr);
       log.info('redeem wbtc key pair: ', kp)
 
