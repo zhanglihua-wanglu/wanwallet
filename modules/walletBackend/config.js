@@ -25,8 +25,11 @@ if (settings.network.includes('main')) {
         decimals: 8
     }
 
+    config.feeRate = 30
+    config.feeHard = 10000
     config.confirmBlocks = 12
     config.btcConfirmBlocks = 3
+    config.defaultAmount = 0.0002;
 } else {
     global.wanchain_js_testnet =  true
     config.bitcoinNetwork = bitcoin.networks.testnet
@@ -45,8 +48,11 @@ if (settings.network.includes('main')) {
         decimals: 8
     }
 
+    config.feeRate = 300
+    config.feeHard = 100000
     config.confirmBlocks = 3
     config.btcConfirmBlocks = 1
+    config.defaultAmount = 0.002;
 }
 
 config.tryTimes = 3
@@ -61,14 +67,13 @@ config.ccErr = path.join(config.logPathPrex, 'crossChainErr.log');
 config.mrLog = path.join(config.logPathPrex, 'ccMonitorLog.log');
 config.mrErr = path.join(config.logPathPrex, 'ccMonitorErr.log');
 
-
 config.loglevel = settings.loglevel
 config.rpcIpcPath = settings.rpcIpcPath
 config.keyStorePath = settings.getKeystoreDir('wanchain')
 config.ethkeyStorePath = settings.getKeystoreDir('ethereum')
 
-config.useLocalNode = true // ???
-config.listOption = true   // ???
+config.useLocalNode = true 
+config.listOption = true   
 
 config.loggers = {}
 config.getLogger = function (name) {
@@ -89,12 +94,9 @@ config.ethLockGas = 300000
 config.ethRefundGas = 200000 
 config.ethRevokeGas = 200000 
 
-config.wanLockGas = 2e6
+config.wanLockGas = 1e6
 config.wanRefundGas = 1e6 
 config.wanRevokeGas = 1e6 
-
-config.feeRate = 300
-config.feeHard = 100000
 
 config.MAX_CONFIRM_BLKS = 100000000;
 config.MIN_CONFIRM_BLKS = 0;
