@@ -275,7 +275,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         smgBtcAddr: btcUtil.addressToHash160(storeman.btcAddress, 'pubkeyhash', settings.btcNetwork),
         value: Number(web3.toBigNumber(amount).mul(100000000)),
         feeRate: config.feeRate,
-        password: btcPassword,
+        password: wanPassword,
         changeAddress: addressList[0],
         keypair: [],
         storeman: storeman['wanAddress'],
@@ -289,7 +289,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
         let utxo = input.utxos[i];
         // must call this in async func
         if (!addrMap.hasOwnProperty(utxo.address)) {
-            let kp = await btcUtil.getECPairsbyAddr(input.password, utxo.address);
+            let kp = await btcUtil.getECPairsbyAddr(btcPassword, utxo.address);
             input.keypair.push(kp);
             addrMap[utxo.address] = true;
         }
@@ -300,8 +300,8 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       let ret = await global.crossInvoker.invoke(srcChain, dstChain, 'LOCK', input);
 
       if (!ret.code) {
-        throw new Error('lock btc error')
         log.error('lock btc error: ', ret)
+        throw new Error('lock btc error')
       }
 
       data.value = ret.result
