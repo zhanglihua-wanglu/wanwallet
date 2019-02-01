@@ -4,7 +4,6 @@ const Settings = require('./settings');
 const log = require('./utils/logger').create('Windows');
 const EventEmitter = require('events').EventEmitter;
 
-
 class Window extends EventEmitter {
     constructor(mgr, type, opts) {
         super();
@@ -82,11 +81,9 @@ class Window extends EventEmitter {
 
         this.window.once('closed', () => {
             this._log.debug('Closed');
-
             this.isShown = false;
             this.isClosed = true;
             this.isContentReady = false;
-
             this.emit('closed');
         });
 
@@ -95,10 +92,30 @@ class Window extends EventEmitter {
             {
                 const mainWindow = windows.getByType('main');
                 mainWindow.send('uiAction_windowClose','','', null, '');
-                console.log('uiAction_windowClose');
-            }
+                this._log.info('uiAction_windowClose')
+            } 
             this.emit('close', e);
         });
+
+        this.window.on('close', (e) => {
+            if(this.type === 'main' && !global.confirmQuit) {
+                const {ccPendingCounter} = require('./walletBackend')
+                const pendingTxNum = ccPendingCounter()
+                if (pendingTxNum) {
+                    const choice = require('electron').dialog.showMessageBox({
+                        type: 'warning',
+                        buttons: ['Quit Anyway', 'Cancel'],
+                        defaultId: 0,
+                        cancelId: 1,
+                        title: 'Quit with possible Unfinished Cross-Chain Transactions?',
+                        message: `WARNING! You have ${pendingTxNum} ongoing cross-chain transactions. Quitting will probably cause executing failures. Are you sure to quit?`
+                    });
+                    if (choice === 1) {
+                        e.preventDefault();
+                    }
+                }
+            }
+        })
 
         this.window.on('show', (e) => {
             this.emit('show', e);
@@ -167,9 +184,7 @@ class Window extends EventEmitter {
         if (this.isClosed) {
             return;
         }
-
         this._log.debug('Close');
-
         this.window.close();
     }
 }
