@@ -1,4 +1,5 @@
 global._ = require('./modules/utils/underscore');
+global.confirmQuit = false;
 const { app, dialog, ipcMain, shell, protocol } = require('electron');
 const timesync = require('os-timesync');
 const dbSync = require('./modules/dbSync.js');
@@ -17,7 +18,6 @@ const path = require('path');
 Q.config({
     cancellation: true,
 });
-
 
 Settings.init();
 // logging setup
