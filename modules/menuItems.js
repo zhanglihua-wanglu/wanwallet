@@ -9,6 +9,8 @@ const ethereumNode = require('./ethereumNode.js');
 const swarmNode = require('./swarmNode.js');
 const ClientBinaryManager = require('./clientBinaryManager');
 
+const {ccPendingCounter} = require('./walletBackend')
+
 const version = require('../package').version;
 
 
@@ -120,7 +122,7 @@ let menuTempl = function (webviews) {
     //                     path.join(Settings.userDataPath, 'skippedNodeVersion.json'),
     //                     '' // write no version
     //                 );
-    //
+    
     //                 // true = will restart after updating and user consent
     //                 ClientBinaryManager.init(true);
     //             },
@@ -158,6 +160,24 @@ let menuTempl = function (webviews) {
         { label: i18n.t('mist.applicationMenu.app.quit', { app: Settings.appName }),
             accelerator: 'CommandOrControl+Q',
             click() {
+                let pendingTxNum = ccPendingCounter()
+                if (pendingTxNum) {
+
+                    const choice = require('electron').dialog.showMessageBox({
+                        type: 'warning',
+                        buttons: ['Quit Anyway', 'Cancel'],
+                        defaultId: 0,
+                        cancelId: 1,
+                        title: 'Quit with possible Unfinished Cross-Chain Transactions?',
+                        message: `WARNING! You have ${pendingTxNum} ongoing cross-chain transactions. Quitting will probably cause executing failures. Are you sure to quit?`
+                    });
+            
+                    if (choice === 1) {
+                        return
+                    }
+
+                }
+                global.confirmQuit = true
                 app.quit();
             },
         });
@@ -559,9 +579,29 @@ let menuTempl = function (webviews) {
             checked: ethereumNode.isOwnNode && ethereumNode.isMainNetwork,
             enabled: ethereumNode.isOwnNode,
             type: 'radio',
-            click() {
-                //restartNode(ethereumNode.type, 'main');
-                if(!ethereumNode.isMainNetwork) {
+            click(m) {                
+                if (!ethereumNode.isMainNetwork) {
+                    let pendingTxNum = ccPendingCounter()
+
+                    if (pendingTxNum) {
+                        const choice = require('electron').dialog.showMessageBox({
+                            type: 'warning',
+                            buttons: ['Quit Anyway', 'Cancel'],
+                            defaultId: 0,
+                            cancelId: 1,
+                            title: 'Quit with possible Unfinished Cross-Chain Transactions?',
+                            message: `WARNING! You have ${pendingTxNum} ongoing cross-chain transactions. Quitting will probably cause executing failures. Are you sure to quit?`
+                        });
+
+                        if (choice === 1) {
+                            m.menu.items[1].click()
+                            return
+                        }
+
+                    }  
+
+                    global.confirmQuit = true
+
                     if (process.platform === 'win32') {
                         ClientBinaryManager._relaunch({args: ['--network', 'main', "--node-datadir", Settings.appDataPath]});
                     } else {
@@ -576,15 +616,33 @@ let menuTempl = function (webviews) {
             checked: ethereumNode.isOwnNode && ethereumNode.isTestNetwork,
             enabled: ethereumNode.isOwnNode,
             type: 'radio',
-            click() {
-                //restartNode(ethereumNode.type, 'testnet');
-                if(!ethereumNode.isTestNetwork) {
+            click(m) {
+                if (!ethereumNode.isTestNetwork) {
+                    let pendingTxNum = ccPendingCounter()
+
+                    if (pendingTxNum) {
+                        const choice = require('electron').dialog.showMessageBox({
+                            type: 'warning',
+                            buttons: ['Quit Anyway', 'Cancel'],
+                            defaultId: 0,
+                            cancelId: 1,
+                            title: 'Quit with possible Unfinished Cross-Chain Transactions?',
+                            message: `WARNING! You have ${pendingTxNum} ongoing cross-chain transactions. Quitting will probably cause executing failures. Are you sure to quit?`
+                        });
+                
+                        if (choice === 1) {
+                            m.menu.items[0].click()
+                            return
+                        }
+                    }
+
+                    global.confirmQuit = true
+
                     if (process.platform === 'win32') {
                         ClientBinaryManager._relaunch({args: ['--network', 'testnet', "--node-datadir", Settings.appDataPath]});
                     } else {
                         ClientBinaryManager._relaunch({args: ['--network', 'testnet']});
                     }
-
                 }
             },
         }
