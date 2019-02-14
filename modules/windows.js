@@ -107,8 +107,8 @@ class Window extends EventEmitter {
                         buttons: ['Quit Anyway', 'Cancel'],
                         defaultId: 0,
                         cancelId: 1,
-                        title: 'Quit with possible Unfinished Cross-Chain Transactions?',
-                        message: `WARNING! You have ${pendingTxNum} ongoing cross-chain transactions. Quitting will probably cause executing failures. Are you sure to quit?`
+                        title: 'Quit with pending cross-chain transactions?',
+                        message: `Quit with pending cross-chain transactions?\n\nWARNING! You have ${pendingTxNum} ongoing cross-chain transactions. Exiting now might cause transaction failures. Are you sure you want to exit anyway?`
                     });
                     if (choice === 1) {
                         e.preventDefault();
