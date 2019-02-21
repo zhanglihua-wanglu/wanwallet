@@ -235,6 +235,33 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     }
+  } else if (data.action === 'increaseFailedRetryCount') {
+    log.debug('CrossChain_BTC2WBTC->>>>>>>>>increaseFailedRetryCount>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    let hashX = data.parameters.hashX;
+    let toCount = data.parameters.toCount;
+    let isRedeem= data.parameters.isRedeem;
+
+    try {
+      let record = global.wanDb.getItem(config.crossCollectionBtc,{HashX:hashX});
+      if (record) {
+          if (isRedeem) {
+              record.redeemTryCount = toCount;
+          } else {
+              record.revokeTryCount = toCount;
+          }
+          global.wanDb.updateItem(config.crossCollectionBtc, {HashX:record.HashX}, record);
+
+          data.value = 'OK';
+      } else {
+          log.error('Increase failed try count error: record not found');
+          data.value = 'Record not found';
+      } 
+
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    } catch (error) {
+      parseError(data, error);
+      callbackMessage('CrossChain_BTC2WBTC', e, data);
+    }
   } else if (data.action === 'lockBtc') {
     try {
 

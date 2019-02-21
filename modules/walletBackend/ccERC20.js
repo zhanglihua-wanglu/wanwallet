@@ -139,6 +139,26 @@ ipc.on('CrossChain_ERC202WERC20', async (e, data) => {
         data.value = newArr;
         callbackMessage('CrossChain_ERC202WERC20', e, data);
     }
+    else if (data.action === 'increaseFailedRetryCount') {
+        let hashX = data.parameters.hashX;
+        let toCount = data.parameters.toCount;
+        let isRedeem= data.parameters.isRedeem;
+
+        let record = global.wanDb.getItem(config.crossCollection,{hashX:hashX});
+        if (record) {
+            if (isRedeem) {
+                record.redeemTryCount = toCount;
+            } else {
+                record.revokeTryCount = toCount;
+            }
+            global.wanDb.updateItem(config.crossCollection, {hashX:record.hashX}, record);
+
+            data.value = 'OK';
+        } else {
+            data.value = 'Record not found';
+        }
+        callbackMessage('CrossChain_ERC202WERC20', e, data);
+    }
     else if (data.action === 'getGasPrice') {
         let result = {};
         if (data.chainType === 'ETH') {
