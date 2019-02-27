@@ -69,8 +69,10 @@ upgradeDb.upgradeDb_2_1 = function (appPath,network) {
                 _data.storeman = data.storeman;
 
                 // let value
-                _data.value = 0;
-                _data.contractValue = data.txValue;
+                _data.value = data.value;
+                _data.contractValue = data.chain === 'WAN' ? web3.toHex(web3.toWei(data.value)) : data.txValue;
+                
+                _data.txValue = data.txValue;
 
                 _data.lockedTime = data.time ? parseInt(data.time / 1000) : "";
                 _data.buddyLockedTime = "";
