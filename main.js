@@ -548,13 +548,13 @@ onReady = () => {
             return ethereumNode.init();
         })
         .then(() => {
-            upgradeDb.upgradeDb_2_1(Settings.userDataPath, Settings.network);
-        })
-        .then(() => {
             return startBtcDBMigration()
         })
         .then(()=>{
             return startCrossChain();
+        })
+        .then(() => {
+            upgradeDb.upgradeDb_2_1(Settings.userDataPath, Settings.network);
         })
         .then(() => {
             if (Settings.uiMode === 'wallet') {
