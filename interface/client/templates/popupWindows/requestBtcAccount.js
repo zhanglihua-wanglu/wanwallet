@@ -76,8 +76,6 @@ Template['popupWindows_requestBtcAccount'].events({
 
             let data = {parameters: pwRepeat, action: 'createBtcAddress'};
 
-            ipc.send('CrossChain_BTC2WBTC', data);
-
             ipc.on('Callback_CrossChain_BTC2WBTC', function (e, data) {
                 if (data.action === 'createBtcAddress') {
                     TemplateVar.set(template, 'created', true);
@@ -88,6 +86,8 @@ Template['popupWindows_requestBtcAccount'].events({
                     }
                 }
             });
+
+            ipc.send('CrossChain_BTC2WBTC', data);
 
             TemplateVar.set('password-repeat', false);
             template.find('input.password-repeat').value = '';

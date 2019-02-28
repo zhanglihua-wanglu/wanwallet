@@ -26,6 +26,7 @@ ipc.on('CrossChain_BTC2WBTC', async (e, data) => {
       data.value = newAddress.address;
       callbackMessage('CrossChain_BTC2WBTC', e, data);
     } catch (error) {
+      log.debug('CrossChain_BTC2WBTC->>>>>>>>>failed>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       parseError(data, error);
       callbackMessage('CrossChain_BTC2WBTC', e, data);
       return;
