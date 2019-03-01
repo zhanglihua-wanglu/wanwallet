@@ -71,8 +71,8 @@ Template['popupWindows_requestBtcAccount'].events({
             TemplateVar.set('passwordRepat', true);
         }  else if (pw && pw.length >= 8) {
 
-            TemplateVar.set('creating', true);
-            TemplateVar.set('created', false);
+            TemplateVar.set(template, 'creating', true);
+            TemplateVar.set(template, 'created', false);
 
             let data = {parameters: pwRepeat, action: 'createBtcAddress'};
 
